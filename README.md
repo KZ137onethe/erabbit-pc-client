@@ -1,7 +1,21 @@
-# Vue 3 + Vite
+# 小兔鲜儿电商项目
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+> 这是一个仓库迁移的项目，之后会继续开发。
+>
+> 为什么迁移呢？因为vue cli3构建速度太慢了，开发体验极差，所以脚手架迁移到vite
+>
+> 当然没有在原仓库上迁移脚手架，怕搞没，所以才有了这个项目
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+* 技术栈：
+  * CSS预处理器：less
+  * 包管理工具：pnpm
+  * 脚手架：vite4
+  * 框架：vue3
+  * UI组件库：ant-design-vue
+  * 图标库：@ant-design-vue 和 @icon-park/next
+  * 第三方工具：
+    * vuex
+    * vue-router
+    * @vueuse
+    * axios
+    * Eslint 
