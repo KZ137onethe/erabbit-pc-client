@@ -1,0 +1,9 @@
+# （默认）一般情况下，node_modules ，点文件和点文件夹不会被 eslint 扫描到
+
+# ignore code file
+/src/vender
+
+# packaging file
+/dist
+/dist.zip
+
