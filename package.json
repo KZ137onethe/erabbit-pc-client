@@ -7,7 +7,18 @@
     "dev": "vite --force --host",
     "build": "vite build",
     "preview": "vite preview",
-    "git": "git add . && git cz"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "commit": "git cz"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz"
+    }
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
@@ -26,11 +37,15 @@
     "@babel/core": "^7.21.3",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
+    "@commitlint/config-conventional": "^17.4.4",
     "@typescript-eslint/parser": "^5.55.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/babel-plugin-jsx": "^1.1.1",
     "commitizen": "^4.3.0",
+    "commitlint": "^17.4.4",
+    "conventional-changelog-cli": "^2.2.2",
     "core-js": "^3.29.1",
+    "cz-customizable": "^7.0.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-config-standard": "^17.0.0",
@@ -39,6 +54,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^9.9.0",
+    "husky": "^8.0.3",
     "prettier": "^2.8.4",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.1.0",
