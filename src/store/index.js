@@ -7,25 +7,21 @@ import category from './module/category'
 // * vue2.0 创建仓库 new Vuex.Store({})
 // * vue3.0 创建仓库 createStore({})
 export default createStore({
-    state () {
-        return {
-        }
-    },
-    getters: {
-    },
-    mutations: {
-    },
-    actions: {
-    },
-    modules: {
-        user,
-        cart,
-        category
-    },
-    plugins: [
-        createVuexPersistedState({
-            key: 'erabbit-pc-data',
-            paths: ['user', 'cart']
-        })
-    ]
+	state() {
+		return {}
+	},
+	getters: {},
+	mutations: {},
+	actions: {},
+	modules: {
+		user,
+		cart,
+		category,
+	},
+	plugins: [
+		createVuexPersistedState({
+			key: 'erabbit-pc-data',
+			paths: ['user', 'cart'],
+		}),
+	],
 })
