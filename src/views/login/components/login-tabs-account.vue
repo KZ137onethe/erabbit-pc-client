@@ -5,21 +5,13 @@
       <a-tag color="default" @click="modeToggle">
         <template v-for="[key, value] in Object.entries(accountMode)" :key="key">
           <template v-if="value.status">
-            <component :is="value.icon"/> <span>{{ value.message }}</span>
+            <component :is="value.icon" /> <span>{{ value.message }}</span>
           </template>
         </template>
       </a-tag>
     </div>
-    <a-form
-      v-bind="layout"
-      :model="formState"
-      :rules="ruleSchema"
-      ref="formRef"
-      name="normal_login"
-      class="login-form"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
-    >
+    <a-form v-bind="layout" :model="formState" :rules="ruleSchema" ref="formRef" name="normal_login" class="login-form"
+      @finish="onFinish" @finishFailed="onFinishFailed">
       <!--用户名-->
       <a-form-item has-feedback class="submit-data" name="username">
         <a-input v-model:value="formState.username" autocomplete="off">
@@ -58,7 +50,8 @@
       </a-form-item>
       <!--登录按钮-->
       <a-form-item style="margin-bottom: 5px;">
-        <a-button size="large" :block="true" :disabled="!disabled" type="primary" html-type="submit" class="login-form-button">
+        <a-button size="large" :block="true" :disabled="!disabled" type="primary" html-type="submit"
+          class="login-form-button">
           登录
         </a-button>
       </a-form-item>
@@ -89,7 +82,7 @@ import { validateUsername, validatePassword, validateVerificationCode } from './
 const imageQQURL = 'https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png'
 export default {
   name: 'login-tabs-account',
-  setup () {
+  setup() {
     const formRef = ref(null)
     const accountMode = reactive({
       account: { status: true, message: '使用密码登录', icon: UserOutlined, useMode: 'password' },
@@ -197,46 +190,54 @@ export default {
 </script>
 
 <style scoped lang="less">
-.login-tabs-account{
+.login-tabs-account {
   padding: 10px 0;
   text-align: center;
-  .login-mode{
+
+  .login-mode {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
-    > .ant-tag{
-    display: inline-block;
-    height: 25px;
-    .hoverLink(blue);
-    > span.anticon {
-      line-height: 25px;
-      margin-right: 5px;
+
+    >.ant-tag {
+      display: inline-block;
+      height: 25px;
+      .hoverLink(blue);
+
+      >span.anticon {
+        line-height: 25px;
+        margin-right: 5px;
+      }
     }
   }
-  }
-  > form{
-    .ant-form-item{
+
+  >form {
+    .ant-form-item {
       display: flex;
       flex-flow: row nowrap;
       justify-content: center;
       width: 100%;
-      &.submit-data{
-        .ant-form-item-control{
+
+      &.submit-data {
+        .ant-form-item-control {
+
           // 表单大小
-          span.ant-input-affix-wrapper{
+          span.ant-input-affix-wrapper {
             height: 45px;
           }
         }
       }
+
       // 网站条款
-      &.term{
-        a{
+      &.term {
+        a {
           color: @xtxColor;
         }
       }
     }
   }
-  .other{
+
+  .other {
     margin-top: 20px;
   }
 }

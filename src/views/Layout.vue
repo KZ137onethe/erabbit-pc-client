@@ -1,17 +1,17 @@
 <template>
-    <div class="layout">
-      <!-- 顶部组件 -->
-      <AppNavbar />
-      <!-- 头部组件 -->
-      <AppHeader />
-      <!-- 头部吸顶组件 -->
-      <AppHeaderSticky />
-      <div class="main">
-        <!-- 二级路由 -->
-        <router-view />
-      </div>
-      <AppFooter />
+  <div class="layout">
+    <!-- 顶部组件 -->
+    <AppNavbar />
+    <!-- 头部组件 -->
+    <AppHeader />
+    <!-- 头部吸顶组件 -->
+    <AppHeaderSticky />
+    <div class="main">
+      <!-- 二级路由 -->
+      <router-view />
     </div>
+    <AppFooter />
+  </div>
 </template>
 
 <script>
@@ -28,12 +28,13 @@ export default {
     AppHeaderSticky,
     AppFooter
   },
-  setup () {
+  setup() {
     const storeCategoryActions = useActions('category', {
       getCategoryList: 'getList'
     })
     storeCategoryActions.getCategoryList()
     const storeCategoryState = useState('category', ['list'])
+    const a = abc => (console.log("121"))
     return {
       ...storeCategoryActions,
       ...storeCategoryState
@@ -42,5 +43,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
