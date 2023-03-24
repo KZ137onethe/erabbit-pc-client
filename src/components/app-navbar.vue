@@ -2,7 +2,7 @@
 	<nav class="app-topnav">
 		<div class="container">
 			<a-row justify="end" align="middle">
-				<a-col :flex="30"></a-col>
+				<a-col :flex="60"></a-col>
 				<template v-if="profile.token">
 					<a-col :flex="2">
 						<a-avatar>
@@ -13,18 +13,25 @@
 						&emsp;
 						<a href="javascript:;">{{ profile.account }}</a>
 					</a-col>
+					<a-divider type="vertical" style="height: 20px; border-color: gray" />
 					<a-col :flex="2"><a @click="logout" href="javascript:;">退出登录</a></a-col>
 				</template>
 				<template v-else>
 					<a-col :flex="2">
 						<router-link to="/login">请先登录</router-link>
 					</a-col>
+					<a-divider type="vertical" style="height: 20px; border-color: gray" />
 					<a-col :flex="2"><a href="javascript:;">免费注册</a></a-col>
 				</template>
+				<a-divider type="vertical" style="height: 20px; border-color: gray" />
 				<a-col :flex="2"><a href="javascript:;">我的订单</a></a-col>
+				<a-divider type="vertical" style="height: 20px; border-color: gray" />
 				<a-col :flex="2"><a href="javascript:;">会员中心</a></a-col>
+				<a-divider type="vertical" style="height: 20px; border-color: gray" />
 				<a-col :flex="2"><a href="javascript:;">帮助中心</a></a-col>
+				<a-divider type="vertical" style="height: 20px; border-color: gray" />
 				<a-col :flex="2"><a href="javascript:;">关于我们</a></a-col>
+				<a-divider type="vertical" style="height: 20px; border-color: gray" />
 				<a-col :flex="2">
 					<MobileTwoTone style="fontsize: 20px" />
 					&nbsp;
@@ -40,7 +47,7 @@ import { UserOutlined, MobileTwoTone } from '@ant-design/icons-vue'
 
 import { useState } from '@/hooks'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { useMutations } from '@/hooks'
 export default {
 	components: {
 		UserOutlined,
@@ -48,17 +55,17 @@ export default {
 	},
 	setup() {
 		const storeUserState = useState('user', {
-		    profile: (state) => state.profile,
+			profile: (state) => state.profile,
 		})
-		const store = useStore()
-    const router = useRouter()
+		const storeUserMutations = useMutations('user', ['setUser'])
+		const router = useRouter()
 		const logout = () => {
-			store.commit('user/setUser', {})
-      router.push('/login')
+			storeUserMutations.setUser({})
+			router.push('/login')
 		}
 		return {
 			...storeUserState,
-      logout
+			logout,
 		}
 	},
 }
@@ -83,12 +90,6 @@ export default {
 					&:hover {
 						color: @xtxColor;
 					}
-				}
-				~ .ant-col {
-					border-right: 2px solid #666;
-					// a {
-					// border-right: 2px solid #666;
-					// }
 				}
 			}
 		}
