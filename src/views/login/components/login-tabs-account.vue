@@ -67,20 +67,20 @@
 			</a-form-item>
 			<!--登录按钮-->
 			<a-form-item style="margin-bottom: 5px">
-				<a-button size="large" :block="true" :disabled="!disabled" type="primary" html-type="submit" class="login-form-button"> 登录 </a-button>
+				<a-button size="large" :block="true" :disabled="disabled" type="primary" html-type="submit" class="login-form-button"> 登录 </a-button>
 			</a-form-item>
 		</a-form>
 		<!--其他-->
 		<a-row type="flex" justify="space-between" class="other">
 			<a-col class="mode-QQ">
-				<router-link to="/">
+				<a :href="QQ_sdk_callback_url">
 					<img :src="imageQQURL" alt="" />
-				</router-link>
+				</a>
 			</a-col>
 			<a-col class="login-front">
 				<router-link to="/">忘记密码</router-link>
 				<a-divider type="vertical" />
-				<router-link to="/">免费注册</router-link>
+				<router-link to="/register">免费注册</router-link>
 			</a-col>
 		</a-row>
 	</div>
@@ -92,13 +92,15 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 import { ref, reactive, computed } from 'vue'
 
-import { validateAccount, validatePhone, schemaPhone, validatePassword, validateVerificationCode } from './login-account-validate.js'
+import { validateAccount, validatePhone, schemaPhone, validatePassword, validateVerificationCode } from './schema-rule/login-account-validate.js'
 import { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } from '@/api'
-import { useStore } from 'vuex'
+import { useMutations } from '@/hooks'
 import { useRoute, useRouter } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
 
 const imageQQURL = 'https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png'
+const QQ_sdk_callback_url =
+	'https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback'
 export default {
 	name: 'login-tabs-account',
 	setup() {
@@ -192,7 +194,6 @@ export default {
 			},
 		}
 
-		const store = useStore()
 		const router = useRouter()
 		const route = useRoute()
 		// 冷却计时
@@ -229,6 +230,7 @@ export default {
 				message.error('手机号格式不对，发送失败！')
 			}
 		}
+		const userMutations = useMutations('user', ['setUser'])
 		// 表单检验成功的回调
 		const onFinish = (values) => {
 			// message.success('登录成功!')
@@ -244,7 +246,7 @@ export default {
 						 * 2. 反馈给用户 ”登陆成功“
 						 * 3、登录跳转（重定向）到首页
 						 */
-						store.commit('user/setUser', userData)
+						userMutations.setUser(userData)
 						message.success('登录成功')
 						router.push(route.query.redirectUrl ?? '/')
 					})
@@ -258,9 +260,8 @@ export default {
 				const { phone, verificationCode } = values
 				_userSMSLogin({ phone, verificationCode })
 					.then((res) => {
-						console.log(res)
 						const userData = { ...res.result }
-						store.commit('user/setUser', userData)
+						userMutations.setUser(userData)
 						message.success('登录成功')
 						router.push(route.query.redirectUrl ?? '/')
 					})
@@ -276,12 +277,22 @@ export default {
 			// console.log('Failed:', errorInfo)
 		}
 		// 重置表单
-		const resetForm = () => formRef.value.resetFields()
+		const resetForm = () => {
+			formRef.value.resetFields()
+		}
 		const disabled = computed(() => {
-			return formState[currentLoginMode.value.useMode.uniqueKey] && formState[currentLoginMode.value.useMode.name]
+			for (let value of Object.values(currentLoginMode.value.useMode)) {
+				const key = value
+				if (Boolean(formState[key]) === false) {
+					return true
+				}
+			}
+			return false
 		})
+
 		return {
 			imageQQURL,
+			QQ_sdk_callback_url,
 			accountMode,
 			currentLoginMode,
 			modeToggle,
