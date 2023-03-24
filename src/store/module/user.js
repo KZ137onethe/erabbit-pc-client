@@ -16,6 +16,7 @@ const UserModule = {
 				profession: '',
 				provinceCode: '',
 			},
+			redirectUrl: '/',
 		}
 	},
 	getters: {},
@@ -24,6 +25,9 @@ const UserModule = {
 			for (let key of Object.keys(state.profile)) {
 				state.profile[key] = payload[key] ?? ''
 			}
+		},
+		setRedirectUrl(state, url) {
+			state.redirectUrl = url
 		},
 	},
 	actions: {},
