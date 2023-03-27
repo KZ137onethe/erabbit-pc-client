@@ -1,4 +1,5 @@
 import { _userCheckAccount } from '@/api'
+import { computed } from 'vue'
 
 export const validateAccount = async (_rule, value) => {
 	return new Promise((resolve, reject) => {
@@ -61,4 +62,56 @@ export const validatePassword = async (_rule, value) => {
 			resolve()
 		}
 	})
+}
+
+export const ValidateRule = (password) => {
+	const code = computed(() => password)
+
+	return {
+		account: [
+			{
+				required: true,
+				validator: validateAccount,
+				trigger: 'change',
+			},
+		],
+		phone: [
+			{
+				required: true,
+				validator: validatePhone,
+				trigger: 'change',
+			},
+		],
+		verificationCode: [
+			{
+				required: true,
+				validator: validateVerificationCode,
+				trigger: 'change',
+			},
+		],
+		password: [
+			{
+				required: true,
+				validator: validatePassword,
+				trigger: 'change',
+			},
+		],
+		// TODO:这个需要写的更严谨一些
+		confirmPassword: [
+			{
+				required: true,
+				validator: (rule, value) => {
+					return new Promise((resolve, reject) => {
+						if (value !== code.value) {
+							console.log(value, code.value)
+							reject('与输入密码不符！')
+						} else {
+							resolve()
+						}
+					})
+				},
+				trigger: 'change',
+			},
+		],
+	}
 }

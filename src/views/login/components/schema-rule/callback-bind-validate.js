@@ -27,3 +27,22 @@ export const validateVerificationCode = async (_rule, value) => {
 		}
 	})
 }
+
+export const BindRules = () => {
+	return {
+		phone: [
+			{
+				required: true,
+				validator: validatePhone,
+				trigger: 'change',
+			},
+		],
+		verificationCode: [
+			{
+				required: true,
+				validator: validateVerificationCode,
+				trigger: 'change',
+			},
+		],
+	}
+}
