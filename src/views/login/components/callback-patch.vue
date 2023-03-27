@@ -45,7 +45,7 @@ import 'ant-design-vue/es/message/style/css'
 import { ref, reactive, computed } from 'vue'
 import { _userPCRegisterVerificationCode, _userQQPatchAccount } from '@/api'
 import { checkButton, SendBtn } from './form'
-import { PatchRules } from './schema-rule/register-validate.js'
+import { PatchRules } from './schema-rule/callback-patch-validate'
 import { useState, useMutations } from '@/hooks'
 import { useRouter } from 'vue-router'
 
