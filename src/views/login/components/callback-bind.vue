@@ -6,14 +6,7 @@
 			<span>{{ promptMSG }}</span>
 		</div>
 		<!-- 表单 -->
-		<a-form
-			class="callback-bind-form"
-			ref="callbackForm"
-			:rules="bindRule"
-			:model="formState"
-			@finish="handleFinish"
-			@finishFailed="handleFinishFailed"
-		>
+		<a-form class="callback-bind-form" :rules="bindRule" :model="formState" @finish="handleFinish" @finishFailed="handleFinishFailed">
 			<a-form-item name="phone" class="bind-data">
 				<a-input v-model:value="formState.phone" placeholder="绑定的手机号">
 					<template #prefix>
@@ -27,7 +20,7 @@
 						<SafetyOutlined />
 					</template>
 					<template #suffix>
-						<a-button :disabled="timer > 0" type="link" @click="sendVerificationCode()">{{ timer <= 0 ? '发送验证码' : `${timer}秒` }}</a-button>
+						<SendBtn v-model:data="formState.phone" :data_rule="validate" :AuthenticationFn="send_code" />
 					</template>
 				</a-input>
 			</a-form-item>
@@ -44,8 +37,8 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
 import { ref, reactive, computed, onMounted } from 'vue'
-import { validatePhone, validateVerificationCode, schemaPhone } from './schema-rule/callback-bind-validate.js'
-import { useIntervalFn } from '@vueuse/core'
+import { checkButton, SendBtn } from './form'
+import { BindRules } from './schema-rule/callback-bind-validate.js'
 import { _userQQBindGetVerificationCode, _userQQBindPhone } from '@/api'
 import { useState, useMutations } from '@/hooks'
 import { useRouter } from 'vue-router'
@@ -54,6 +47,7 @@ export default {
 	components: {
 		MobileOutlined,
 		SafetyOutlined,
+		SendBtn,
 	},
 	props: {
 		unionId: {
@@ -63,79 +57,38 @@ export default {
 	},
 	setup(props) {
 		// 表单
-		const callbackForm = ref(null)
 		const formState = reactive({
 			phone: '',
 			verificationCode: '',
 		})
 
-		// QQ用户
+		// QQ用户绑定规则
 		const QQUserInfo = reactive({
 			nickname: '',
 			avatar: '',
 		})
 		const promptMSG = computed(() => `Hi，${QQUserInfo.nickname} 欢迎来小兔鲜，完成绑定后可以QQ账号一键登录哦~`)
 		const unionId = props.unionId
+		onMounted(() => {
+			if (QC.Login.check()) {
+				QC.api('get_user_info').success((res) => {
+					const data = res.data
+					QQUserInfo.nickname = data.nickname
+					QQUserInfo.avatar = data.figureurl_qq
+				})
+			}
+		})
 
 		// 绑定规则
-		const bindRule = {
-			phone: [
-				{
-					required: true,
-					validator: validatePhone,
-					trigger: 'change',
-				},
-			],
-			verificationCode: [
-				{
-					required: true,
-					validator: validateVerificationCode,
-					trigger: 'change',
-				},
-			],
+		const bindRule = computed(() => BindRules())
+		// SendBtn
+		const validate = (data) => {
+			const phone = parseInt(data)
+			return /^1[3-9]\d{9}$/.test(phone)
 		}
-
-		// 冷却计时
-		const timer = ref(0)
-		// 用于验证码冷却计时函数
-		const { pause, resume } = useIntervalFn(
-			() => {
-				timer.value--
-				if (timer.value <= 0) {
-					pause()
-				}
-			},
-			1000,
-			false
-		)
-		// 发送验证码
-		const sendVerificationCode = async () => {
-			// 校验手机号
-			const phone = parseInt(formState.phone)
-			const valid = schemaPhone(phone)
-			if (valid) {
-				try {
-					await _userQQBindGetVerificationCode(phone)
-					message.success('短信发送成功！')
-					timer.value = 60
-				} catch (e) {
-					message.error(e.response.data.message)
-					timer.value = 3
-				} finally {
-					resume()
-				}
-			} else {
-				// 手机校验失败，提示用户
-				message.error('手机号格式不对，发送失败！')
-			}
-		}
+		const send_code = (phone) => _userQQBindGetVerificationCode(phone)
 		// 绑定框状态
-		const buttonCheck = computed(() => {
-			for (let value of Object.values(formState)) {
-				if (Boolean(value) === false) return true
-			}
-			return false
-		})
+		const buttonCheck = computed(() => checkButton(formState))
 		const router = useRouter()
 		const storeState = useState(['web_home_page_router'])
 		const storeUserMutations = useMutations('user', ['setUser'])
@@ -158,22 +111,14 @@ export default {
 		const handleFinishFailed = (errors) => {
 			message.error('表单校验失败！')
 		}
-		onMounted(() => {
-			if (QC.Login.check()) {
-				QC.api('get_user_info').success((res) => {
-					const data = res.data
-					QQUserInfo.nickname = data.nickname
-					QQUserInfo.avatar = data.figureurl_qq
-				})
-			}
-		})
+
 		return {
 			formState,
 			QQUserInfo,
 			promptMSG,
 			bindRule,
-			timer,
-			sendVerificationCode,
+			validate,
+			send_code,
 			buttonCheck,
 			handleFinish,
 			handleFinishFailed,

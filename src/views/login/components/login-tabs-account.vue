@@ -13,8 +13,7 @@
 		<a-form
 			v-bind="layout"
 			:model="formState"
-			:rules="ruleSchema"
-			ref="formRef"
+			:rules="loginRule"
 			name="normal_login"
 			class="login-form"
 			@finish="onFinish"
@@ -49,9 +48,7 @@
 						<SafetyOutlined class="site-form-item-icon" />
 					</template>
 					<template #suffix>
-						<a-button :disabled="timer > 0" type="primary" @click="sendVerificationCode()">
-							{{ timer <= 0 ? '发送验证码' : `${timer}秒` }}
-						</a-button>
+						<SendBtn v-model:data="formState.phone" :data_rule="validate" :AuthenticationFn="send_code" />
 					</template>
 				</a-input>
 			</a-form-item>
@@ -92,11 +89,11 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 import { ref, reactive, computed } from 'vue'
 
-import { validateAccount, validatePhone, schemaPhone, validatePassword, validateVerificationCode } from './schema-rule/login-account-validate.js'
+import { LoginRules } from './schema-rule/login-account-validate.js'
 import { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } from '@/api'
 import { useMutations } from '@/hooks'
-import { useRoute, useRouter } from 'vue-router'
-import { useIntervalFn } from '@vueuse/core'
+import { useRouter } from 'vue-router'
+import { SendBtn } from './form'
 
 const imageQQURL = 'https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png'
 const QQ_sdk_callback_url =
@@ -104,11 +101,26 @@ const QQ_sdk_callback_url =
 export default {
 	name: 'login-tabs-account',
 	setup() {
-		const formRef = ref(null)
 		const accountMode = reactive({
 			account: { status: true, message: '使用密码登录', icon: UserOutlined, useMode: { name: 'account', uniqueKey: 'password' } },
 			SMS: { status: false, message: '使用短信登录', icon: MailOutlined, useMode: { name: 'phone', uniqueKey: 'verificationCode' } },
 		})
+		const formState = reactive({
+			account: 'zhousg',
+			password: '123456',
+			phone: '13241051259',
+			verificationCode: '',
+			termReading: false,
+		})
+		// 表单布局
+		const layout = {
+			labelCol: {
+				span: 0,
+			},
+			wrapperCol: {
+				span: 22,
+			},
+		}
 		// 当前的登录模式
 		const currentLoginMode = computed(() => {
 			const mode = ref(null)
@@ -120,13 +132,7 @@ export default {
 			}
 			return mode.value
 		})
-		const formState = reactive({
-			account: 'zhousg',
-			password: '123456',
-			phone: '13241051259',
-			verificationCode: '',
-			termReading: false,
-		})
+
 		// 登录方式切换
 		const modeToggle = () => {
 			// 修改 accountMode
@@ -149,89 +155,23 @@ export default {
 					formState[key] = ''
 				}
 			}
-			// 重置表单
-			resetForm()
 		}
 
 		// 表单校验规则
-		const ruleSchema = {
-			account: [
-				{
-					required: true,
-					validator: validateAccount,
-					trigger: 'change',
-				},
-			],
-			phone: [
-				{
-					required: true,
-					validator: validatePhone,
-					trigger: 'change',
-				},
-			],
-			password: [
-				{
-					require: true,
-					validator: validatePassword,
-					trigger: 'change',
-				},
-			],
-			verificationCode: [
-				{
-					required: true,
-					validator: validateVerificationCode,
-					trigger: 'change',
-				},
-			],
-		}
-		// 表单布局
-		const layout = {
-			labelCol: {
-				span: 0,
-			},
-			wrapperCol: {
-				span: 22,
-			},
-		}
+		const loginRule = computed(() => LoginRules())
 
-		const router = useRouter()
-		const route = useRoute()
-		// 冷却计时
-		const timer = ref(0)
-		// 用于验证码冷却计时函数
-		const { pause, resume } = useIntervalFn(
-			() => {
-				timer.value--
-				if (timer.value <= 0) {
-					pause()
-				}
-			},
-			1000,
-			false
-		)
-		// 发送验证码
-		const sendVerificationCode = async () => {
-			// 校验手机号
-			const phone = parseInt(formState.phone)
-			const valid = schemaPhone(phone)
-			if (valid) {
-				try {
-					await _userGetVerificationCode({ phone: phone })
-					message.success('短信发送成功！')
-					timer.value = 60
-				} catch (e) {
-					message.error(e.response.data.message)
-					timer.value = 3
-				} finally {
-					resume()
-				}
-			} else {
-				// 手机校验失败，提示用户
-				message.error('手机号格式不对，发送失败！')
-			}
+		// SendBtn
+		const validate = (data) => {
+			const phone = parseInt(data)
+			return /^1[3-9]\d{9}$/.test(phone)
 		}
-		const userMutations = useMutations('user', ['setUser'])
+		const send_code = (phone) => _userGetVerificationCode(phone)
+
 		// 表单检验成功的回调
+		const router = useRouter()
+		const storeState = useState(['web_home_page_router'])
+		const redirectUrl = storeState.web_home_page_router.value
+		const userMutations = useMutations('user', ['setUser'])
 		const onFinish = (values) => {
 			// message.success('登录成功!')
 			// ? 账号密码登录
@@ -247,11 +187,10 @@ export default {
 						 * 3、登录跳转（重定向）到首页
 						 */
 						userMutations.setUser(userData)
+						router.push(redirectUrl)
 						message.success('登录成功')
-						router.push(route.query.redirectUrl ?? '/')
 					})
 					.catch((e) => {
-						console.log(e)
 						message.error(e.response.data.message)
 					})
 			}
@@ -262,11 +201,10 @@ export default {
 					.then((res) => {
 						const userData = { ...res.result }
 						userMutations.setUser(userData)
+						router.push(redirectUrl)
 						message.success('登录成功')
-						router.push(route.query.redirectUrl ?? '/')
 					})
 					.catch((e) => {
-						console.log(e)
 						message.error('登录失败')
 					})
 			}
@@ -276,10 +214,7 @@ export default {
 			message.error('表单验证失败')
 			// console.log('Failed:', errorInfo)
 		}
-		// 重置表单
-		const resetForm = () => {
-			formRef.value.resetFields()
-		}
+
 		const disabled = computed(() => {
 			for (let value of Object.values(currentLoginMode.value.useMode)) {
 				const key = value
@@ -297,16 +232,16 @@ export default {
 			currentLoginMode,
 			modeToggle,
 			formState,
-			ruleSchema,
+			loginRule,
 			layout,
-			timer,
-			sendVerificationCode,
+			validate,
+			send_code,
 			onFinish,
 			onFinishFailed,
 			disabled,
 		}
 	},
-	components: { UserOutlined, PhoneOutlined, MailOutlined, LockOutlined, SafetyOutlined },
+	components: { UserOutlined, PhoneOutlined, MailOutlined, LockOutlined, SafetyOutlined, SendBtn },
 }
 </script>
 

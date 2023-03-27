@@ -16,7 +16,7 @@
 				<a-input v-model:value="formState.verificationCode" placeholder="请输入验证码">
 					<template #prefix><SafetyOutlined /></template>
 					<template #suffix>
-						<a-button type="link" :disabled="timer > 0" @click="sendVerificationCode()">{{ timer <= 0 ? '发送验证码' : `${timer}秒` }}</a-button>
+						<SendBtn v-model:data="formState.phone" :data_rule="validate" :AuthenticationFn="send_code" />
 					</template>
 				</a-input>
 			</a-form-item>
@@ -44,8 +44,8 @@ import 'ant-design-vue/es/message/style/css'
 
 import { ref, reactive, computed } from 'vue'
 import { _userPCRegisterVerificationCode, _userQQPatchAccount } from '@/api'
-import { useIntervalFn } from '@vueuse/core'
-import { validateAccount, validatePhone, schemaPhone, validateVerificationCode, validatePassword } from './schema-rule/register-validate.js'
+import { checkButton, SendBtn } from './form'
+import { PatchRules } from './schema-rule/register-validate.js'
 import { useState, useMutations } from '@/hooks'
 import { useRouter } from 'vue-router'
 
@@ -65,94 +65,16 @@ export default {
 			confirmPassword: '',
 		})
 		// 绑定规则
-		const patchRule = {
-			account: [
-				{
-					required: true,
-					validator: validateAccount,
-					trigger: 'change',
-				},
-			],
-			phone: [
-				{
-					required: true,
-					validator: validatePhone,
-					trigger: 'change',
-				},
-			],
-			verificationCode: [
-				{
-					required: true,
-					validator: validateVerificationCode,
-					trigger: 'change',
-				},
-			],
-			password: [
-				{
-					required: true,
-					validator: validatePassword,
-					trigger: 'change',
-				},
-			],
-			// TODO:这个需要写的更严谨一些
-			confirmPassword: [
-				{
-					required: true,
-					validator: (rule, value) => {
-						return new Promise((resolve, reject) => {
-							if (value !== formState.password) {
-								reject('与输入密码不符！')
-							} else {
-								resolve()
-							}
-						})
-					},
-					trigger: 'change',
-				},
-			],
+		const patchRule = computed(() => PatchRules(formState.password))
+		// SendBtn
+		const validate = (data) => {
+			const phone = parseInt(data)
+			return /^1[3-9]\d{9}$/.test(phone)
 		}
-		const unionId = props.unionId
-		// 冷却计时
-		const timer = ref(0)
-		// 用于验证码冷却计时函数
-		const { pause, resume } = useIntervalFn(
-			() => {
-				timer.value--
-				if (timer.value <= 0) {
-					pause()
-				}
-			},
-			1000,
-			false
-		)
-		// 发送验证码
-		const sendVerificationCode = async () => {
-			// 校验手机号
-			const phone = parseInt(formState.phone)
-			const valid = schemaPhone(phone)
-			if (valid) {
-				try {
-					await _userPCRegisterVerificationCode(phone)
-					message.success('短信发送成功！')
-					timer.value = 60
-				} catch (e) {
-					message.error(e.response.data.message)
-					timer.value = 3
-				} finally {
-					resume()
-				}
-			} else {
-				// 手机校验失败，提示用户
-				message.error('手机号格式不对，发送失败！')
-			}
-		}
+		const send_code = (phone) => _userPCRegisterVerificationCode(phone)
 		// 绑定框状态
-		const buttonCheck = computed(() => {
-			for (let value of Object.values(formState)) {
-				if (Boolean(value) === false) return true
-			}
-			return false
-		})
+		const buttonCheck = computed(() => checkButton(formState))
+		const unionId = props.unionId
 		const router = useRouter()
 		const storeState = useState(['web_home_page_router'])
 		const storeUserMutations = useMutations('user', ['setUser'])
@@ -179,8 +101,8 @@ export default {
 		return {
 			formState,
 			patchRule,
-			timer,
-			sendVerificationCode,
+			validate,
+			send_code,
 			buttonCheck,
 			handleFinish,
 			handleFinishFailed,
@@ -191,6 +113,7 @@ export default {
 		MobileOutlined,
 		SafetyOutlined,
 		LockOutlined,
+		SendBtn,
 	},
 }
 </script>

@@ -6,7 +6,7 @@
 			<a-form
 				class="callback-bind-form"
 				ref="callbackForm"
-				:rules="registerRule"
+				v-model:rules="registerRule"
 				:model="formState"
 				@finish="handleFinish"
 				@finishFailed="handleFinishFailed"
@@ -27,7 +27,7 @@
 							<SafetyOutlined />
 						</template>
 						<template #suffix>
-							<a-button :disabled="timer > 0" type="link" @click="sendVerificationCode()">{{ timer <= 0 ? '发送验证码' : `${timer}秒` }}</a-button>
+							<SendBtn v-model:data="formState.phone" :data_rule="validate" :AuthenticationFn="send_code" />
 						</template>
 					</a-input>
 				</a-form-item>
@@ -51,18 +51,19 @@
 
 <script>
 import { UserOutlined, MobileOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons-vue'
-
-import { ref, reactive, computed } from 'vue'
-import { validateAccount, validatePhone, validateVerificationCode, validatePassword, schemaPhone } from './schema-rule/register-validate.js'
-import { useIntervalFn } from '@vueuse/core'
-import { _userPCRegisterVerificationCode, _userPCRegister } from '@/api'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
+
+import { reactive, computed } from 'vue'
+import { ValidateRule } from './schema-rule/register-validate.js'
+import { _userPCRegisterVerificationCode, _userPCRegister } from '@/api'
+import { checkButton, SendBtn } from './form'
 import { useState } from '@/hooks'
 import { useRouter } from 'vue-router'
 export default {
 	setup() {
 		const router = useRouter()
+		const userState = useState('user', ['redirectUrl'])
 		const formState = reactive({
 			account: '',
 			phone: '',
@@ -70,95 +71,18 @@ export default {
 			password: '',
 			confirmPassword: '',
 		})
-		// 绑定规则
-		const registerRule = {
-			account: [
-				{
-					required: true,
-					validator: validateAccount,
-					trigger: 'change',
-				},
-			],
-			phone: [
-				{
-					required: true,
-					validator: validatePhone,
-					trigger: 'change',
-				},
-			],
-			verificationCode: [
-				{
-					required: true,
-					validator: validateVerificationCode,
-					trigger: 'change',
-				},
-			],
-			password: [
-				{
-					required: true,
-					validator: validatePassword,
-					trigger: 'change',
-				},
-			],
-			// TODO:这个需要写的更严谨一些
-			confirmPassword: [
-				{
-					required: true,
-					validator: (rule, value) => {
-						return new Promise((resolve, reject) => {
-							if (value !== formState.password) {
-								reject('与输入密码不符！')
-							} else {
-								resolve()
-							}
-						})
-					},
-					trigger: 'change',
-				},
-			],
+
+		// 表单校验规则
+		const registerRule = computed(() => ValidateRule(formState.password))
+		// SendBtn
+		const validate = (data) => {
+			const phone = parseInt(data)
+			return /^1[3-9]\d{9}$/.test(phone)
 		}
-		// 冷却计时
-		const timer = ref(0)
-		// 用于验证码冷却计时函数
-		const { pause, resume } = useIntervalFn(
-			() => {
-				timer.value--
-				if (timer.value <= 0) {
-					pause()
-				}
-			},
-			1000,
-			false
-		)
-		// 发送验证码
-		const sendVerificationCode = async () => {
-			// 校验手机号
-			const phone = parseInt(formState.phone)
-			const valid = schemaPhone(phone)
-			if (valid) {
-				try {
-					await _userPCRegisterVerificationCode(phone)
-					message.success('短信发送成功！')
-					timer.value = 60
-				} catch (e) {
-					message.error(e.response.data.message)
-					timer.value = 3
-				} finally {
-					resume()
-				}
-			} else {
-				// 手机校验失败，提示用户
-				message.error('手机号格式不对，发送失败！')
-			}
-		}
+		const send_code = (phone) => _userPCRegisterVerificationCode(phone)
 		// 绑定框状态
-		const buttonCheck = computed(() => {
-			for (let value of Object.values(formState)) {
-				if (Boolean(value) === false) return true
-			}
-			return false
-		})
-		const userState = useState('user', ['redirectUrl'])
+		const buttonCheck = computed(() => checkButton(formState))
+		// 表单校验成功的点击回调
 		const handleFinish = (values) => {
 			const { account, phone, verificationCode, password } = values
 			// 注册成功提示 => 重定向
@@ -174,15 +98,16 @@ export default {
 					message.error(e.response.data.message)
 				})
 		}
+		// 表单校验失败的点击回调
 		const handleFinishFailed = (errors) => {
-			console.log(errors)
+			message.error('表单校验失败！')
 		}
 		return {
 			formState,
-			registerRule,
 			buttonCheck,
-			timer,
-			sendVerificationCode,
+			validate,
+			registerRule,
+			send_code,
 			handleFinish,
 			handleFinishFailed,
 		}
@@ -192,6 +117,7 @@ export default {
 		MobileOutlined,
 		SafetyOutlined,
 		LockOutlined,
+		SendBtn,
 	},
 }
 </script>
