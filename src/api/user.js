@@ -14,7 +14,7 @@ export const _userAccountLogin = ({ account, password }) => {
  * @param {Number} phone -- 手机号
  * @returns Object
  */
-export const _userGetVerificationCode = ({ phone }) => {
+export const _userGetVerificationCode = (phone) => {
 	return request('/login/code', 'get', { mobile: phone })
 }
 
