@@ -6,10 +6,14 @@ import path from 'path'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
+// 使用jsx
+import vueJsx from '@vitejs/plugin-vue-jsx'
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
 		vue(),
+		vueJsx(),
 		Components({
 			resolvers: [AntDesignVueResolver()],
 		}),
