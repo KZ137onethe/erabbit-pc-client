@@ -19,7 +19,12 @@ const UserModule = {
 			redirectUrl: '/',
 		}
 	},
-	getters: {},
+	getters: {
+		// 用户是否登录
+		isLogin(state) {
+			return false
+		},
+	},
 	mutations: {
 		setUser(state, payload) {
 			for (let key of Object.keys(state.profile)) {
