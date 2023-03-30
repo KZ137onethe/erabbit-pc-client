@@ -14,6 +14,7 @@ specifiers:
   '@vueuse/core': ^9.13.0
   ant-design-vue: ^3.2.15
   axios: ^1.3.4
+  big.js: ^6.2.1
   commitizen: ^4.3.0
   commitlint: ^17.4.4
   conventional-changelog-cli: ^2.2.2
@@ -45,6 +46,7 @@ dependencies:
   '@vueuse/core': 9.13.0_vue@3.2.47
   ant-design-vue: 3.2.15_vue@3.2.47
   axios: 1.3.4
+  big.js: 6.2.1
   less: 4.1.3
   normalize.css: 8.0.1
   vue: 3.2.47
@@ -2382,6 +2384,10 @@ packages:
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: true
+
+  /big.js/6.2.1:
+    resolution: {integrity: sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==}
+    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
