@@ -31,23 +31,6 @@ a {
   outline: none;
 }
 
-i {
-  font-style: normal;
-}
-
-input[type="text"],
-input[type="search"],
-input[type="password"],
-input[type="checkbox"]{
-  padding: 0;
-  outline: none;
-  border: none;
-  -webkit-appearance: none;
-  &::placeholder{
-    color: #ccc;
-  }
-}
-
 img {
   max-width: 100%;
   max-height: 100%;
@@ -84,46 +67,4 @@ ul {
   overflow: hidden;
 }
 
-.fl {
-  float: left;
-}
 
-.fr {
-  float: right;
-}
-
-.clearfix:after {
-  content: ".";
-  display: block;
-  visibility: hidden;
-  height: 0;
-  line-height: 0;
-  clear: both;
-}
-
-.fade{
-  &-leave{
-    &-from{
-      position: absolute;
-      width: 100%;
-      transition: opacity .5s .2s
-    }
-    &-to{
-      opacity: 0;
-    }
-  }
-}
-
-// 面包屑淡入淡出动画
-.fade-right-enter-to,
-.fade-right-leave-from{
-  opacity: 1;
-}
-.fade-right-enter-active,
-.fade-right-leave-active{
-  transition: all .5s;
-}
-.fade-right-enter-from,
-.fade-right-leave-to{
-  opacity: 0;
-}
