@@ -111,7 +111,6 @@ export default {
 			if (isSKU) {
 				const { id, name, mainPictures } = goods.value
 				const { skuId, price, specsText, inventory } = currentSKU.value
-				console.log(1121)
 				storeCartActions
 					.addCart({
 						id,

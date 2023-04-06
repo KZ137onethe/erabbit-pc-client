@@ -24,6 +24,7 @@ export default {
 	},
 	setup(props) {
 		const disable = computed(() => (props?.disabled ? 'disabled' : ''))
+		// TODO: 新增一个功能：深度禁用，即传入一个指令，可以开启button的禁用，防止click事件触发
 		return {
 			disable,
 		}
