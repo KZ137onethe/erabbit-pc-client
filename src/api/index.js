@@ -4,7 +4,7 @@ import { _findAllCategory, _findTopCategory, _findSubCategoryFilter, _findSubCat
 import { _findBrand, _findBanner, _findFreshThing, _findHot, _findGoodsColumn, _findSpecial } from './home'
 import { _findGoodsDetail, _findGoodsRelevant, _findGoodsHot, _findGoodsCommentInfo, _findGoodsCommentData } from './product.js'
 
-import { _getGoodsInfoNewest } from './cart.js'
+import { _getGoodsInfoNewest, _getCartSku, _mergeLocalCart, _getCartList, _addCart, _deleteCart, _modifyCart, _checkCartAllSelected } from './cart.js'
 import {
 	_userAccountLogin,
 	_userSMSLogin,
@@ -52,4 +52,11 @@ export {
 	_userPCRegister,
 	// 购物车相关
 	_getGoodsInfoNewest,
+	_getCartSku,
+	_mergeLocalCart,
+	_getCartList,
+	_addCart,
+	_deleteCart,
+	_modifyCart,
+	_checkCartAllSelected,
 }
