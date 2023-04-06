@@ -42,11 +42,11 @@ import { UserOutlined, MobileOutlined, SafetyOutlined, LockOutlined } from '@ant
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, warn } from 'vue'
 import { _userPCRegisterVerificationCode, _userQQPatchAccount } from '@/api'
 import { checkButton, SendBtn } from './form'
 import { PatchRules } from './schema-rule/callback-patch-validate'
-import { useState, useMutations } from '@/hooks'
+import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -78,6 +78,7 @@ export default {
 		const router = useRouter()
 		const storeState = useState(['web_home_page_router'])
 		const storeUserMutations = useMutations('user', ['setUser'])
+		const storeCartActions = useActions('cart', ['mergeLocalCart', 'getCartList'])
 		const handleFinish = (values) => {
 			const { account, phone, verificationCode, password } = values
 			_userQQPatchAccount(unionId, { account, phone, verificationCode, password })
@@ -86,17 +87,18 @@ export default {
 					const userData = res.result
 					const redirectUrl = storeState.web_home_page_router.value
 					storeUserMutations.setUser(userData)
-					router.push(redirectUrl)
-					message.success('完善成功!')
+					storeCartActions.mergeLocalCart().then(() => {
+						router.push(redirectUrl)
+						message.success('登录成功')
+					})
+					storeCartActions.getCartList()
 				})
 				.catch((e) => {
 					message.error(e.response.data.message)
 				})
 		}
 		const handleFinishFailed = (errors) => {
-			alert('error')
-			console.log(errors)
-			// message.error('表单校验失败!')
+			message.error('表单校验失败!')
 		}
 		return {
 			formState,

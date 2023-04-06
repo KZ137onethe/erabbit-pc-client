@@ -40,7 +40,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { checkButton, SendBtn } from './form'
 import { BindRules } from './schema-rule/callback-bind-validate.js'
 import { _userQQBindGetVerificationCode, _userQQBindPhone } from '@/api'
-import { useState, useMutations } from '@/hooks'
+import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -92,6 +92,7 @@ export default {
 		const router = useRouter()
 		const storeState = useState(['web_home_page_router'])
 		const storeUserMutations = useMutations('user', ['setUser'])
+		const storeCartActions = useActions('cart', ['mergeLocalCart', 'getCartList'])
 		const handleFinish = (values) => {
 			const { phone, verificationCode } = values
 			console.log(phone, verificationCode)
@@ -101,8 +102,11 @@ export default {
 					const userData = res.result
 					const redirectUrl = storeState.web_home_page_router.value
 					storeUserMutations.setUser(userData)
-					router.push(redirectUrl)
-					message.success('登录成功')
+					storeCartActions.mergeLocalCart().then(() => {
+						router.push(redirectUrl)
+						message.success('登录成功')
+					})
+					storeCartActions.getCartList()
 				})
 				.catch((e) => {
 					message.error(e.response.data.message)
