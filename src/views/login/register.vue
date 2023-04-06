@@ -1,23 +1,21 @@
 <template>
-	<div class="login-register">
-		<LoginHeader>
-			<template #subTitle>账号注册</template>
-		</LoginHeader>
-		<RegisterPanel></RegisterPanel>
-		<LoginFooter></LoginFooter>
-	</div>
+	<LoginLayout class="login-register">
+		<template #headTitle> 账号注册 </template>
+		<template #body>
+			<RegisterPanel />
+		</template>
+	</LoginLayout>
 </template>
 
 <script>
-import LoginHeader from './components/login-header.vue'
-import LoginFooter from './components/login-footer.vue'
+import LoginLayout from '@/layout/login/Layout.vue'
 import RegisterPanel from './components/register-panel.vue'
 
 export default {
 	setup() {
 		return {}
 	},
-	components: { LoginHeader, RegisterPanel, LoginFooter },
+	components: { LoginLayout, RegisterPanel },
 }
 </script>
 
