@@ -2,8 +2,8 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 
-const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
-// const baseURL = 'https://apipc-xiaotuxian-front.itheima.net/'
+// const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+const baseURL = 'https://apipc-xiaotuxian-front.itheima.net/'
 const instance = axios.create({
 	baseURL,
 	timeout: 5000,
@@ -15,7 +15,7 @@ instance.interceptors.request.use(
 		// 如果有token就在头部携带，如果没有token就设置token
 		const { profile } = store.state.user
 		if (profile.token) {
-			config.headers.Authorization = `Baarer ${profile.token}`
+			config.headers.Authorization = `Bearer ${profile.token}`
 		}
 		return config
 	},
