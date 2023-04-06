@@ -2,11 +2,6 @@
 	<div class="top-category">
 		<div class="container">
 			<!-- 面包屑 -->
-			<!-- <XtxBread>
-            <XtxBreadItem to="/">首页</XtxBreadItem>
-            <XtxBreadItem to="/category/1005000">{{ topCategory.name }}</XtxBreadItem>
-            <XtxBreadItem>空调</XtxBreadItem>
-          </XtxBread> -->
 			<a-breadcrumb separator=">" class="breadcrumb">
 				<a-breadcrumb-item>首页</a-breadcrumb-item>
 				<transition name="fade-right" mode="out-in">

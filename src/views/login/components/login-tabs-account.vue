@@ -57,9 +57,9 @@
 				<a-form-item name="remember" no-style>
 					<a-checkbox v-model:checked="formState.termReading" />
 					我已同意
-					<router-link to="/" class="term">《隐私条款》</router-link>
+					<router-link to="/login" class="term">《隐私条款》</router-link>
 					和
-					<router-link to="/" class="term">《服务条款》</router-link>
+					<router-link to="/login" class="term">《服务条款》</router-link>
 				</a-form-item>
 			</a-form-item>
 			<!--登录按钮-->
@@ -91,7 +91,7 @@ import { ref, reactive, computed } from 'vue'
 
 import { LoginRules } from './schema-rule/login-account-validate.js'
 import { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } from '@/api'
-import { useMutations } from '@/hooks'
+import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 import { SendBtn } from './form'
 
@@ -106,9 +106,9 @@ export default {
 			SMS: { status: false, message: '使用短信登录', icon: MailOutlined, useMode: { name: 'phone', uniqueKey: 'verificationCode' } },
 		})
 		const formState = reactive({
-			account: 'zhousg',
-			password: '123456',
-			phone: '13241051259',
+			account: '',
+			password: '',
+			phone: '',
 			verificationCode: '',
 			termReading: false,
 		})
@@ -171,7 +171,8 @@ export default {
 		const router = useRouter()
 		const storeState = useState(['web_home_page_router'])
 		const redirectUrl = storeState.web_home_page_router.value
-		const userMutations = useMutations('user', ['setUser'])
+		const storeUserMutations = useMutations('user', ['setUser'])
+		const storeCartActions = useActions('cart', ['mergeLocalCart', 'getCartList'])
 		const onFinish = (values) => {
 			// message.success('登录成功!')
 			// ? 账号密码登录
@@ -186,9 +187,12 @@ export default {
 						 * 2. 反馈给用户 ”登陆成功“
 						 * 3、登录跳转（重定向）到首页
 						 */
-						userMutations.setUser(userData)
-						router.push(redirectUrl)
-						message.success('登录成功')
+						storeUserMutations.setUser(userData)
+						storeCartActions.mergeLocalCart().then(() => {
+							message.success('登录成功')
+							router.push(redirectUrl)
+						})
+						storeCartActions.getCartList()
 					})
 					.catch((e) => {
 						message.error(e.response.data.message)
@@ -198,11 +202,14 @@ export default {
 			else if (currentLoginMode.value.useMode === accountMode.SMS.useMode) {
 				const { phone, verificationCode } = values
 				_userSMSLogin({ phone, verificationCode })
-					.then((res) => {
+					.then(async (res) => {
 						const userData = { ...res.result }
-						userMutations.setUser(userData)
-						router.push(redirectUrl)
-						message.success('登录成功')
+						storeUserMutations.setUser(userData)
+						storeCartActions.mergeLocalCart().then(() => {
+							message.success('登录成功')
+							router.push(redirectUrl)
+						})
+						storeCartActions.getCartList()
 					})
 					.catch((e) => {
 						message.error('登录失败')

@@ -3,20 +3,18 @@
 		<div class="item" v-for="(item, index) in goods.specs" :key="item.id">
 			<header>{{ item.name }}:</header>
 			<a-row type="flex" justify="start" :wrap="true">
-				<a-space :size="20">
-					<a-col flex="50px" v-for="val in item.values" :key="val.name">
-						<a-radio-group v-model:value="value[Object.keys(value)[index]]" @change="clickBtn()">
-							<a-radio-button :value="val.name" :class="{ imgStyle: val.picture }" :disabled="val.disabled">
-								<template v-if="val.picture">
-									<img :src="val.picture" alt="" :title="val.name" />
-								</template>
-								<template v-else>
-									<span :title="val.name">{{ val.name }}</span>
-								</template>
-							</a-radio-button>
-						</a-radio-group>
-					</a-col>
-				</a-space>
+				<a-col flex="50px" v-for="val in item.values" :key="val.name">
+					<a-radio-group v-model:value="value[Object.keys(value)[index]]" @change="clickBtn()">
+						<a-radio-button :value="val.name" :class="{ imgStyle: val.picture }" :disabled="val.disabled">
+							<template v-if="val.picture">
+								<img :src="val.picture" alt="" :title="val.name" />
+							</template>
+							<template v-else>
+								<span :title="val.name">{{ val.name }}</span>
+							</template>
+						</a-radio-button>
+					</a-radio-group>
+				</a-col>
 			</a-row>
 		</div>
 	</div>
@@ -76,7 +74,7 @@ export default {
 		const clickBtn = () => {
 			goods.specs = updateDisabledStatus(goods.specs, pathMap.value, selectedArr.value)
 			const validSelectedValue = selectedArr.value.filter((attribute) => attribute !== '')
-			console.log(goods.specs.length, selectedArr.value)
+			// console.log(goods.specs.length, selectedArr.value)
 			if (validSelectedValue.length === goods.specs.length) {
 				// 规格选择完整
 				const [skuId] = pathMap.value[selectedArr.value.join(separator)]
@@ -192,30 +190,33 @@ const initSpecsSelected = (goods, skuId) => {
 		}
 		.ant-row {
 			flex: 1;
-			max-width: 580px;
-			.ant-radio-group {
-				min-height: 30px;
-				min-width: 50px;
-				.ant-radio-button-wrapper {
+			max-width: inherit;
+			.ant-col {
+				margin: 5px 10px;
+				.ant-radio-group {
 					min-height: 30px;
 					min-width: 50px;
-					&.imgStyle {
-						height: 50px;
-						padding: 0;
-						> span {
-							height: 50px;
-							line-height: 50px;
-						}
-					}
-					> span {
-						text-align: center;
+					.ant-radio-button-wrapper {
 						min-height: 30px;
-						&:last-child {
-							img {
-								display: inline-block;
-								width: 50px;
+						min-width: 50px;
+						&.imgStyle {
+							height: 50px;
+							padding: 0;
+							> span {
 								height: 50px;
-								object-fit: cover;
+								line-height: 50px;
+							}
+						}
+						> span {
+							text-align: center;
+							min-height: 30px;
+							&:last-child {
+								img {
+									display: inline-block;
+									width: 50px;
+									height: 50px;
+									object-fit: cover;
+								}
 							}
 						}
 					}
