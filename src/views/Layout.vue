@@ -1,45 +1,44 @@
 <template>
-  <div class="layout">
-    <!-- 顶部组件 -->
-    <AppNavbar />
-    <!-- 头部组件 -->
-    <AppHeader />
-    <!-- 头部吸顶组件 -->
-    <AppHeaderSticky />
-    <div class="main">
-      <!-- 二级路由 -->
-      <router-view />
-    </div>
-    <AppFooter />
-  </div>
+	<defaultLayout class="app-layout">
+		<template #childBody>
+			<router-view></router-view>
+		</template>
+	</defaultLayout>
 </template>
 
 <script>
+import DefaultLayout from '@/layout/default.vue'
+
+import { useRoute } from 'vue-router'
+import { computed, provide } from 'vue'
 import { useState, useActions } from '@/hooks'
-import AppNavbar from '@/components/app-navbar'
-import AppHeader from '@/components/app-header'
-import AppHeaderSticky from '@/components/app-header-sticky'
-import AppFooter from '@/components/app-footer'
+
 export default {
-  name: 'Layout-default',
-  components: {
-    AppNavbar,
-    AppHeader,
-    AppHeaderSticky,
-    AppFooter
-  },
-  setup() {
-    const storeCategoryActions = useActions('category', {
-      getCategoryList: 'getList'
-    })
-    storeCategoryActions.getCategoryList()
-    const storeCategoryState = useState('category', ['list'])
-    const a = abc => (console.log("121"))
-    return {
-      ...storeCategoryActions,
-      ...storeCategoryState
-    }
-  }
+	name: 'Layout-default',
+	components: {
+		DefaultLayout,
+	},
+	setup() {
+		const route = useRoute()
+		const control = computed(() => {
+			if (route.path === '/cart') {
+				return false
+			} else {
+				return true
+			}
+		})
+		const storeCategoryActions = useActions('category', {
+			getCategoryList: 'getList',
+		})
+		storeCategoryActions.getCategoryList()
+		const storeCategoryState = useState('category', ['list'])
+		provide('headSticky', control)
+		return {
+			control,
+			...storeCategoryActions,
+			...storeCategoryState,
+		}
+	},
 }
 </script>
 

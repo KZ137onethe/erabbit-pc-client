@@ -1,32 +1,30 @@
 <template>
-	<div class="login-callback">
-		<LoginHeader>
-			<template #subTitle>联合登录</template>
-		</LoginHeader>
-		<div v-if="loading" class="loading container">
-			<div class="loading-wrapper">
-				<a-spin :indicator="indicator" />
-				<span>加载中...</span>
-			</div>
-		</div>
-		<a-tabs v-else class="tab-card container" v-model:activeKey="activeKey" centered>
-			<a-tab-pane v-for="[key, value] of Object.entries(QQLoginTabs)" :key="key">
-				<template #tab>
-					<component :is="value.prevIcon" />
-					{{ value.message }}
-				</template>
-				<div class="pane-content">
-					<component :is="value.components" :unionId="unionId" />
+	<LoginLayout class="login-callback">
+		<template #headTitle> 联合登录 </template>
+		<template #body>
+			<div v-if="loading" class="loading container">
+				<div class="loading-wrapper">
+					<a-spin :indicator="indicator" />
+					<span>加载中...</span>
 				</div>
-			</a-tab-pane>
-		</a-tabs>
-		<LoginFooter></LoginFooter>
-	</div>
+			</div>
+			<a-tabs v-else class="tab-card container" v-model:activeKey="activeKey" centered>
+				<a-tab-pane v-for="[key, value] of Object.entries(QQLoginTabs)" :key="key">
+					<template #tab>
+						<component :is="value.prevIcon" />
+						{{ value.message }}
+					</template>
+					<div class="pane-content">
+						<component :is="value.components" :unionId="unionId" />
+					</div>
+				</a-tab-pane>
+			</a-tabs>
+		</template>
+	</LoginLayout>
 </template>
 
 <script>
-import LoginHeader from './components/login-header'
-import LoginFooter from './components/login-footer.vue'
+import LoginLayout from '@/layout/login/Layout.vue'
 import CallbackBind from './components/callback-bind'
 import CallbackPatch from './components/callback-patch'
 
@@ -89,11 +87,10 @@ export default {
 		}
 	},
 	components: {
+		LoginLayout,
 		NodeIndexOutlined,
 		FormOutlined,
 		LoadingOutlined,
-		LoginHeader,
-		LoginFooter,
 		CallbackBind,
 		CallbackPatch,
 	},

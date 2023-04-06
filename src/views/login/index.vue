@@ -1,17 +1,15 @@
 <template>
-	<div class="page-login">
-		<LoginHeader>
-			<template #subTitle>请先登录</template>
-		</LoginHeader>
-		<LoginBody></LoginBody>
-		<LoginFooter></LoginFooter>
-	</div>
+	<LoginLayout class="page-login">
+		<template #headTitle> 请先登录 </template>
+		<template #body>
+			<LoginBody></LoginBody>
+		</template>
+	</LoginLayout>
 </template>
 
 <script>
-import LoginHeader from './components/login-header.vue'
+import LoginLayout from '@/layout/login/Layout.vue'
 import LoginBody from './components/login-body.vue'
-import LoginFooter from './components/login-footer.vue'
 
 import { useMutations } from '@/hooks'
 import { useRoute } from 'vue-router'
@@ -23,7 +21,7 @@ export default {
 		const storeUserMutations = useMutations('user', ['setRedirectUrl'])
 		storeUserMutations.setRedirectUrl(route.fullPath)
 	},
-	components: { LoginHeader, LoginFooter, LoginBody },
+	components: { LoginLayout, LoginBody },
 }
 </script>
 
