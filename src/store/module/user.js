@@ -35,7 +35,14 @@ const UserModule = {
 			state.redirectUrl = url
 		},
 	},
-	actions: {},
+	actions: {
+		// 我们这里有很多种登录方式，所以不在这里写一个专门的异步方法
+		// 退出登录
+		logout({ rootState, commit }) {
+			commit('setUser', {})
+			rootState.cart.list = []
+		},
+	},
 }
 
 export default UserModule
