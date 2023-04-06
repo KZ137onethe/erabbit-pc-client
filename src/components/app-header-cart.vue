@@ -1,22 +1,22 @@
 <template>
-	<a-popover placement="bottomRight" v-model:visible="visible" class="app-header-cart">
+	<a-popover v-model:visible="visible" placement="bottomRight" class="app-header-cart">
 		<!-- 主体的弹层 -->
 		<template #content>
 			<div class="layer">
 				<div class="list">
-					<div class="item" v-for="goods in storeCartGetters.validateList.value" :key="goods">
-						<router-link to="">
+					<div class="item" v-for="goods in storeCartGetters.validateList.value" :key="goods.skuId">
+						<router-link :to="`/product/${goods.id}`" @click="hide()">
 							<img :src="goods.picture" alt="" />
 							<div class="center">
 								<p class="name ellipsis-2">{{ goods.name }}</p>
-								<p class="attr ellipsis">{{ goods.attrText }}</p>
+								<p class="attr ellipsis">{{ goods.attrsText ?? goods.attrText }}</p>
 							</div>
 							<div class="right">
 								<p class="price">&yen;{{ goods.nowPrice }}</p>
 								<p class="count">{{ `X ${goods.count}` }}</p>
 							</div>
 						</router-link>
-						<a-button @click="hide()" shape="circle" size="small"><CloseOutlined /></a-button>
+						<a-button @click="deleteGoods(goods)" shape="circle" size="small"><CloseOutlined /></a-button>
 					</div>
 				</div>
 				<div class="foot">
@@ -24,17 +24,19 @@
 						<p>共 {{ storeCartGetters.validateTotal }} 件商品</p>
 						<p>&yen;{{ storeCartGetters.validateAmount }}</p>
 					</div>
-					<XtxButton type="plain">去购物车结算</XtxButton>
+					<XtxButton type="primary" v-model:disabled="checkButton" @click="$router.push('/cart')">去购物车结算</XtxButton>
 				</div>
 			</div>
 		</template>
 		<!-- 购物车图标按钮 -->
 		<a-badge :count="storeCartGetters.validateTotal" class="cart-btn">
-			<a-button type="dashed" shape="circle" size="large">
-				<template #icon>
-					<ShoppingCartOutlined />
-				</template>
-			</a-button>
+			<router-link to="/cart">
+				<a-button type="dashed" shape="circle" size="large">
+					<template #icon>
+						<ShoppingCartOutlined />
+					</template>
+				</a-button>
+			</router-link>
 		</a-badge>
 	</a-popover>
 </template>
@@ -42,27 +44,43 @@
 <script>
 import { ShoppingCartOutlined, CloseOutlined } from '@ant-design/icons-vue'
 
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useGetters, useActions } from '@/hooks'
+import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
+import 'ant-design-vue/es/message/style/css'
+
+const router = useRouter()
 export default {
 	setup() {
-		const visible = ref(true)
 		const storeCartGetters = useGetters('cart', ['validateList', 'validateTotal', 'validateAmount'])
-
-		const hide = () => {
-			visible.value = false
+		const storeCartActions = useActions('cart', ['getCartList', 'removeCart'])
+		const visible = ref(false)
+		const hide = () => (visible.value = false)
+		const checkButton = computed(() => !Boolean(storeCartGetters.validateTotal.value.valueOf()))
+		const deleteGoods = (goods) => {
+			// 这里处理购物车删除单个商品
+			try {
+				storeCartActions.removeCart(goods).then(() => message.success('删除成功!'))
+			} catch (e) {
+				message.error('删除失败!')
+				throw new Error(e)
+			}
 		}
-
-		const storeCartActions = useActions('cart', ['getCartList'])
+		const toCartPage = () => router.push('/cart')
 		onMounted(() => {
-			storeCartActions.getCartList().then(() => message.success('更新本地购物车成功！'))
+			if (Boolean(storeCartGetters.validateTotal.value.valueOf())) {
+				storeCartActions.getCartList().then(() => message.success('更新本地购物车成功！'))
+			}
 		})
 
 		return {
-			visible,
 			storeCartGetters,
+			visible,
 			hide,
+			checkButton,
+			deleteGoods,
+			toCartPage,
 		}
 	},
 	components: { ShoppingCartOutlined, CloseOutlined },
@@ -137,7 +155,6 @@ export default {
 					}
 				}
 				.right {
-					width: 100px;
 					margin-right: 20px;
 					text-align: center;
 					> p {
