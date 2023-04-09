@@ -57,6 +57,7 @@ declare module '@vue/runtime-core' {
     ATabPane: typeof import('ant-design-vue/es')['TabPane']
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATag: typeof import('ant-design-vue/es')['Tag']
+    Carousel: typeof import('./src/components/optional/carousel.vue')['default']
     RelevantGoodsBanner: typeof import('./src/components/optional/relevant-goods-banner.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
