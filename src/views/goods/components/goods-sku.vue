@@ -10,7 +10,7 @@
 								<img :src="val.picture" alt="" :title="val.name" />
 							</template>
 							<template v-else>
-								<span :title="val.name">{{ val.name }}</span>
+								<span class="ellipsis" :title="val.name">{{ val.name }}</span>
 							</template>
 						</a-radio-button>
 					</a-radio-group>
