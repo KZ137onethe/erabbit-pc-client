@@ -14,9 +14,11 @@
   - UI 组件库：ant-design-vue
   - 图标库：@ant-design-vue 和 @icon-park/next
   - 表单校验: async-validator
+  - 轮播图：swiper
+  - 数据运算（主要是金额）：big.js
   - 第三方工具：
     - vuex
     - vue-router
     - @vueuse
     - axios
-    - Eslint
+    - Eslint + Prettier
