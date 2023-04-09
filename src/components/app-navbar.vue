@@ -35,7 +35,7 @@
 				<a-col :flex="2">
 					<MobileTwoTone style="fontsize: 20px" />
 					&nbsp;
-					<a href="javascript:;">手机版</a>
+					<router-link to="/">手机版</router-link>
 				</a-col>
 			</a-row>
 		</div>

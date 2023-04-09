@@ -1,6 +1,7 @@
-import { _userCheckAccount } from '@/api'
+import { userApi } from '@/api'
 import { computed } from 'vue'
 
+const { _userCheckAccount } = userApi
 export const validateAccount = async (_rule, value) => {
 	return new Promise((resolve, reject) => {
 		if (value === '') {

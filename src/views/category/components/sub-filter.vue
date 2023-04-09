@@ -40,7 +40,9 @@
 <script>
 import { ref, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { _findSubCategoryFilter } from '@/api'
+import { categoryApi } from '@/api'
+
+const { _findSubCategoryFilter } = categoryApi
 export default {
 	name: 'sub-filter',
 	setup(props, { emit }) {

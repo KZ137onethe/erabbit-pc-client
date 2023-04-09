@@ -31,11 +31,12 @@ import CallbackPatch from './components/callback-patch'
 import { ref, reactive, h, onMounted } from 'vue'
 import { useState, useMutations } from '@/hooks'
 import { useRouter } from 'vue-router'
-import { _userQQLogin } from '@/api'
+import { userApi } from '@/api'
 import { NodeIndexOutlined, FormOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
+const { _userQQLogin } = userApi
 export default {
 	setup() {
 		const loading = ref(true)

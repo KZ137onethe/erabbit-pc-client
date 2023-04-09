@@ -94,8 +94,9 @@
 <script>
 import GoodsTabsCommentPreviewImg from './goods-tabs-comment-previewImg'
 import { inject, ref, reactive, watch, toRefs } from 'vue'
-import { _findGoodsCommentInfo, _findGoodsCommentData } from '@/api'
+import { productApi } from '@/api'
 
+const { _findGoodsCommentInfo, _findGoodsCommentData } = productApi
 export default {
 	components: { GoodsTabsCommentPreviewImg },
 	setup() {

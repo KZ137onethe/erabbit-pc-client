@@ -43,12 +43,13 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
 import { ref, reactive, computed, warn } from 'vue'
-import { _userPCRegisterVerificationCode, _userQQPatchAccount } from '@/api'
+import { userApi } from '@/api'
 import { checkButton, SendBtn } from './form'
 import { PatchRules } from './schema-rule/callback-patch-validate'
 import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 
+const { _userPCRegisterVerificationCode, _userQQPatchAccount } = userApi
 export default {
 	props: {
 		unionId: {

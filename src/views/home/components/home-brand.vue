@@ -47,8 +47,10 @@ import HomePanel from './home-panel'
 import HomeSkeleton from './home-skeleton'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
 import { ref, computed } from 'vue'
-import { _findBrand } from '@/api'
+import { homeApi } from '@/api'
 import { useLazyData } from '@/hooks'
+
+const { _findBrand } = homeApi
 export default {
 	components: {
 		HomePanel,

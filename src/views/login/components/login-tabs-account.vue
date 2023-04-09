@@ -90,11 +90,12 @@ import 'ant-design-vue/es/message/style/css'
 import { ref, reactive, computed } from 'vue'
 
 import { LoginRules } from './schema-rule/login-account-validate.js'
-import { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } from '@/api'
+import { userApi } from '@/api'
 import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 import { SendBtn } from './form'
 
+const { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } = userApi
 const imageQQURL = 'https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png'
 const QQ_sdk_callback_url =
 	'https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback'

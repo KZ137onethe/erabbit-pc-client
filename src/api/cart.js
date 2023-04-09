@@ -5,8 +5,7 @@ import { request } from './request.js'
  * @param {String} skuId -- 商品规格唯一id
  * return Promise
  */
-
-export const _getGoodsInfoNewest = (skuId) => {
+export function _getGoodsInfoNewest(skuId) {
 	return request(`/goods/stock/${skuId}`, 'get')
 }
 
@@ -15,7 +14,7 @@ export const _getGoodsInfoNewest = (skuId) => {
  * @param {String} skuId -- 商品规格唯一id
  * @returns
  */
-export const _getCartSku = (skuId) => {
+export function _getCartSku(skuId) {
 	return request(`/goods/sku/${skuId}`, 'get')
 }
 
@@ -25,14 +24,14 @@ export const _getCartSku = (skuId) => {
  * object 必须包含 skuId, selected, count 这三个字段
  * @returns
  */
-export const _mergeLocalCart = (localCartList) => {
+export function _mergeLocalCart(localCartList) {
 	return request(`/member/cart/merge`, 'post', localCartList)
 }
 
 /**
  * 登录状态下，获取购物车列表
  */
-export const _getCartList = () => {
+export function _getCartList() {
 	return request('/member/cart', 'get')
 }
 
@@ -42,7 +41,7 @@ export const _getCartList = () => {
  * @param {Number} count -- 商品数量
  * @returns
  */
-export const _addCart = ({ skuId, count }) => {
+export function _addCart({ skuId, count }) {
 	return request('/member/cart', 'post', { skuId, count })
 }
 
@@ -51,7 +50,7 @@ export const _addCart = ({ skuId, count }) => {
  * @param {Array<string>} ids -- skuId数组集合
  * @returns
  */
-export const _deleteCart = (ids) => {
+export function _deleteCart(ids) {
 	return request('/member/cart', 'delete', { ids: ids })
 }
 
@@ -62,7 +61,7 @@ export const _deleteCart = (ids) => {
  * @param {Number} count -- 商品数量
  * @returns
  */
-export const _modifyCart = ({ skuId, selected, count }) => {
+export function _modifyCart({ skuId, selected, count }) {
 	return request(`/member/cart/${skuId}`, 'put', { selected, count })
 }
 
@@ -72,6 +71,6 @@ export const _modifyCart = ({ skuId, selected, count }) => {
  * @param {Array<string>} ids -- skuId数组集合
  * @returns
  */
-export const _checkCartAllSelected = ({ selected, ids }) => {
+export function _checkCartAllSelected({ selected, ids }) {
 	return request(`/member/cart/selected`, 'put', { selected, ids: ids })
 }

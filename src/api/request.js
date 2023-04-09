@@ -44,7 +44,7 @@ instance.interceptors.response.use(
 )
 
 // * 请求工具函数
-const request = (url, method, submitData) => {
+function request(url, method, submitData) {
 	// * 负责发请求
 	return instance({
 		url,

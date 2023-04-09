@@ -1,7 +1,8 @@
-import { _findGoodsDetail } from '@/api'
+import { productApi } from '@/api'
 import { ref, watch, nextTick } from 'vue'
 const goods = ref(null)
 
+const { _findGoodsDetail } = productApi
 // 获取商品详情
 export const useGoods = (route) => {
 	watch(

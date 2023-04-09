@@ -56,10 +56,12 @@ import 'ant-design-vue/es/message/style/css'
 
 import { reactive, computed } from 'vue'
 import { ValidateRule } from './schema-rule/register-validate.js'
-import { _userPCRegisterVerificationCode, _userPCRegister } from '@/api'
+import { userApi } from '@/api'
 import { checkButton, SendBtn } from './form'
 import { useState } from '@/hooks'
 import { useRouter } from 'vue-router'
+
+const { _userPCRegisterVerificationCode, _userPCRegister } = userApi
 export default {
 	setup() {
 		const router = useRouter()

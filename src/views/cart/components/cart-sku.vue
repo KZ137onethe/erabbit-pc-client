@@ -19,7 +19,8 @@ import { DownOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 
 import { h, ref, computed } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { _getCartSku } from '@/api'
+import { cartApi } from '@/api'
+const { _getCartSku } = cartApi
 export default {
 	name: 'CartSku',
 	props: {

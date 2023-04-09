@@ -5,7 +5,7 @@ import { request } from './request'
  * @param {String} account -- 用户账号
  * @param {String} password -- 用户密码
  */
-export const _userAccountLogin = ({ account, password }) => {
+export function _userAccountLogin({ account, password }) {
 	return request('/login', 'post', { account, password })
 }
 
@@ -14,7 +14,7 @@ export const _userAccountLogin = ({ account, password }) => {
  * @param {Number} phone -- 手机号
  * @returns Object
  */
-export const _userGetVerificationCode = (phone) => {
+export function _userGetVerificationCode(phone) {
 	return request('/login/code', 'get', { mobile: phone })
 }
 
@@ -24,7 +24,7 @@ export const _userGetVerificationCode = (phone) => {
  * @param {Number} verificationCode -- 验证码
  * @returns Object
  */
-export const _userSMSLogin = ({ phone, verificationCode }) => {
+export function _userSMSLogin({ phone, verificationCode }) {
 	return request('/login/code', 'post', { mobile: phone, code: verificationCode })
 }
 
@@ -34,7 +34,7 @@ export const _userSMSLogin = ({ phone, verificationCode }) => {
  * @param {*} source -- 注册来源，1为pc，2为webapp，3为微信小程序，4为Android，5为ios,6为qq,7为微信
  * @returns Object
  */
-export const _userQQLogin = ({ unionId, source = 6 }) => {
+export function _userQQLogin({ unionId, source = 6 }) {
 	return request('/login/social', 'post', { unionId, source })
 }
 
@@ -43,7 +43,7 @@ export const _userQQLogin = ({ unionId, source = 6 }) => {
  * @param {Number} phone -- 手机号
  * @returns
  */
-export const _userQQBindGetVerificationCode = (phone) => {
+export function _userQQBindGetVerificationCode(phone) {
 	return request('/login/social/code', 'get', { mobile: phone })
 }
 
@@ -54,7 +54,7 @@ export const _userQQBindGetVerificationCode = (phone) => {
  * @param { Number } verificationCode -- 验证码
  * @returns
  */
-export const _userQQBindPhone = ({ unionId, mobile, verificationCode }) => {
+export function _userQQBindPhone({ unionId, mobile, verificationCode }) {
 	return request('/login/social/bind', 'post', { unionId, mobile, code: verificationCode })
 }
 
@@ -63,7 +63,7 @@ export const _userQQBindPhone = ({ unionId, mobile, verificationCode }) => {
  * @param {string} account -- 用户账号名
  * @returns
  */
-export const _userCheckAccount = (account) => {
+export function _userCheckAccount(account) {
 	return request('/register/check', 'get', { account })
 }
 
@@ -73,7 +73,7 @@ export const _userCheckAccount = (account) => {
  * @param {Object} { account, phone, verificationCode, password } -- 用户账号名,用户手机号,手机验证码,账号密码
  * @returns
  */
-export const _userQQPatchAccount = (unionId, { account, phone, verificationCode, password }) => {
+export function _userQQPatchAccount(unionId, { account, phone, verificationCode, password }) {
 	return request(`/login/social/${unionId}/complement`, 'post', { account, mobile: phone, code: verificationCode, password })
 }
 
@@ -82,7 +82,7 @@ export const _userQQPatchAccount = (unionId, { account, phone, verificationCode,
  * @param {*} phone -- 手机号
  * @returns
  */
-export const _userPCRegisterVerificationCode = (phone) => {
+export function _userPCRegisterVerificationCode(phone) {
 	return request('/register/code', 'get', { mobile: phone })
 }
 
@@ -94,6 +94,6 @@ export const _userPCRegisterVerificationCode = (phone) => {
  * @param {} password -- 用户账号密码
  * @returns
  */
-export const _userPCRegister = ({ account, phone, verificationCode, password }) => {
+export function _userPCRegister({ account, phone, verificationCode, password }) {
 	return request('/register', 'post', { account, mobile: phone, code: verificationCode, password })
 }

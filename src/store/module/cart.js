@@ -1,5 +1,8 @@
 import Big from 'big.js'
-import { _getGoodsInfoNewest, _mergeLocalCart, _getCartList, _addCart, _deleteCart, _modifyCart, _checkCartAllSelected } from '@/api'
+
+import { cartApi } from '@/api'
+const { _getGoodsInfoNewest, _mergeLocalCart, _getCartList, _addCart, _deleteCart, _modifyCart, _checkCartAllSelected } = cartApi
+
 // 购物车模块
 const CartModule = {
 	namespaced: true,

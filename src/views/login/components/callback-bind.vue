@@ -39,10 +39,11 @@ import 'ant-design-vue/es/message/style/css'
 import { ref, reactive, computed, onMounted } from 'vue'
 import { checkButton, SendBtn } from './form'
 import { BindRules } from './schema-rule/callback-bind-validate.js'
-import { _userQQBindGetVerificationCode, _userQQBindPhone } from '@/api'
+import { userApi } from '@/api'
 import { useState, useMutations, useActions } from '@/hooks'
 import { useRouter } from 'vue-router'
 
+const { _userQQBindGetVerificationCode, _userQQBindPhone } = userApi
 export default {
 	components: {
 		MobileOutlined,

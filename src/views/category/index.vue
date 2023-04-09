@@ -41,12 +41,14 @@
 </template>
 
 <script>
-import { _findTopCategory } from '@/api'
+import { categoryApi } from '@/api'
 import { useState } from '@/hooks'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import CategoryBanner from './components/category-banner'
 import CategoryGoodsItem from './components/category-goods-item'
+
+const { _findTopCategory } = categoryApi
 export default {
 	name: 'category-index',
 	setup() {
