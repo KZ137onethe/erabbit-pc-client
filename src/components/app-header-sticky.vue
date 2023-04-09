@@ -1,10 +1,10 @@
 <template>
-	<div class="app-header-sticky" :class="{ show: scrollY >= 78 && isShow.value }">
-		<div class="container" v-show="scrollY >= 78">
+	<div class="app-header-sticky" :class="{ show: show }">
+		<div class="container" v-show="show">
 			<RouterLink to="/">
 				<a-image :width="200" :height="132" :src="logoImg" :preview="false" class="logo" />
 			</RouterLink>
-			<AppHeaderNav />
+			<AppHeaderNav :layer-show="show" />
 			<a-row type="flex" justify="space-around" align="middle">
 				<a-col :flex="1">
 					<RouterLink to="/">品牌</RouterLink>
@@ -20,7 +20,7 @@
 <script>
 import AppHeaderNav from './app-header-nav.vue'
 
-import { computed } from 'vue'
+import { computed, toRefs } from 'vue'
 import { useWindowScroll } from '@vueuse/core'
 import logoImg from '@/assets/images/logo.png'
 export default {
@@ -29,18 +29,23 @@ export default {
 		AppHeaderNav,
 	},
 	props: {
+		// 其实传递过来的是 computed 的数据
 		isShow: {
-			type: Boolean,
+			type: String,
 			default: true,
 		},
 	},
 	setup(props) {
 		const { y } = useWindowScroll()
-		const isShow = computed(() => props.isShow)
+		const isShow = computed(() => props.isShow?.value)
+		const show = computed(() => {
+			return Boolean(y.value >= 100 && isShow.value)
+		})
 		return {
 			scrollY: y,
 			logoImg,
 			isShow,
+			show,
 		}
 	},
 }
