@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from '@/store'
 
 // * 路由规则
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
 			{ path: '/category/sub/:id', component: () => import('@/views/category/sub.vue') },
 			{ path: '/product/:id', component: () => import('@/views/goods/index.vue') },
 			{ path: '/cart', component: () => import('@/views/cart/index.vue') },
+			{ path: '/member/checkout', component: () => import('@/views/member/pay/checkout.vue') },
 		],
 	},
 	{
@@ -36,6 +38,16 @@ const router = createRouter({
 		// 始终滚动到顶部
 		return { left: 0, top: 0 }
 	},
+})
+
+router.beforeEach((to, from, next) => {
+	const isLogin = store.getters['user/isLogin']
+	// 跳转去一个 /member 的地址，且未登录
+	if (to.path.startsWith('/member') && isLogin === false) {
+		next({ path: '/login', query: { redirectUrl: to.fullPath } })
+	} else {
+		next()
+	}
 })
 
 export default router
