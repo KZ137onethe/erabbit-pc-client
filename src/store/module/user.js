@@ -1,4 +1,5 @@
 // 用户模块
+
 const UserModule = {
 	namespaced: true,
 	state() {
@@ -22,7 +23,7 @@ const UserModule = {
 	getters: {
 		// 用户是否登录
 		isLogin(state) {
-			return false
+			return Boolean(state.profile.token)
 		},
 	},
 	mutations: {

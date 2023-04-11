@@ -5,6 +5,7 @@ export * as categoryApi from './category'
 export * as homeApi from './home'
 export * as productApi from './product'
 export * as userApi from './user'
+export * as orderApi from './order'
 
 let ApiFn = {}
 const modules = import.meta.glob(['./api/*.js', '!./api/index.js'], { eager: true })
