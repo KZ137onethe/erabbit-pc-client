@@ -7,7 +7,7 @@
 				<a-breadcrumb-item>购物车</a-breadcrumb-item>
 			</a-breadcrumb>
 			<!-- 购物车面板 -->
-			<a-table sticky :columns="columns" v-model:data-source="currentData">
+			<a-table sticky :columns="columns" v-model:data-source="currentData" :pagination="false">
 				<template #headerCell="{ column }">
 					<template v-if="column.key === 'Selected'">
 						<a-select ref="select" v-model:value="selectValue" :options="options" style="width: 100px" @change="selectChange($event)"> </a-select>
@@ -71,7 +71,7 @@
 								<span class="total">共计 ¥{{ dataSummary.selectedAmount }}</span>
 							</a-table-summary-cell>
 							<a-table-summary-cell class="overview" :index="4" :col-span="1">
-								<XtxButton type="primary" size="middle" :disabled="false">下单结算</XtxButton>
+								<XtxButton type="primary" size="middle" :disabled="false" @click="checkout()">下单结算</XtxButton>
 							</a-table-summary-cell>
 						</a-table-summary-row>
 					</a-table-summary>
@@ -84,14 +84,17 @@
 
 <script>
 import CartSku from './components/cart-sku.vue'
-import { Modal } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
+import 'ant-design-vue/es/message/style/css'
 import 'ant-design-vue/es/modal/style/css'
 import { WarningOutlined } from '@ant-design/icons-vue'
 
 import { ref, reactive, computed, createVNode, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import { useState, useGetters, useActions } from '@/hooks'
 import Big from 'big.js'
 import { options, columns } from './index.js'
+
 export default defineComponent({
 	setup() {
 		const { cartList } = useState('cart', {
@@ -246,6 +249,38 @@ export default defineComponent({
 			updateCartGoodsSku({ newValue, old })
 		}
 
+		// 结算
+		const { isLogin } = useGetters('user', ['isLogin'])
+		const { selectedList } = useGetters('cart', ['selectedList'])
+		const router = useRouter()
+		const checkout = () => {
+			// 判断 有无商品 或者 有无勾选的商品 => 判断是否登录
+			if (validateList.value.length === 0) {
+				message.error('当前购物车没有商品!')
+				return
+			}
+			if (selectedList.value.length === 0) {
+				message.warn('请选择至少一件商品!')
+				return
+			}
+
+			if (isLogin.value) {
+				router.push('/member/checkout')
+			} else {
+				// 提示去登录
+				Modal.confirm({
+					title: '提示',
+					content: createVNode('div', { style: 'color: orange;' }, '结算需要登录，你确认登录吗？'),
+					okText: '确认',
+					cancelText: '取消',
+					centered: true,
+					onOk() {
+						router.push('/member/checkout')
+					},
+				})
+			}
+		}
+
 		return {
 			options,
 			columns,
@@ -260,6 +295,7 @@ export default defineComponent({
 			deleteCartGoods,
 			deleteSelectedCartGoods,
 			updateCartSku,
+			checkout,
 		}
 	},
 	components: {
