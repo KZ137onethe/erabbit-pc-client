@@ -10,17 +10,22 @@ import Directive from './utils/plugin'
 import 'normalize.css'
 import '@/assets/styles/common.less'
 
-const app = createApp(App)
 // 导入全局注册的UI组件
 import { getComponent } from '@/components/library/index.js'
-await getComponent(app)
 
 // iconPark 字体图标库
 import { install } from '@icon-park/vue-next/es/all'
-install(app, 'i')
 
-app.use(router)
-app.use(store)
-app.use(Directive)
+;(async () => {
+	const app = createApp(App)
 
-app.mount('#app')
+	await getComponent(app)
+
+	install(app, 'i')
+
+	app.use(router)
+	app.use(store)
+	app.use(Directive)
+
+	app.mount('#app')
+})()
