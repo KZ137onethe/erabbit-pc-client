@@ -71,7 +71,7 @@
 								<span class="total">共计 ¥{{ dataSummary.selectedAmount }}</span>
 							</a-table-summary-cell>
 							<a-table-summary-cell class="overview" :index="4" :col-span="1">
-								<XtxButton type="primary" size="middle" :disabled="false" @click="checkout()">下单结算</XtxButton>
+								<XtxButton type="primary" size="middle" :disabled="false" @click="checkout">下单结算</XtxButton>
 							</a-table-summary-cell>
 						</a-table-summary-row>
 					</a-table-summary>
