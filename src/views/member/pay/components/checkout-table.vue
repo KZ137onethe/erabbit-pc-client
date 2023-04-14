@@ -1,7 +1,7 @@
 <template>
 	<div class="checkout-table">
 		<a-divider>商品明细</a-divider>
-		<a-table :columns="columns" :data-source="goods" :scroll="{ y: 1000 }" bordered>
+		<a-table :columns="columns" :data-source="goods" :scroll="{ y: 1000 }" bordered :pagination="false">
 			<template #bodyCell="{ column, record }">
 				<template v-if="column.dataIndex === 'goodsInfo'">
 					<a-row class="goods-info" type="flex" justify="start" :wrap="false">
@@ -16,7 +16,7 @@
 			<template #summary>
 				<a-table-summary :fixed="bottom">
 					<a-table-summary-row>
-						<a-table-summary-cell :col-span="6">
+						<a-table-summary-cell class="summary-cell--1" :col-span="6">
 							<!-- 商品件数: 5 商品总价: 500 运费: 10  -->
 							<a-row type="flex" justify="start">
 								<a-col :span="4">商品件数: {{ summary?.goodsCount }}</a-col>
@@ -25,8 +25,10 @@
 							</a-row>
 						</a-table-summary-cell>
 					</a-table-summary-row>
-					<a-table-summary-row>
-						<a-table-summary-cell :col-span="6">应付总额: {{ summary?.totalPayPrice }}</a-table-summary-cell>
+					<a-table-summary-row :bordered="false">
+						<a-table-summary-cell class="summary-cell--2" :col-span="6">
+							<span>应付总额: {{ summary?.totalPayPrice }}</span>
+						</a-table-summary-cell>
 					</a-table-summary-row>
 				</a-table-summary>
 			</template>
@@ -86,6 +88,14 @@ export default {
 	tfoot.ant-table-summary {
 		> tr {
 			background-color: #fafafa;
+			.summary-cell {
+				&--1 {
+					color: blue;
+				}
+				&--2 {
+					color: red;
+				}
+			}
 		}
 	}
 }
