@@ -1,5 +1,5 @@
 <script lang="jsx">
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, reactive } from 'vue'
 import { Divider, Button } from 'ant-design-vue'
 import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 
@@ -25,6 +25,7 @@ const Option = (props, { attrs, slots }) => {
 	)
 }
 
+// 订单页面那块
 export const DeliveryTime = defineComponent({
 	setup() {
 		const deliveryForm = ref([
@@ -43,7 +44,7 @@ export const DeliveryTime = defineComponent({
 		])
 		const copyArr = addMessage(deliveryForm.value, ': ', 'method', 'time')
 		return () => (
-			<Option class="delivery-time" title="配送时间">
+			<Option class="delivery-time bold" title="配送时间">
 				{{
 					content: () => (
 						<div class="main">
@@ -79,7 +80,7 @@ export const PayMethod = defineComponent({
 			},
 		])
 		return () => (
-			<Option class="delivery-time" title="配送时间">
+			<Option class="delivery-time bold" title="支付方式">
 				{{
 					content: () => (
 						<div class="main inline-block">
@@ -96,13 +97,67 @@ export const PayMethod = defineComponent({
 		)
 	},
 })
+
+// 支付页面那块
+export const PaymentPlatform = defineComponent({
+	setup() {
+		const platform = ref([
+			{
+				picture: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg',
+				message: '微信支付',
+			},
+			{
+				picture: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7b6b02396368c9314528c0bbd85a2e06.png',
+				message: '支付宝支付',
+			},
+		])
+		return () => (
+			<Option class="payment-platform bold" title="支付平台">
+				{{
+					content: () => (
+						<div class="main">
+							{platform.value.map((item, index) => (
+								<a-button size="large" key={index}>
+									<img src={item.picture} title={item.message} />
+								</a-button>
+							))}
+						</div>
+					),
+				}}
+			</Option>
+		)
+	},
+})
+
+export const PlatformMethods = defineComponent({
+	setup() {
+		const methods = ref(['工商银行', '招商银行', '建设银行', '农业银行', '交通银行'])
+		return () => (
+			<Option class="payment-methods bold" title="支付方式">
+				{{
+					content: () => (
+						<div class="main">
+							{methods.value.map((item, index) => (
+								<a-button size="large" key={index}>
+									{item}
+								</a-button>
+							))}
+						</div>
+					),
+				}}
+			</Option>
+		)
+	},
+})
 export default Option
 </script>
 
 <style lang="less" scoped>
-.ant-divider {
-	font-size: 18px;
-	font-weight: bold;
+.bold {
+	.ant-divider {
+		font-size: 18px;
+		font-weight: bold;
+	}
 }
 
 :deep(button.ant-btn) {

@@ -4,14 +4,14 @@
 		<div class="address-box">
 			<a-row class="address-box--wrapper" align="middle" :wrap="false">
 				<a-col :span="18" class="now">
-					<a-row v-if="addressNow?.length" type="flex" justify="space-between" class="now-content">
+					<a-row v-if="currentAddress" type="flex" justify="space-between" class="now-content">
 						<a-col class="now-info">
-							<p>收货人: {{ addressNow.receiver }}</p>
-							<p>联系方式: {{ addressNow.contact }}</p>
-							<p>收货地址: {{ addressNow.fullLocation + addressNow.address }}</p>
+							<p>收货人: {{ currentAddress?.receiver }}</p>
+							<p>联系方式: {{ currentAddress?.contact }}</p>
+							<p>收货地址: {{ currentAddress?.fullLocation + currentAddress?.address }}</p>
 						</a-col>
 						<a-col class="now-modify">
-							<a-button type="link">修改地址</a-button>
+							<a-button type="link" @click="open('modifyAddress')">修改地址</a-button>
 						</a-col>
 					</a-row>
 					<a-row v-else class="empty" type="flex" justify="center" align="center">
@@ -21,17 +21,35 @@
 				<a-divider type="vertical" style="height: 100%" />
 				<a-col :span="5" class="option">
 					<a-row type="flex" align="middle" justify="space-around">
-						<a-button>切换地址</a-button>
-						<a-button>添加地址</a-button>
+						<a-button v-model:disabled="actionsBtn.switchAddress" @click="open('switchAddress')">切换地址</a-button>
+						<a-button @click="open('appendAddress')">添加地址</a-button>
 					</a-row>
 				</a-col>
 			</a-row>
 		</div>
+		<CheckoutAddressAppend v-model:open="actions.appendAddress" @close="close('appendAddress')" @submit="appendAddress" />
+		<CheckoutAddressSwitch
+			v-model:addressGroup="addressGroup"
+			v-model:open="actions.switchAddress"
+			@change="switchAddress"
+			@delete="removeAddress"
+			@close="close('switchAddress')"
+		/>
+		<CheckoutAddressModify
+			v-bind:address="currentAddress"
+			v-model:open="actions.modifyAddress"
+			@change="modifyAddress"
+			@close="close('modifyAddress')"
+		/>
 	</div>
 </template>
 
 <script>
-import { computed } from 'vue'
+import CheckoutAddressAppend from './checkout-address-append.vue'
+import CheckoutAddressSwitch from './checkout-address-switch.vue'
+import CheckoutAddressModify from './checkout-address-modify.vue'
+
+import { ref, computed, reactive, onMounted, nextTick } from 'vue'
 export default {
 	props: {
 		address: {
@@ -39,18 +57,94 @@ export default {
 			required: true,
 		},
 	},
-	setup(props) {
-		const addressNow = computed(() => {
+	setup(props, { emit }) {
+		const addressGroup = computed(() => {
 			if (props.address === undefined) {
 				return []
-			} else {
-				const addressIndex = props.address.indexOf((item) => item?.isDefault === 1)
-				return addressIndex === -1 ? props.address[0] : props.address[addressIndex]
 			}
+			return props.address
+		})
+		const currentAddress = computed(() => {
+			const valueArr = computed(() =>
+				addressGroup.value.map((item) => {
+					return item?.isDefault
+				})
+			)
+			const index = computed(() => valueArr.value.findIndex((value) => value === 0))
+			return addressGroup.value[index.value]
+		})
+
+		// 弹层状态（开和闭）
+		const actions = reactive({
+			appendAddress: false,
+			modifyAddress: false,
+			switchAddress: false,
+		})
+
+		// 操作的按钮
+		const actionsBtn = reactive({
+			switchAddress: computed(() => !Boolean(addressGroup.value.length)),
+		})
+
+		const open = (modal) => {
+			if (Boolean(modal in actions) === false) return
+			for (let key in actions) {
+				actions[key] = false
+			}
+			actions[modal] = true
+		}
+		const close = (modal) => {
+			console.log('modal:', modal)
+			if (Boolean(modal in actions) === false) return
+			actions[modal] = false
+		}
+
+		const appendAddress = (submitData) => {
+			const copyData = reactive(Object.assign({}, submitData))
+			if (addressGroup.value.length === 0) {
+				copyData.isDefault = 0
+			}
+			addressGroup.value.unshift(copyData)
+		}
+
+		const switchAddress = (address) => {
+			const index = addressGroup.value.findIndex((item) => item.id === address.id)
+			addressGroup.value[index].isDefault = 0
+			emit('change', currentAddress.value?.id)
+		}
+
+		const removeAddress = (addressId) => {
+			const index = addressGroup.value.findIndex((item) => item.id === addressId)
+			addressGroup.value.splice(index, 1)
+			emit('change', currentAddress.value?.id)
+		}
+
+		const modifyAddress = (address) => {
+			const index = addressGroup.value.findIndex((item) => item.id === address.id)
+			addressGroup.value[index] = address
+			emit('change', currentAddress.value?.id)
+		}
+
+		onMounted(() => {
+			emit('change', currentAddress.value?.id)
 		})
 		return {
-			addressNow,
+			addressGroup,
+			actions,
+			actionsBtn,
+			currentAddress,
+			open,
+			close,
+			appendAddress,
+			switchAddress,
+			removeAddress,
+			modifyAddress,
 		}
+	},
+	components: {
+		CheckoutAddressAppend,
+		CheckoutAddressSwitch,
+		CheckoutAddressModify,
 	},
 }
 </script>
