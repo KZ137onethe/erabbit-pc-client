@@ -1,5 +1,5 @@
-import { useIntervalFn } from '@vueuse/core'
-import { ref, reactive, computed, defineComponent, watch} from 'vue'
+import { useReciprocalTime } from '@/hooks'
+import { ref, reactive, computed, defineComponent} from 'vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 import { Button } from 'ant-design-vue'
@@ -36,32 +36,25 @@ export const SendBtn = defineComponent({
   setup(props){
     const {  data_rule, AuthenticationFn } = props;
     const data = computed(() => props.data)
-    const timer = ref(0)
-    const { pause, resume } = useIntervalFn(
-      () => {
-        timer.value--
-        if (timer.value <= 0) {
-          pause()
-        }
-      },
-      1000,
-      false
-    )
-    
+    const process = ref(null)
     const SendCode = async () => {
 			// 校验手机号
       
 			const validate = data_rule(data.value)
 			if (validate) {
+        
 				try {
 					await AuthenticationFn(data.value)
 					message.success('短信发送成功！')
-					timer.value = 60
+					// timer.value = 60
+          process.value = useReciprocalTime(60)
 				} catch (e) {
 					message.error(e.response.data.message)
-					timer.value = 3
+					// timer.value = 3
+          process.value  = useReciprocalTime(3)
 				} finally {
-					resume()
+					// resume()
+          process.value?.start()
 				}
 			} else {
 				// 手机校验失败，提示用户
@@ -69,9 +62,11 @@ export const SendBtn = defineComponent({
 			}
 		}
 
+    // 这里写个正则更合适
+    const timeNumber = computed(() => parseInt(process.value?.zh_time) || 0)
     const checkBtn = reactive({
-      msg: computed(() => timer.value <= 0 ? '发送验证码' : `${timer.value}秒`),
-      disabled: computed(() => timer.value > 0)
+      msg: computed(() => timeNumber.value <= 0 ? '发送验证码' : `${process.value?.zh_time}`),
+      disabled: computed(() => timeNumber.value > 0)
     })
 
     return () => (
