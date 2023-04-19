@@ -8,7 +8,7 @@
 			<a-spin v-if="layerLoading" :indicator="indicator" />
 			<div v-else class="result">
 				<GoodsSku @amend="changeSku($event)" :skuId="skuId" :goods="skuData"></GoodsSku>
-				<XtxButton type="primary" :disabled="false" size="mini" @click="submit">确认</XtxButton>
+				<XtxButton type="primary" size="mini" @click="submit">确认</XtxButton>
 			</div>
 		</div>
 	</div>

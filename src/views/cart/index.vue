@@ -71,7 +71,7 @@
 								<span class="total">共计 ¥{{ dataSummary.selectedAmount }}</span>
 							</a-table-summary-cell>
 							<a-table-summary-cell class="overview" :index="4" :col-span="1">
-								<XtxButton type="primary" size="middle" :disabled="false" @click="checkout">下单结算</XtxButton>
+								<XtxButton v-model:disabled="checkBtn" type="primary" size="middle" @click="checkout">下单结算</XtxButton>
 							</a-table-summary-cell>
 						</a-table-summary-row>
 					</a-table-summary>
@@ -281,6 +281,8 @@ export default defineComponent({
 			}
 		}
 
+		const checkBtn = computed(() => !Boolean(validateList.value.length && selectedList.value.length))
+
 		return {
 			options,
 			columns,
@@ -296,6 +298,7 @@ export default defineComponent({
 			deleteSelectedCartGoods,
 			updateCartSku,
 			checkout,
+			checkBtn,
 		}
 	},
 	components: {
@@ -305,6 +308,10 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.breadcrumb {
+	height: 40px;
+	line-height: 40px;
+}
 .preview {
 	display: flex;
 	flex-flow: row nowrap;

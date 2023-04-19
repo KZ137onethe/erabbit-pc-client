@@ -18,7 +18,7 @@
 				<!-- 商品明细，结算(表格总览) -->
 				<CheckoutTable :data="order"></CheckoutTable>
 				<div class="order-submit">
-					<XtxButton type="primary" :disabled="false" @click="submitOrder">提交订单</XtxButton>
+					<XtxButton v-model:disabled="checkBtn" type="primary" @click="submitOrder">提交订单</XtxButton>
 				</div>
 			</a-space>
 		</div>
@@ -32,7 +32,7 @@ import CheckoutTable from './components/checkout-table.vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { orderApi } from '@/api'
 import { useRouter } from 'vue-router'
 
@@ -67,9 +67,18 @@ export default {
 					})
 				})
 			} else {
-				message.warn('您尚未选择收货地址，添加收货地址才能提交!')
+				message.warn('您的订单必选项尚未选择完整，完善必选项才能提交!')
 			}
 		}
+
+		const checkBtn = computed(() => {
+			for (let [key, value] of Object.entries(submitParams)) {
+				if (Boolean(value) === false && key !== 'buyerMessage') {
+					return true
+				}
+			}
+			return false
+		})
 
 		const router = useRouter()
 		onMounted(() => {
@@ -88,6 +97,7 @@ export default {
 			submitParams,
 			toggleAddress,
 			submitOrder,
+			checkBtn,
 		}
 	},
 	components: {
