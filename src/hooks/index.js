@@ -1,9 +1,8 @@
-import { useState } from './useState'
-import { useGetters } from './useGetters'
-import { useMutations } from './useMutations'
-import { useActions } from './useActions'
-import { useLazyData } from './useLazyData'
-
 // ! tips: 封装的vuex函数不能在嵌套中使用！！！
+export { useState } from './useState'
+export { useGetters } from './useGetters'
+export { useMutations } from './useMutations'
+export { useActions } from './useActions'
 
-export { useState, useGetters, useMutations, useActions, useLazyData }
+export { useLazyData } from './useLazyData'
+export { useReciprocalTime } from './useReciprocalTime.js'
