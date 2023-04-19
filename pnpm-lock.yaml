@@ -20,6 +20,7 @@ specifiers:
   conventional-changelog-cli: ^2.2.2
   core-js: ^3.29.1
   cz-customizable: ^7.0.0
+  dayjs: ^1.11.7
   eslint: ^8.36.0
   eslint-config-prettier: ^8.7.0
   eslint-config-standard: ^17.0.0
@@ -48,6 +49,7 @@ dependencies:
   ant-design-vue: 3.2.15_vue@3.2.47
   axios: 1.3.4
   big.js: 6.2.1
+  dayjs: 1.11.7
   less: 4.1.3
   normalize.css: 8.0.1
   swiper: 9.2.0
