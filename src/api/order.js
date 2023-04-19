@@ -57,3 +57,12 @@ export function _removeAddress(addressId) {
 export function _submitOrder({ goods, addressId, deliveryTimeType, payType, payChannel, buyerMessage }) {
 	return request(`/member/order`, 'post', { goods, addressId, deliveryTimeType, payType, payChannel, buyerMessage })
 }
+
+/**
+ * 获取我的订单详情
+ * @param {String} orderId -- 订单ID
+ * @returns
+ */
+export function _getOrderDetail(orderId) {
+	return request(`/member/order/${orderId}`, 'get')
+}
