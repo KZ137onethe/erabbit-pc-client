@@ -49,7 +49,7 @@ import CheckoutAddressAppend from './checkout-address-append.vue'
 import CheckoutAddressSwitch from './checkout-address-switch.vue'
 import CheckoutAddressModify from './checkout-address-modify.vue'
 
-import { ref, computed, reactive, onMounted, nextTick } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 export default {
 	props: {
 		address: {
@@ -108,8 +108,17 @@ export default {
 		}
 
 		const switchAddress = (address) => {
-			const index = addressGroup.value.findIndex((item) => item.id === address.id)
-			addressGroup.value[index].isDefault = 0
+			if (!address) {
+				return
+			}
+			const oldIndex = addressGroup.value.findIndex((item) => item?.isDefault === 0)
+			const newIndex = addressGroup.value.findIndex((item) => item.id === address.id)
+			console.log(oldIndex, newIndex)
+			if (oldIndex !== -1) {
+				addressGroup.value[oldIndex].isDefault = 1
+			}
+			addressGroup.value[newIndex].isDefault = 0
+			console.log('addressGroup:', addressGroup.value)
 			emit('change', currentAddress.value?.id)
 		}
 

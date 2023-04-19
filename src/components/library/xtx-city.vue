@@ -2,7 +2,7 @@
 	<div class="xtx-city" ref="target">
 		<div class="select" @click="toggle">
 			<div v-if="!selectedArea.fullLocation" class="placeholder">{{ placeholder }}</div>
-			<div v-else class="value">{{ selectedArea.fullLocation }}</div>
+			<div v-else class="value">{{ fullLocation || selectedArea.fullLocation }}</div>
 			<DownOutlined />
 		</div>
 		<div class="option" v-if="active">
@@ -29,10 +29,16 @@ export default {
 			type: String,
 			default: '请选择配送地址',
 		},
+		fullLocation: {
+			type: String,
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
 		// 城市组件的选择框默认提示
 		const placeholder = computed(() => props.placeholder)
+		// 外部传入的fullLocation => 只在外部有传入fullLocation 才会 根据外部的变化而改变
+		const fullLocation = computed(() => props.fullLocation)
 		// 城市组件的选择框状态
 		const active = ref(false)
 		// 城市组件元素
@@ -114,6 +120,7 @@ export default {
 		onClickOutside(target, () => close())
 		return {
 			placeholder,
+			fullLocation,
 			active,
 			target,
 			cityData,

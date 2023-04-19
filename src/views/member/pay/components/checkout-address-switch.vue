@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { computed, ref, reactive, nextTick } from 'vue'
+import { watch, computed, ref, toRefs } from 'vue'
 import { orderApi } from '@/api'
 
 const { _removeAddress } = orderApi
@@ -55,49 +55,43 @@ export default {
 		const addressList = computed(() => {
 			// 这里不能用解构赋值和Object.assign, 因为数组中的元素是对象会进行引用
 			// 进行深拷贝
-			const copy = JSON.parse(JSON.stringify(props.addressGroup))
-			copy.forEach((item) => {
-				item.selected = !Boolean(item.isDefault)
-			})
-			return copy
-		})
-		const popoverVisible = ref([])
-		nextTick().then(() => {
-			// DOM更新后
-			popoverVisible.value = new Array(addressList.value.length).fill(false)
-		})
-		const currentAddress = ref({})
-
-		const onFinish = () => {
-			const copy = Object.assign({}, currentAddress.value)
-			delete copy.selected
-			console.log('copy:', copy)
-			emit('change', copy)
-			onClose()
-		}
-		const onClose = () => {
-			emit('close', false)
-		}
-
-		const popoverControl = (index, status) => {
-			popoverVisible.value[index] = status
-		}
-
-		// 这里只需控制isDefault
-		const selected = (address) => {
-			for (let i = 0; i < addressList.value.length; i++) {
-				addressList.value[i].isDefault = 1
+			const copy = ref(JSON.parse(JSON.stringify(props.addressGroup)))
+			for (let i = 0; i < copy.value.length; i++) {
+				copy.value[i] = toRefs(copy.value[i])
 			}
-			console.log(
-				addressList.value.map((item) => {
-					return item?.isDefault
+
+			return copy.value
+		})
+
+		watch(
+			() => addressList.value.filter((item) => item.isDefault),
+			(newValue, oldValue) => {
+				addressList.value.forEach((item) => {
+					const value = item.isDefault
+					// console.log('value:', value)
+					item.selected = !Boolean(value)
 				})
-			)
-			const index = addressList.value.findIndex((item) => item.id === address.id)
-			addressList.value[index].isDefault = 0
-			const outAddress = Object.assign({}, addressList.value[index])
-			console.log(outAddress)
-			currentAddress.value = outAddress
+			}
+		)
+
+		const currentAddress = computed(() => {
+			const [filter] = addressList.value.filter((item) => item.isDefault === 0)
+			return filter
+		})
+
+		// 选中操作
+		const selected = (address) => {
+			if (address?.isDefault.value === 0) {
+				return
+			}
+			if (Object.keys(address).length !== 0) {
+				for (let i = 0; i < addressList.value.length; i++) {
+					addressList.value[i].isDefault = ref(1)
+				}
+				const index = addressList.value.findIndex((item) => item.id === address.id)
+				addressList.value[index].isDefault = ref(0)
+				// console.log('addressList:', addressList)
+			}
 		}
 
 		const deleteAddress = (addressId) => {
@@ -107,6 +101,31 @@ export default {
 					emit('delete', id)
 				})
 			}
+		}
+
+		const onFinish = () => {
+			;[currentAddress.value] = addressList.value.filter((item) => item.selected === true)
+			const copy = Object.assign({}, currentAddress.value)
+			delete copy.selected
+			emit('change', copy)
+			onClose()
+		}
+
+		const onClose = () => {
+			emit('close')
+		}
+
+		// 地址栏删除选项弹层
+		const popoverVisible = ref([])
+		watch(
+			() => addressList.value.length,
+			(newValue) => {
+				const len = newValue
+				popoverVisible.value = new Array(len).fill(false)
+			}
+		)
+		const popoverControl = (index, status) => {
+			popoverVisible.value[index] = status
 		}
 		return {
 			visible,

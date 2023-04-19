@@ -9,7 +9,7 @@
 				<a-input :placeholder="formFormat.contact.placeholder" v-model:value="formState.contact" />
 			</a-form-item>
 			<a-form-item name="fullLocation" :label="formFormat.fullLocation.label" :rules="[{ required: true }]">
-				<XtxCity placeholder="请选择所在地区" :fullLocation="formFormat.fullLocation" @change="modifyAddress"></XtxCity>
+				<XtxCity :placeholder="formFormat.fullLocation.placeholder" v-model:fullLocation="cityFullLocation" @change="modifyAddress"></XtxCity>
 			</a-form-item>
 			<a-form-item name="address" :label="formFormat.address.label" :rules="[{ required: true }]">
 				<a-input :placeholder="formFormat.address.placeholder" v-model:value="formState.address" />
@@ -80,7 +80,7 @@ export default {
 			contact: '',
 			address: '',
 			postalCode: '',
-			addressTags: [],
+			addressTags: '',
 			isDefault: 1,
 			provinceCode: '',
 			cityCode: '',
@@ -88,8 +88,9 @@ export default {
 			fullLocation: '',
 		})
 
+		const cityFullLocation = computed(() => formState.fullLocation || formFormat.fullLocation.placeholder)
 		const onFinish = () => {
-			const copyFormState = Object.assign({}, formState)
+			const copyFormState = reactive(Object.assign({}, formState))
 			delete copyFormState.fullLocation
 			_appendAddress(copyFormState)
 				.then((res) => {
@@ -97,6 +98,12 @@ export default {
 					copyFormState.fullLocation = formState.fullLocation
 					onClose()
 					emit('submit', copyFormState)
+					// 清空表单
+					for (let key in formState) {
+						if (key !== 'isDefault') {
+							formState[key] = ''
+						}
+					}
 					message.success('地址添加成功!')
 				})
 				.catch((e) => {
@@ -107,6 +114,8 @@ export default {
 		const onClose = () => {
 			emit('close')
 		}
+
+		// 修改City城市组件时才会修改formState的地址编码
 		const modifyAddress = (path) => {
 			const { provinceCode, cityCode, countryCode, fullLocation } = path
 			formState.provinceCode = provinceCode
@@ -119,6 +128,7 @@ export default {
 			visible,
 			formState,
 			formFormat,
+			cityFullLocation,
 			onFinish,
 			onClose,
 			modifyAddress,
