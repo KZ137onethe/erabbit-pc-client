@@ -1,4 +1,4 @@
-export { request } from './request'
+export { baseURL, request } from './request'
 export { topCategory } from './contents'
 export * as cartApi from './cart'
 export * as categoryApi from './category'

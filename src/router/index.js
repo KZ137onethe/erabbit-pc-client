@@ -15,6 +15,7 @@ const routes = [
 			{ path: '/cart', component: () => import('@/views/cart/index.vue') },
 			{ path: '/member/checkout', component: () => import('@/views/member/pay/checkout.vue') },
 			{ path: '/member/pay', component: () => import('@/views/member/pay/index.vue') },
+			{ path: '/pay/callback', component: () => import('@/views/member/pay/callback.vue') },
 		],
 	},
 	{
