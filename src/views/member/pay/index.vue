@@ -6,11 +6,12 @@
 			<a-breadcrumb-item>购物车</a-breadcrumb-item>
 			<a-breadcrumb-item>支付订单</a-breadcrumb-item>
 		</a-breadcrumb>
-		<div class="pay-status">
+		<div class="pay-status" v-if="order">
 			<a-row class="pay-status--wrapper" :wrap="false" align="middle" justify="space-between">
 				<a-col class="time">
 					<a-row :wrap="false">
 						<a-col>
+							<!-- 完成图标 -->
 							<icon>
 								<template #component>
 									<svg
@@ -32,37 +33,72 @@
 								</template>
 							</icon>
 						</a-col>
-						<a-col>
+						<a-col class="time-description">
 							<p>订单提交成功！请尽快完成支付。</p>
-							<p>支付还剩29分58秒，超时后将取消订单。</p>
+							<p>
+								<span v-if="order.countdown >= 0">
+									支付还剩<b>{{ payTime?.zh_time }}</b
+									>， 超时将取消订单
+								</span>
+								<b v-else>订单已超时!</b>
+							</p>
 						</a-col>
 					</a-row>
 				</a-col>
 				<a-col class="total" :wrap="false">
 					<span>应付总额：</span>
-					<span class="total-amount">&yen; 296</span>
+					<span class="total-amount">&yen; {{ order.payMoney }}</span>
 				</a-col>
 			</a-row>
 		</div>
 		<div class="pay-type">
-			<PaymentPlatform />
-			<PlatformMethods />
+			<a-space direction="vertical" size="large">
+				<header class="pay-type--description">选择以下支付方式付款</header>
+				<PayPlatform />
+				<PayMethods />
+			</a-space>
 		</div>
 	</div>
 </template>
 
 <script>
-import Icon, { CheckCircleOutlined } from '@ant-design/icons-vue'
-import { PaymentPlatform, PlatformMethods } from './components/public-option.vue'
+import Icon from '@ant-design/icons-vue'
+import PayPlatform from './components/pay-platform.vue'
+import PayMethods from './components/pay-methods.vue'
+
+import { orderApi } from '@/api'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useReciprocalTime } from '@/hooks'
+
+const { _getOrderDetail } = orderApi
 export default {
 	setup() {
-		return {}
+		const route = useRoute()
+		const order = ref(null)
+		const orderId = computed(() => route.query.id)
+
+		const payTime = ref(null)
+		onMounted(() => {
+			_getOrderDetail(orderId.value).then((res) => {
+				const { result } = res
+				order.value = result
+				if (result.countdown >= 0) {
+					payTime.value = useReciprocalTime(result.countdown)
+					payTime.value.start()
+				}
+			})
+		})
+
+		return {
+			order,
+			payTime,
+		}
 	},
 	components: {
 		Icon,
-		CheckCircleOutlined,
-		PaymentPlatform,
-		PlatformMethods,
+		PayPlatform,
+		PayMethods,
 	},
 }
 </script>
@@ -79,10 +115,40 @@ export default {
 .pay-status {
 	.background-layout();
 	padding: 20px 50px;
+	.time {
+		.time-description {
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-around;
+			> p {
+				margin: 0;
+				margin-left: 10px;
+				span b {
+					color: @xtxColor;
+				}
+				> b {
+					color: @priceColor;
+				}
+			}
+		}
+	}
+	.total {
+		.total-amount {
+			color: @priceColor;
+			font-size: 18px;
+		}
+	}
 }
 
 .pay-type {
 	.background-layout();
 	padding: 20px 30px;
+	:deep(.ant-space-vertical) {
+		width: 100%;
+	}
+	&--description {
+		font-size: 16px;
+		font-weight: 700;
+	}
 }
 </style>

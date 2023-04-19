@@ -97,58 +97,6 @@ export const PayMethod = defineComponent({
 		)
 	},
 })
-
-// 支付页面那块
-export const PaymentPlatform = defineComponent({
-	setup() {
-		const platform = ref([
-			{
-				picture: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg',
-				message: '微信支付',
-			},
-			{
-				picture: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7b6b02396368c9314528c0bbd85a2e06.png',
-				message: '支付宝支付',
-			},
-		])
-		return () => (
-			<Option class="payment-platform bold" title="支付平台">
-				{{
-					content: () => (
-						<div class="main">
-							{platform.value.map((item, index) => (
-								<a-button size="large" key={index}>
-									<img src={item.picture} title={item.message} />
-								</a-button>
-							))}
-						</div>
-					),
-				}}
-			</Option>
-		)
-	},
-})
-
-export const PlatformMethods = defineComponent({
-	setup() {
-		const methods = ref(['工商银行', '招商银行', '建设银行', '农业银行', '交通银行'])
-		return () => (
-			<Option class="payment-methods bold" title="支付方式">
-				{{
-					content: () => (
-						<div class="main">
-							{methods.value.map((item, index) => (
-								<a-button size="large" key={index}>
-									{item}
-								</a-button>
-							))}
-						</div>
-					),
-				}}
-			</Option>
-		)
-	},
-})
 export default Option
 </script>
 
