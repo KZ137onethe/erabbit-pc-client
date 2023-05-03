@@ -11,7 +11,7 @@
 							</template>
 						</a-avatar>
 						&emsp;
-						<a href="javascript:;">{{ profile.account }}</a>
+						<router-link to="/member">{{ profile.account }}</router-link>
 					</a-col>
 					<a-divider type="vertical" style="height: 20px; border-color: gray" />
 					<a-col :flex="2"><a @click="logout" href="javascript:;">退出登录</a></a-col>

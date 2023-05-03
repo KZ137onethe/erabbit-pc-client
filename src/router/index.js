@@ -16,6 +16,15 @@ const routes = [
 			{ path: '/member/checkout', component: () => import('@/views/member/pay/checkout.vue') },
 			{ path: '/member/pay', component: () => import('@/views/member/pay/index.vue') },
 			{ path: '/pay/callback', component: () => import('@/views/member/pay/callback.vue') },
+			{
+				path: '/member',
+				component: () => import('@/views/member/layout.vue'),
+				children: [
+					{ path: '/member', component: () => import('@/views/member/home/index.vue') },
+					{ path: '/member/order', component: () => import('@/views/member/order/index.vue') },
+					{ path: '/member/order/:id', component: () => import('@/views/member/order/detail.vue') },
+				],
+			},
 		],
 	},
 	{
