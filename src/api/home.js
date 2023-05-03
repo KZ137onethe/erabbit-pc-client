@@ -1,4 +1,4 @@
-import { request } from './request'
+import { request } from '@/utils/request.js'
 
 // ? 定义主页的品牌数据请求接口
 export function _findBrand(limitNum = 6) {

@@ -1,4 +1,4 @@
-import { request } from './request.js'
+import { request } from '@/utils/request.js'
 
 /**
  * 获取结算信息

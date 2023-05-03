@@ -1,4 +1,4 @@
-import { request } from './request'
+import { request } from '@/utils/request.js'
 
 // 定义获得商品详情的接口
 export function _findGoodsDetail(id) {

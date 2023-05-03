@@ -1,4 +1,4 @@
-import { request } from './request'
+import { request } from '@/utils/request.js'
 // ? 获取首页头部的分类数据
 export function _findAllCategory() {
 	return request('/home/category/head', 'get')

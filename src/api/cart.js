@@ -1,4 +1,4 @@
-import { request } from './request.js'
+import { request } from '@/utils/request.js'
 
 /**
  * 获取最新的商品信息
