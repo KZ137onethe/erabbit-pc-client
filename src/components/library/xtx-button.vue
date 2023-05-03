@@ -59,7 +59,7 @@ export default {
 	font-size: 14px;
 }
 .mini {
-	width: 60px;
+	width: 80px;
 	height: 32px;
 	font-size: 14px;
 }
