@@ -15,6 +15,11 @@
 </template>
 
 <script>
+import AppNavbar  from '@/components/app-navbar.vue'
+import AppHeader from '@/components/app-header.vue'
+import AppHeaderSticky from '@/components/app-header-sticky.vue'
+import AppFooter from '@/components/app-footer.vue'
+
 import { computed, inject } from 'vue'
 export default {
 	setup() {
@@ -26,7 +31,13 @@ export default {
 			headSticky,
 		}
 	},
+  components:{
+    AppNavbar,
+    AppHeader,
+    AppHeaderSticky,
+    AppFooter
+  }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>
