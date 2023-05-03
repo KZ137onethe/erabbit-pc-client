@@ -1,5 +1,5 @@
 // ? 这里定义 用户 相关的接口
-import { request } from './request'
+import { request } from '@/utils/request.js'
 
 /** ? 账号登录
  * @param {String} account -- 用户账号
