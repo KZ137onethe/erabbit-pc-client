@@ -1,9 +1,9 @@
 <template>
-	<defaultLayout class="app-layout">
+	<DefaultLayout class="app-layout">
 		<template #childBody>
 			<router-view></router-view>
 		</template>
-	</defaultLayout>
+	</DefaultLayout>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
 	setup() {
 		const route = useRoute()
 		const control = computed(() => {
-			if (route.path === '/cart') {
+			if (route.path === '/cart' || route.fullPath.search(/\/member[\/\w*]*/) !== -1) {
 				return false
 			} else {
 				return true
