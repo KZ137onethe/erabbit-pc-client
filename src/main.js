@@ -16,6 +16,7 @@ import { getComponent } from '@/components/library/index.js'
 // iconPark 字体图标库
 import { install } from '@icon-park/vue-next/es/all'
 
+import './mock/index.js'
 ;(async () => {
 	const app = createApp(App)
 
