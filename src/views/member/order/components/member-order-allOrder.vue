@@ -57,8 +57,7 @@ import { ref, watch, computed } from 'vue'
 
 import { orderStatus } from '../index.vue'
 import OrderGoodsTable, { columns } from './order-table.vue'
-import OptionMap from './order-option-btn.vue'
-import OrderCancel from './order-cancel.vue'
+import { OptionMap } from './option-btn.js'
 
 export default {
 	props: {
@@ -91,7 +90,6 @@ export default {
 	},
 	components: {
 		OrderGoodsTable,
-		OrderCancel,
 	},
 }
 </script>

@@ -1,6 +1,5 @@
 <template>
-	<div>
-		<XtxButton size="mini" @click="showModal">取消订单</XtxButton>
+	<OperationButton class="order-cancel" title="取消订单" @btnClick="showModal">
 		<a-modal v-model:visible="visible" title="取消订单" :confirm-loading="confirmLoading" @ok="handleOk">
 			<p class="description">取消订单后，本单享有的优惠可能会一并取消，是否继续？</p>
 			<a-row :wrap="true" class="option">
@@ -14,9 +13,10 @@
 				</a-col>
 			</a-row>
 		</a-modal>
-	</div>
+	</OperationButton>
 </template>
 <script>
+import OperationButton from './operation-btn.vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css'
 
@@ -85,6 +85,9 @@ export default defineComponent({
 			handleOk,
 			selectedReason,
 		}
+	},
+	components: {
+		OperationButton,
 	},
 })
 </script>

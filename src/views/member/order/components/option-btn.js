@@ -1,6 +1,4 @@
-<script lang="jsx">
 // 权限管理
-
 import CancelBtn from './order-cancel.vue' // 取消订单
 import ReceiptBtn from './order-receipt.vue' // 确认收货
 import DetailBtn from './order-detail.vue' // 查看详情
@@ -25,6 +23,4 @@ const OptionMap = new Set([
 	[DetailBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
 	[DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
 ])
-
-export default OptionMap
-</script>
+export { OptionMap }

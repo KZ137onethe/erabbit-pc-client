@@ -18,17 +18,22 @@
 				<!-- 订单操作 -->
 				<template v-if="column.dataIndex === 'orderOption'">
 					<div class="option">
-						<XtxButton size="mini" type="primary">确认收货</XtxButton>
-						<a-button size="small" type="link">查看详情</a-button>
-						<a-button size="small" type="link">再次购买</a-button>
-						<a-button size="small" type="link">申请售后</a-button>
+						<template
+							v-for="btn of [...OptionMap][
+								Array.from(orderStatus)
+									.map((status) => status[1])
+									.findIndex((item) => item === record.orderState)
+							]"
+						>
+							<component :is="btn" :orderId="record.id" @refresh="refresh"></component>
+						</template>
 					</div>
 				</template>
 			</template>
 			<template #title>
 				<a-row :wrap="false" type="flex" justify="space-between">
 					<a-col>{{ order.message }}</a-col>
-					<a-col>{{ order.payTime ?? '已取消' }}</a-col>
+					<a-col>{{ order.payTime ?? '付款已截止' }}</a-col>
 				</a-row>
 			</template>
 		</a-table>
@@ -50,7 +55,10 @@ import { Empty } from 'ant-design-vue'
 
 import { ref, watch, computed } from 'vue'
 
+import { orderStatus } from '../index.vue'
 import OrderGoodsTable, { columns } from './order-table.vue'
+import { OptionMap } from './option-btn.js'
+
 export default {
 	props: {
 		orderMap: {
@@ -66,10 +74,17 @@ export default {
 			emit('changePage', newValue)
 		})
 
+		const refresh = () => {
+			emit('refresh')
+		}
+
 		return {
+			orderStatus,
+			OptionMap,
 			orderList,
 			columns,
 			currentPageNumber,
+			refresh,
 			simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
 		}
 	},

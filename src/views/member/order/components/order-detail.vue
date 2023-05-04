@@ -1,13 +1,19 @@
 <template>
-	<div>
-		<XtxButton type="primary" size="mini">查看详情</XtxButton>
-	</div>
+	<OperationButton title="查看详情" @btnClick="click" class="order-detail"></OperationButton>
 </template>
 
 <script>
+import OperationButton from './operation-btn.vue'
+
 export default {
 	setup() {
-		return {}
+		const click = () => console.log('hhh')
+		return {
+			click,
+		}
+	},
+	components: {
+		OperationButton,
 	},
 }
 </script>
