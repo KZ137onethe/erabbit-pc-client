@@ -33,7 +33,9 @@
 			<template #title>
 				<a-row :wrap="false" type="flex" justify="space-between">
 					<a-col>{{ order.message }}</a-col>
-					<a-col>{{ order.payTime ?? '付款已截止' }}</a-col>
+					<a-col>
+						<OrderDelete :orderId="order.id" @refresh="refresh" />
+					</a-col>
 				</a-row>
 			</template>
 		</a-table>
@@ -57,6 +59,8 @@ import { ref, watch, computed } from 'vue'
 
 import { orderStatus } from '../index.vue'
 import OrderGoodsTable, { columns } from './order-table.vue'
+import OrderDelete from './order-delete.vue'
+
 import { OptionMap } from './option-btn.js'
 
 export default {
@@ -90,6 +94,7 @@ export default {
 	},
 	components: {
 		OrderGoodsTable,
+		OrderDelete,
 	},
 }
 </script>
