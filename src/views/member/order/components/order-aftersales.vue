@@ -4,10 +4,14 @@
 
 <script>
 import OperationButton from './operation-btn.vue'
+import { message } from 'ant-design-vue'
+import 'ant-design-vue/es/message/style/css'
 
 export default {
 	setup() {
-		const click = () => console.log('hhh')
+		const click = () => {
+			message.warn('未开放')
+		}
 		return {
 			click,
 		}

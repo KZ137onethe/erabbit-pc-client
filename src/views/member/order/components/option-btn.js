@@ -2,6 +2,7 @@
 import CancelBtn from './order-cancel.vue' // 取消订单
 import ReceiptBtn from './order-receipt.vue' // 确认收货
 import DetailBtn from './order-detail.vue' // 查看详情
+import LogisticsBtn from './order-logistics.vue'
 import RepurchaseBtn from './order-repurchase.vue' // 再次购买
 import AfterSalesBtn from './order-aftersales.vue' // 申请售后
 
@@ -17,9 +18,9 @@ import AfterSalesBtn from './order-aftersales.vue' // 申请售后
 const OptionMap = new Set([
 	null,
 	[DetailBtn, CancelBtn], // ['查看详情', '取消订单']
-	[ReceiptBtn, DetailBtn, RepurchaseBtn], // ['确认收货', '查看详情', '取消订单', '再次购买']
-	[ReceiptBtn, DetailBtn, RepurchaseBtn], // ['确认收货', '查看详情', '再次购买']
-	[DetailBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
+	[DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
+	[ReceiptBtn, LogisticsBtn, DetailBtn, RepurchaseBtn], // ['确认收货', '查看详情', '再次购买']
+	[DetailBtn, LogisticsBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
 	[DetailBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
 	[DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
 ])

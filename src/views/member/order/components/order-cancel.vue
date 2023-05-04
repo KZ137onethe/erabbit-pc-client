@@ -63,7 +63,6 @@ export default defineComponent({
 				}
 			}
 			confirmLoading.value = true
-			console.log('orderId:', props.orderId)
 			_cancelOrder({ orderId: props.orderId, cancelReason: nowReason.value }).then(() => {
 				confirmLoading.value = false
 				visible.value = false
