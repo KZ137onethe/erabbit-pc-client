@@ -38,3 +38,29 @@ export function _getOrderList({ page, pageSize, orderState = 0 }) {
 export function _cancelOrder({ orderId, cancelReason }) {
 	return request(`/member/order/${orderId}/cancel`, 'put', { cancelReason })
 }
+
+/**
+ * 删除订单
+ * @param {Array} ids 删除订单id的数组
+ */
+export function _deleteOrder(ids) {
+	return request('/member/order', 'delete', { ids })
+}
+
+/**
+ * 确认收货
+ * @param {*} id 订单id
+ * @returns
+ */
+export function _receiptOrder(id) {
+	return request(`/member/order/${id}/receipt`, 'put')
+}
+
+/**
+ * 获取订单的物流信息
+ * @param {*} id 订单id
+ * @returns
+ */
+export function _getOrderLogistics(id) {
+	return request(`/member/order/${id}/logistics`, 'get')
+}
