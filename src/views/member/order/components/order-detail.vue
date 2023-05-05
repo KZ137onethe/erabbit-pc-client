@@ -5,9 +5,19 @@
 <script>
 import OperationButton from './operation-btn.vue'
 
+import { useRouter } from 'vue-router'
 export default {
-	setup() {
-		const click = () => console.log('hhh')
+	props: {
+		orderId: {
+			type: String,
+			required: true,
+		},
+	},
+	setup(props) {
+		const router = useRouter()
+		const click = () => {
+			router.push({ path: `/member/order/${props.orderId}` })
+		}
 		return {
 			click,
 		}
