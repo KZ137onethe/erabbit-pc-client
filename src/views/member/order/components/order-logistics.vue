@@ -2,6 +2,7 @@
 	<OperationButton title="查看物流" @btnClick="getLogistics" class="order-logistics">
 		<a-modal v-model:visible="visible" title="物流信息" :footer="null">
 			<!-- 商品基本信息 -->
+			<OrderCard class="logistics-info" :order="allData"></OrderCard>
 			<!-- 时间轴 -->
 			<a-timeline>
 				<!-- 绿色代表已经完成，蓝色代表正在进行 -->
@@ -18,7 +19,7 @@
 import { ref } from 'vue'
 import { memberApi } from '@/api'
 
-import OperationButton from './operation-btn.vue'
+import OperationButton, { OrderCard } from './operation-btn.vue'
 import { SmileOutlined } from '@ant-design/icons-vue'
 
 const { _getOrderLogistics } = memberApi
@@ -32,8 +33,10 @@ export default {
 	setup(props) {
 		const visible = ref(false)
 		const logisticsData = ref([])
+		const allData = ref(null)
 		const getLogistics = () => {
 			_getOrderLogistics(props.orderId).then((res) => {
+				allData.value = res.result
 				if (res && res.result && res.result.list) {
 					logisticsData.value = Array.isArray(res.result.list) && res.result.list.reverse()
 				}
@@ -44,12 +47,14 @@ export default {
 		return {
 			visible,
 			logisticsData,
+			allData,
 			getLogistics,
 		}
 	},
 	components: {
 		OperationButton,
 		SmileOutlined,
+		OrderCard,
 	},
 }
 </script>
