@@ -64,3 +64,12 @@ export function _receiptOrder(id) {
 export function _getOrderLogistics(id) {
 	return request(`/member/order/${id}/logistics`, 'get')
 }
+
+/**
+ * 获取订单详情
+ * @param {*} id 订单id
+ * @returns
+ */
+export function _getOrderDetail(id) {
+	return request(`/member/order/${id}`, 'get')
+}
