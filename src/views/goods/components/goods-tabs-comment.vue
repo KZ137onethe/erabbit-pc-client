@@ -41,11 +41,11 @@
 								</span>
 								<!-- 已点赞 -->
 								<template v-if="action === 'liked'">
-									<i-thumbs-up theme="filled" size="18" fill="#27BA9B" @click="like" />
+									<svg-icon name="thumbs-up" size="18" color="#27BA9B" @click="like"></svg-icon>
 								</template>
 								<!-- 未点赞 -->
 								<template v-else-if="action === 'like'">
-									<i-thumbs-up theme="outline" size="18" fill="#333" @click="like" />
+									<svg-icon name="thumbs-up" size="18" color="#333" @click="like"></svg-icon>
 								</template>
 								<!-- 点赞数 -->
 								<span style="padding-left: 8px; cursor: auto; vertical-align: top">
@@ -56,11 +56,11 @@
 						<template #author>
 							<!-- 评价星级 -->
 							<div class="star">
-								<i-star theme="filled" size="18" fill="#ff9240" />
-								<i-star theme="filled" size="18" fill="#ff9240" />
-								<i-star theme="filled" size="18" fill="#ff9240" />
-								<i-star theme="outline" size="18" fill="#ff9240" />
-								<i-star theme="outline" size="18" fill="#ff9240" />
+								<svg-icon name="star" size="18" color="#ff9240"></svg-icon>
+								<svg-icon name="star" size="18" color="#ff9240"></svg-icon>
+								<svg-icon name="star" size="18" color="#ff9240"></svg-icon>
+								<svg-icon name="star" size="18" color="#ff9240"></svg-icon>
+								<svg-icon name="star" size="18" color="#ff9240"></svg-icon>
 							</div>
 							<!-- 标签， 比如：颜色：白色；尺寸：10cm; 产地：美国 -->
 							<template v-if="data.orderInfo">

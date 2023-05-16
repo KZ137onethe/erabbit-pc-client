@@ -41,19 +41,21 @@
 					<a-row type="flex" :gutter="16">
 						<a-col flex="1">
 							<a href="javascript:;">
-								<i-dropbox theme="filled" size="38" fill="#fff" :strokeWidth="2" />
-								&nbsp;<span>价格亲民</span>
+								<svg-icon name="dropbox" size="50" class="footer-icon"></svg-icon>
+								&nbsp;
+								<span>价格亲民</span>
 							</a>
 						</a-col>
 						<a-col flex="1">
 							<a href="javascript:;">
-								<i-thumbs-up theme="outline" size="38" fill="#fff" :strokeWidth="2" />
-								&nbsp;<span>物流快捷</span>
+								<svg-icon name="thumbs-up" size="50" class="footer-icon"></svg-icon>
+								&nbsp;
+								<span>物流快捷</span>
 							</a>
 						</a-col>
 						<a-col flex="1">
 							<a href="javascript:;">
-								<i-truck theme="outline" size="38" fill="#fff" :strokeWidth="2" />
+								<svg-icon name="truck" size="50" class="footer-icon"></svg-icon>
 								&nbsp;<span>品质新鲜</span>
 							</a>
 						</a-col>
@@ -227,5 +229,10 @@ export default {
 			}
 		}
 	}
+}
+svg.footer-icon {
+	border: 2px solid white;
+	border-radius: 50%;
+	fill: white;
 }
 </style>

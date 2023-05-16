@@ -71,6 +71,7 @@ declare module '@vue/runtime-core' {
     ATimelineItem: typeof import('ant-design-vue/es')['TimelineItem']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
     XtxBread: typeof import('./src/components/library/xtx-bread.vue')['default']
     XtxBreadItem: typeof import('./src/components/library/xtx-bread-item.vue')['default']
     XtxButton: typeof import('./src/components/library/xtx-button.vue')['default']

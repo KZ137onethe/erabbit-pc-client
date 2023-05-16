@@ -3,51 +3,27 @@
 		<a-row class="detail-header--wrapper" :wrap="false" type="flex" justify="space-around" align-items="center">
 			<a-col class="header-status" flex="1">
 				<template v-if="orderData.orderState === 1">
-					<icon>
-						<template #component>
-							<PaymentIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-payment" size="80"></svg-icon>
 					<b>待支付</b>
 				</template>
 				<template v-if="orderData.orderState === 2">
-					<icon>
-						<template #component>
-							<ShipIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-transport" size="80"></svg-icon>
 					<b>待发货</b>
 				</template>
 				<template v-if="orderData.orderState === 3">
-					<icon>
-						<template #component>
-							<ReceiptIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-receipt" size="80"></svg-icon>
 					<b>待收货</b>
 				</template>
 				<template v-if="orderData.orderState === 4">
-					<icon>
-						<template #component>
-							<EvaluateIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-evaluate" size="80"></svg-icon>
 					<b>待评价</b>
 				</template>
 				<template v-if="orderData.orderState === 5">
-					<icon>
-						<template #component>
-							<CompleteIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-complete" size="80"></svg-icon>
 					<b>已完成</b>
 				</template>
 				<template v-if="orderData.orderState === 6">
-					<icon>
-						<template #component>
-							<CanceledIcon />
-						</template>
-					</icon>
+					<svg-icon name="order-cancel" size="80"></svg-icon>
 					<b>已取消</b>
 				</template>
 			</a-col>
@@ -75,9 +51,6 @@
 </template>
 
 <script>
-import Icon from '@ant-design/icons-vue'
-import OrderStatusIcon from './order-status-icon.vue'
-
 import { computed } from 'vue'
 export default {
 	props: {
@@ -91,15 +64,6 @@ export default {
 		return {
 			orderData,
 		}
-	},
-	components: {
-		Icon,
-		PaymentIcon: OrderStatusIcon.PendingPayment,
-		ShipIcon: OrderStatusIcon.PendingShip,
-		ReceiptIcon: OrderStatusIcon.PendingReceipt,
-		EvaluateIcon: OrderStatusIcon.PendingEvaluate,
-		CompleteIcon: OrderStatusIcon.CompleteOrder,
-		CanceledIcon: OrderStatusIcon.Canceled,
 	},
 }
 </script>

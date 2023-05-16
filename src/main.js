@@ -13,8 +13,9 @@ import '@/assets/styles/common.less'
 // 导入全局注册的UI组件
 import { getComponent } from '@/components/library/index.js'
 
-// iconPark 字体图标库
-import { install } from '@icon-park/vue-next/es/all'
+// svg 图标
+import 'virtual:svg-icons-register'
+import SvgIcon from '@/components/SvgIcon'
 
 import './mock/index.js'
 ;(async () => {
@@ -22,11 +23,10 @@ import './mock/index.js'
 
 	await getComponent(app)
 
-	install(app, 'i')
-
 	app.use(router)
 	app.use(store)
 	app.use(Directive)
+	app.component('svg-icon', SvgIcon)
 
 	app.mount('#app')
 })()
