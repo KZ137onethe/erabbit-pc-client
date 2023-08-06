@@ -1,0 +1,12 @@
+# ignore icon
+src/**/*.svg
+
+# ignore image
+**/*.jpg
+**/*.jpeg
+**/*.png
+
+# ignore eslint, prettier, commitlint options file
+.eslintrc.cjs
+.prettierrc.cjs
+commitlint.config.cjs

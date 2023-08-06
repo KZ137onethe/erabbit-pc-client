@@ -1,13 +1,12 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "node": "current"
-        }
-      }
-    ],
-    "@vue/babel-plugin-jsx"
-  ]
+	"presets": [
+		[
+			"@vue/cli-plugin-babel/preset",
+			{
+				"jsx": {
+					"transformOn": true
+				}
+			}
+		]
+	]
 }
