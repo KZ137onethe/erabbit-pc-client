@@ -1,30 +1,30 @@
 <template>
-	<OperationButton title="查看详情" @btnClick="click" class="order-detail"></OperationButton>
+  <operation-button title="查看详情" class="order-detail" @btnClick="click"></operation-button>
 </template>
 
 <script>
-import OperationButton from './operation-btn.vue'
+import { useRouter } from "vue-router"
+import OperationButton from "./operation-btn.vue"
 
-import { useRouter } from 'vue-router'
 export default {
-	props: {
-		orderId: {
-			type: String,
-			required: true,
-		},
-	},
-	setup(props) {
-		const router = useRouter()
-		const click = () => {
-			router.push({ path: `/member/order/${props.orderId}` })
-		}
-		return {
-			click,
-		}
-	},
-	components: {
-		OperationButton,
-	},
+  components: {
+    OperationButton,
+  },
+  props: {
+    orderId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const router = useRouter()
+    const click = () => {
+      router.push({ path: `/member/order/${props.orderId}` })
+    }
+    return {
+      click,
+    }
+  },
 }
 </script>
 

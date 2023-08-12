@@ -1,8 +1,11 @@
 <template>
   <div class="goods-tabs-detail">
     <a-descriptions>
-      <a-descriptions-item  v-for="item in goods.details.properties" :key="item.value"
-                            :label="item.name">
+      <a-descriptions-item
+        v-for="item in goods.details.properties"
+        :key="item.value"
+        :label="item.name"
+      >
         {{ item.value }}
       </a-descriptions-item>
     </a-descriptions>
@@ -11,20 +14,21 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject } from "vue"
+
 export default {
-  setup () {
-    const goods = inject('goods')
+  setup() {
+    const goods = inject("goods")
     return {
-      goods
+      goods,
     }
-  }
+  },
 }
 </script>
 
 <style lang="less" scoped>
-.goods-tabs-detail{
-  > img{
+.goods-tabs-detail {
+  > img {
     width: 100%;
   }
 }

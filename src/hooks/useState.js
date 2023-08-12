@@ -1,5 +1,5 @@
-import { useMapper } from './useMapper.js'
-import { mapState, createNamespacedHelpers } from 'vuex'
+import { mapState, createNamespacedHelpers } from "vuex"
+import { useMapper } from "./useMapper.js"
 
 /**
  * 获取vuex中的state数据
@@ -9,7 +9,7 @@ import { mapState, createNamespacedHelpers } from 'vuex'
  */
 const useState = (moduleName, mapper) => {
   let mapperFn = mapState
-  if (typeof moduleName === 'string' && moduleName.length > 0) {
+  if (typeof moduleName === "string" && moduleName.length > 0) {
     mapperFn = createNamespacedHelpers(moduleName).mapState
   } else {
     mapper = moduleName
@@ -17,6 +17,4 @@ const useState = (moduleName, mapper) => {
   return useMapper(mapper, mapperFn)
 }
 
-export {
-  useState
-}
+export { useState }

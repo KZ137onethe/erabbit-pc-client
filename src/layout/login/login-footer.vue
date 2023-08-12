@@ -1,6 +1,6 @@
 <template>
   <footer class="login-footer">
-    <div class='container'>
+    <div class="container">
       <p>
         <a href="javascript:;">关于我们</a>
         <a-divider type="vertical" />
@@ -23,11 +23,11 @@
 
 <script>
 export default {
-  name: 'login-footer'
+  name: "LoginFooter",
 }
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 .login-footer {
   padding: 30px 0 50px;
   background: #fff;
@@ -37,7 +37,7 @@ export default {
     padding-top: 20px;
     a {
       line-height: 1;
-      padding:0 10px;
+      padding: 0 10px;
       color: #999;
       display: inline-block;
     }

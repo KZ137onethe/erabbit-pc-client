@@ -1,4 +1,4 @@
-import { request } from '@/utils/request.js'
+import { request } from "@/utils/request.js"
 
 /**
  * 获取最新的商品信息
@@ -6,7 +6,7 @@ import { request } from '@/utils/request.js'
  * return Promise
  */
 export function _getGoodsInfoNewest(skuId) {
-	return request(`/goods/stock/${skuId}`, 'get')
+  return request(`/goods/stock/${skuId}`, "get")
 }
 
 /**
@@ -15,7 +15,7 @@ export function _getGoodsInfoNewest(skuId) {
  * @returns
  */
 export function _getCartSku(skuId) {
-	return request(`/goods/sku/${skuId}`, 'get')
+  return request(`/goods/sku/${skuId}`, "get")
 }
 
 /**
@@ -25,14 +25,14 @@ export function _getCartSku(skuId) {
  * @returns
  */
 export function _mergeLocalCart(localCartList) {
-	return request(`/member/cart/merge`, 'post', localCartList)
+  return request(`/member/cart/merge`, "post", localCartList)
 }
 
 /**
  * 登录状态下，获取购物车列表
  */
 export function _getCartList() {
-	return request('/member/cart', 'get')
+  return request("/member/cart", "get")
 }
 
 /**
@@ -42,7 +42,7 @@ export function _getCartList() {
  * @returns
  */
 export function _addCart({ skuId, count }) {
-	return request('/member/cart', 'post', { skuId, count })
+  return request("/member/cart", "post", { skuId, count })
 }
 
 /**
@@ -51,7 +51,7 @@ export function _addCart({ skuId, count }) {
  * @returns
  */
 export function _deleteCart(ids) {
-	return request('/member/cart', 'delete', { ids: ids })
+  return request("/member/cart", "delete", { ids })
 }
 
 /**
@@ -62,7 +62,7 @@ export function _deleteCart(ids) {
  * @returns
  */
 export function _modifyCart({ skuId, selected, count }) {
-	return request(`/member/cart/${skuId}`, 'put', { selected, count })
+  return request(`/member/cart/${skuId}`, "put", { selected, count })
 }
 
 /**
@@ -72,5 +72,5 @@ export function _modifyCart({ skuId, selected, count }) {
  * @returns
  */
 export function _checkCartAllSelected({ selected, ids }) {
-	return request(`/member/cart/selected`, 'put', { selected, ids: ids })
+  return request(`/member/cart/selected`, "put", { selected, ids })
 }

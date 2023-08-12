@@ -1,11 +1,11 @@
-import { request } from '@/utils/request.js'
+import { request } from "@/utils/request.js"
 
 /**
  * 获取结算信息
  * @returns
  */
 export function _getCheckoutInfo() {
-	return request('/member/order/pre', 'get')
+  return request("/member/order/pre", "get")
 }
 
 /**
@@ -23,7 +23,7 @@ export function _getCheckoutInfo() {
  * @returns
  */
 export function _appendAddress(address) {
-	return request('/member/address', 'post', address)
+  return request("/member/address", "post", address)
 }
 
 /**
@@ -33,7 +33,7 @@ export function _appendAddress(address) {
  * @returns
  */
 export function _modifyAddress({ addressId, address }) {
-	return request(`/member/address/${addressId}`, 'put', address)
+  return request(`/member/address/${addressId}`, "put", address)
 }
 
 /**
@@ -42,7 +42,7 @@ export function _modifyAddress({ addressId, address }) {
  * @returns
  */
 export function _removeAddress(addressId) {
-	return request(`/member/address/${addressId}`, 'delete')
+  return request(`/member/address/${addressId}`, "delete")
 }
 
 /**
@@ -54,8 +54,22 @@ export function _removeAddress(addressId) {
  * @param {*} payChannel -- 支付渠道：支付渠道，1支付宝、2微信--支付方式为在线支付时，传值，为货到付款时，不传值
  * @param {*} buyerMessage -- 买家留言
  */
-export function _submitOrder({ goods, addressId, deliveryTimeType, payType, payChannel, buyerMessage }) {
-	return request(`/member/order`, 'post', { goods, addressId, deliveryTimeType, payType, payChannel, buyerMessage })
+export function _submitOrder({
+  goods,
+  addressId,
+  deliveryTimeType,
+  payType,
+  payChannel,
+  buyerMessage,
+}) {
+  return request(`/member/order`, "post", {
+    goods,
+    addressId,
+    deliveryTimeType,
+    payType,
+    payChannel,
+    buyerMessage,
+  })
 }
 
 /**
@@ -64,5 +78,5 @@ export function _submitOrder({ goods, addressId, deliveryTimeType, payType, payC
  * @returns
  */
 export function _getOrderDetail(orderId) {
-	return request(`/member/order/${orderId}`, 'get')
+  return request(`/member/order/${orderId}`, "get")
 }

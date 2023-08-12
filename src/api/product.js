@@ -1,8 +1,8 @@
-import { request } from '@/utils/request.js'
+import { request } from "@/utils/request.js"
 
 // 定义获得商品详情的接口
 export function _findGoodsDetail(id) {
-	return request('/goods', 'get', { id })
+  return request("/goods", "get", { id })
 }
 
 /**
@@ -11,7 +11,7 @@ export function _findGoodsDetail(id) {
  * @returns {Object}
  */
 export function _findGoodsRelevant({ id, limit }) {
-	return request('/goods/relevant', 'get', { id, limit })
+  return request("/goods/relevant", "get", { id, limit })
 }
 
 /**
@@ -22,7 +22,7 @@ export function _findGoodsRelevant({ id, limit }) {
  * @returns {Object}
  */
 export function _findGoodsHot({ id, limit, type }) {
-	return request('/goods/hot', 'get', { id, limit, type })
+  return request("/goods/hot", "get", { id, limit, type })
 }
 
 /**
@@ -30,7 +30,7 @@ export function _findGoodsHot({ id, limit, type }) {
  * @param {Number} id 商品id
  */
 export function _findGoodsCommentInfo({ id }) {
-	return request(`/goods/${id}/evaluate`, 'get')
+  return request(`/goods/${id}/evaluate`, "get")
 }
 
 /**
@@ -39,6 +39,6 @@ export function _findGoodsCommentInfo({ id }) {
  * @param {Object} query 筛选参数
  */
 export function _findGoodsCommentData({ id, params }) {
-	// return request(`/goods/${id}/evaluate/page`, 'get', params)
-	return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`, 'get', params)
+  // return request(`/goods/${id}/evaluate/page`, 'get', params)
+  return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`, "get", params)
 }

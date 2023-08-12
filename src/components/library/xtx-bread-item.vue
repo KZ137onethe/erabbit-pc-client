@@ -1,21 +1,19 @@
 <template>
-    <div class="xtx-bread-item">
-      <RouterLink v-if="to" :to="to"><slot /></RouterLink>
-      <span v-else><slot /></span>
-    </div>
+  <div class="xtx-bread-item">
+    <RouterLink v-if="to" :to="to"><slot /></RouterLink>
+    <span v-else><slot /></span>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'XtxBreadItem',
+  name: "XtxBreadItem",
   props: {
     to: {
-      type: [String, Object]
-    }
-  }
+      type: [String, Object],
+    },
+  },
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

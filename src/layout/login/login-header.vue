@@ -5,7 +5,7 @@
         <a-col class="title">
           <a-space>
             <router-link to="/">
-              <img src="@/assets/images/logo.png" alt="">
+              <img src="@/assets/images/logo.png" alt="" />
             </router-link>
             <h3>
               <slot name="subTitle"></slot>
@@ -16,7 +16,7 @@
           <router-link to="/">
             <a-space>
               <span>进入网站首页</span>
-              <DoubleRightOutlined />
+              <double-right-outlined />
             </a-space>
           </router-link>
         </a-col>
@@ -26,44 +26,45 @@
 </template>
 
 <script>
-import { DoubleRightOutlined } from '@ant-design/icons-vue'
+import { DoubleRightOutlined } from "@ant-design/icons-vue"
+
 export default {
-  name: 'login-header',
+  name: "LoginHeader",
   components: {
-    DoubleRightOutlined
-  }
+    DoubleRightOutlined,
+  },
 }
 </script>
 
 <style scoped lang="less">
-.container{
+.container {
   height: 100%;
 }
 
-header.login-header{
+header.login-header {
   height: 110px;
   background-color: white;
   border-bottom: 1px solid #e4e4e4;
-  .ant-row{
+  .ant-row {
     width: 100%;
     height: inherit;
-    .ant-col{
+    .ant-col {
       height: 80px;
       display: flex;
       flex-flow: row nowrap;
       align-items: flex-end;
       margin: auto 0;
-      &.title{
-        img{
+      &.title {
+        img {
           width: 200px;
           height: inherit;
         }
-        &:deep(h3){
+        &:deep(h3) {
           display: inline-block;
           transform: translateY(100%);
         }
       }
-      &.right-entry{
+      &.right-entry {
         transform: translateY(-10%);
       }
     }

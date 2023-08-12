@@ -1,4 +1,4 @@
-import { request } from '@/utils/request.js'
+import { request } from "@/utils/request.js"
 
 /**
  * 获取我的收藏
@@ -7,7 +7,7 @@ import { request } from '@/utils/request.js'
  * @param {*} collectType -- 收藏类型 1为商品，2为专题，3为品牌
  */
 export function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
-	return request('/member/collect', 'get', { page, pageSize, collectType })
+  return request("/member/collect", "get", { page, pageSize, collectType })
 }
 
 /**
@@ -16,7 +16,7 @@ export function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
  * @param {*} pageSize -- 页码条数
  */
 export function _getHistory({ page, pageSize }) {
-	return request('/member/browseHistory', 'get', { page, pageSize })
+  return request("/member/browseHistory", "get", { page, pageSize })
 }
 
 /**
@@ -26,7 +26,7 @@ export function _getHistory({ page, pageSize }) {
  * @param {*} orderState -- 订单状态，1为待付款、2为待发货、3为待收货、4为待评价、5为已完成、6为已取消，未传该参数或0为全部
  */
 export function _getOrderList({ page, pageSize, orderState = 0 }) {
-	return request('/member/order', 'get', { page, pageSize, orderState })
+  return request("/member/order", "get", { page, pageSize, orderState })
 }
 
 /**
@@ -36,7 +36,7 @@ export function _getOrderList({ page, pageSize, orderState = 0 }) {
  * @returns
  */
 export function _cancelOrder({ orderId, cancelReason }) {
-	return request(`/member/order/${orderId}/cancel`, 'put', { cancelReason })
+  return request(`/member/order/${orderId}/cancel`, "put", { cancelReason })
 }
 
 /**
@@ -44,7 +44,7 @@ export function _cancelOrder({ orderId, cancelReason }) {
  * @param {Array} ids 删除订单id的数组
  */
 export function _deleteOrder(ids) {
-	return request('/member/order', 'delete', { ids })
+  return request("/member/order", "delete", { ids })
 }
 
 /**
@@ -53,7 +53,7 @@ export function _deleteOrder(ids) {
  * @returns
  */
 export function _receiptOrder(id) {
-	return request(`/member/order/${id}/receipt`, 'put')
+  return request(`/member/order/${id}/receipt`, "put")
 }
 
 /**
@@ -62,7 +62,7 @@ export function _receiptOrder(id) {
  * @returns
  */
 export function _getOrderLogistics(id) {
-	return request(`/member/order/${id}/logistics`, 'get')
+  return request(`/member/order/${id}/logistics`, "get")
 }
 
 /**
@@ -71,5 +71,5 @@ export function _getOrderLogistics(id) {
  * @returns
  */
 export function _getOrderDetail(id) {
-	return request(`/member/order/${id}`, 'get')
+  return request(`/member/order/${id}`, "get")
 }

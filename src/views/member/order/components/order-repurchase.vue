@@ -1,24 +1,24 @@
 <template>
-	<OperationButton title="再次购买" @btnClick="click" class="order-repurchase"></OperationButton>
+  <operation-button title="再次购买" class="order-repurchase" @btnClick="click"></operation-button>
 </template>
 
 <script>
-import OperationButton from './operation-btn.vue'
-import { message } from 'ant-design-vue'
-import 'ant-design-vue/es/message/style/css'
+import { message } from "ant-design-vue"
+import OperationButton from "./operation-btn.vue"
+import "ant-design-vue/es/message/style/css"
 
 export default {
-	setup() {
-		const click = () => {
-			message.warn('未开放')
-		}
-		return {
-			click,
-		}
-	},
-	components: {
-		OperationButton,
-	},
+  components: {
+    OperationButton,
+  },
+  setup() {
+    const click = () => {
+      message.warn("未开放")
+    }
+    return {
+      click,
+    }
+  },
 }
 </script>
 

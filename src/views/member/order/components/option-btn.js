@@ -1,10 +1,10 @@
 // 权限管理
-import CancelBtn from './order-cancel.vue' // 取消订单
-import ReceiptBtn from './order-receipt.vue' // 确认收货
-import DetailBtn from './order-detail.vue' // 查看详情
-import LogisticsBtn from './order-logistics.vue'
-import RepurchaseBtn from './order-repurchase.vue' // 再次购买
-import AfterSalesBtn from './order-aftersales.vue' // 申请售后
+import CancelBtn from "./order-cancel.vue" // 取消订单
+import ReceiptBtn from "./order-receipt.vue" // 确认收货
+import DetailBtn from "./order-detail.vue" // 查看详情
+import LogisticsBtn from "./order-logistics.vue"
+import RepurchaseBtn from "./order-repurchase.vue" // 再次购买
+import AfterSalesBtn from "./order-aftersales.vue" // 申请售后
 
 /** 这里的集合元素索引代表
  * 0 代表 全部订单
@@ -16,12 +16,12 @@ import AfterSalesBtn from './order-aftersales.vue' // 申请售后
  * 6 代表 已取消
  */
 const OptionMap = new Set([
-	null,
-	[DetailBtn, CancelBtn], // ['查看详情', '取消订单']
-	[DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
-	[ReceiptBtn, LogisticsBtn, DetailBtn, RepurchaseBtn], // ['确认收货', '查看详情', '再次购买']
-	[DetailBtn, LogisticsBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
-	[DetailBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
-	[DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
+  null,
+  [DetailBtn, CancelBtn], // ['查看详情', '取消订单']
+  [DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
+  [ReceiptBtn, LogisticsBtn, DetailBtn, RepurchaseBtn], // ['确认收货', '查看详情', '再次购买']
+  [DetailBtn, LogisticsBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
+  [DetailBtn, RepurchaseBtn, AfterSalesBtn], // ['查看详情', '再次购买', '申请售后']
+  [DetailBtn, RepurchaseBtn], // ['查看详情', '再次购买']
 ])
 export { OptionMap }

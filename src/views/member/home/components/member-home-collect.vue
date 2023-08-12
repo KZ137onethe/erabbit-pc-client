@@ -1,33 +1,37 @@
 <template>
-	<div class="member-home-collect">
-		<MemberHomePanel title="我的收藏" :goods="collect?.items" :jump-data="{ path: '/', info: '查看全部 >' }" />
-	</div>
+  <div class="member-home-collect">
+    <member-home-panel
+      title="我的收藏"
+      :goods="collect?.items"
+      :jump-data="{ path: '/', info: '查看全部 >' }"
+    />
+  </div>
 </template>
 
 <script>
-import MemberHomePanel from './member-home-panel.vue'
+import { ref, onMounted } from "vue"
+import MemberHomePanel from "./member-home-panel.vue"
 
-import { memberApi } from '@/api'
-import { ref, onMounted } from 'vue'
+import { memberApi } from "@/api"
 
 const { _getCollect } = memberApi
 export default {
-	setup() {
-		const collect = ref([])
-		onMounted(() => {
-			_getCollect({ page: 1, pageSize: 4 }).then((data) => {
-				collect.value = data.result
-				console.log(collect)
-			})
-		})
+  components: {
+    MemberHomePanel,
+  },
+  setup() {
+    const collect = ref([])
+    onMounted(() => {
+      _getCollect({ page: 1, pageSize: 4 }).then((data) => {
+        collect.value = data.result
+        console.log(collect)
+      })
+    })
 
-		return {
-			collect,
-		}
-	},
-	components: {
-		MemberHomePanel,
-	},
+    return {
+      collect,
+    }
+  },
 }
 </script>
 

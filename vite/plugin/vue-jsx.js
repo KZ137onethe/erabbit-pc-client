@@ -1,5 +1,5 @@
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueJsx from "@vitejs/plugin-vue-jsx"
 
 export default function createVueJsx() {
-	return vueJsx()
+  return vueJsx()
 }

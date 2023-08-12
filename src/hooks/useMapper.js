@@ -1,7 +1,7 @@
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { computed } from "vue"
+import { useStore } from "vuex"
 
-export function useMapper (mapper, mapFn) {
+export function useMapper(mapper, mapFn) {
   // 拿到store独享
   const store = useStore()
 
@@ -10,7 +10,7 @@ export function useMapper (mapper, mapFn) {
 
   // 对数据进行转换
   const storeState = {}
-  Object.keys(storeStateFns).forEach(fnKey => {
+  Object.keys(storeStateFns).forEach((fnKey) => {
     const fn = storeStateFns[fnKey].bind({ $store: store })
     storeState[fnKey] = computed(fn)
   })
@@ -18,7 +18,7 @@ export function useMapper (mapper, mapFn) {
   return storeState
 }
 
-export function useMethodMapper (mapper, mapFn) {
+export function useMethodMapper(mapper, mapFn) {
   // 拿到store独享
   const store = useStore()
 
@@ -27,7 +27,7 @@ export function useMethodMapper (mapper, mapFn) {
 
   // 对数据进行转换
   const storeMethod = {}
-  Object.keys(storeMethodFns).forEach(fnKey => {
+  Object.keys(storeMethodFns).forEach((fnKey) => {
     storeMethod[fnKey] = storeMethodFns[fnKey].bind({ $store: store })
   })
 

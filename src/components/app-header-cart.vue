@@ -1,205 +1,211 @@
 <template>
-	<a-popover v-model:visible="visible" placement="bottomRight" class="app-header-cart">
-		<!-- 主体的弹层 -->
-		<template #content>
-			<div class="layer">
-				<div class="list">
-					<div class="item" v-for="goods in storeCartGetters.validateList.value" :key="goods.skuId">
-						<router-link :to="`/product/${goods.id}`" @click="hide()">
-							<img :src="goods.picture" alt="" />
-							<div class="center">
-								<p class="name ellipsis-2">{{ goods.name }}</p>
-								<p class="attr ellipsis">{{ goods.attrsText ?? goods.attrText }}</p>
-							</div>
-							<div class="right">
-								<p class="price">&yen;{{ goods.nowPrice }}</p>
-								<p class="count">{{ `X ${goods.count}` }}</p>
-							</div>
-						</router-link>
-						<a-button @click="deleteGoods(goods)" shape="circle" size="small"><CloseOutlined /></a-button>
-					</div>
-				</div>
-				<div class="foot">
-					<div class="total">
-						<p>共 {{ storeCartGetters.validateTotal }} 件商品</p>
-						<p>&yen;{{ storeCartGetters.validateAmount }}</p>
-					</div>
-					<XtxButton type="primary" v-model:disabled="checkButton" @click="$router.push('/cart')">去购物车结算</XtxButton>
-				</div>
-			</div>
-		</template>
-		<!-- 购物车图标按钮 -->
-		<a-badge :count="storeCartGetters.validateTotal" class="cart-btn">
-			<router-link to="/cart">
-				<a-button type="dashed" shape="circle" size="large">
-					<template #icon>
-						<ShoppingCartOutlined />
-					</template>
-				</a-button>
-			</router-link>
-		</a-badge>
-	</a-popover>
+  <a-popover v-model:visible="visible" placement="bottomRight" class="app-header-cart">
+    <!-- 主体的弹层 -->
+    <template #content>
+      <div class="layer">
+        <div class="list">
+          <div v-for="goods in storeCartGetters.validateList.value" :key="goods.skuId" class="item">
+            <router-link :to="`/product/${goods.id}`" @click="hide()">
+              <img :src="goods.picture" alt="" />
+              <div class="center">
+                <p class="name ellipsis-2">{{ goods.name }}</p>
+                <p class="attr ellipsis">{{ goods.attrsText ?? goods.attrText }}</p>
+              </div>
+              <div class="right">
+                <p class="price">&yen;{{ goods.nowPrice }}</p>
+                <p class="count">{{ `X ${goods.count}` }}</p>
+              </div>
+            </router-link>
+            <a-button shape="circle" size="small" @click="deleteGoods(goods)">
+              <close-outlined />
+            </a-button>
+          </div>
+        </div>
+        <div class="foot">
+          <div class="total">
+            <p>共 {{ storeCartGetters.validateTotal }} 件商品</p>
+            <p>&yen;{{ storeCartGetters.validateAmount }}</p>
+          </div>
+          <XtxButton v-model:disabled="checkButton" type="primary" @click="$router.push('/cart')">
+            去购物车结算
+          </XtxButton>
+        </div>
+      </div>
+    </template>
+    <!-- 购物车图标按钮 -->
+    <a-badge :count="storeCartGetters.validateTotal" class="cart-btn">
+      <router-link to="/cart">
+        <a-button type="dashed" shape="circle" size="large">
+          <template #icon>
+            <shopping-cart-outlined />
+          </template>
+        </a-button>
+      </router-link>
+    </a-badge>
+  </a-popover>
 </template>
 
 <script>
-import { ShoppingCartOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons-vue"
 
-import { ref, computed, onMounted } from 'vue'
-import { useGetters, useActions } from '@/hooks'
-import { useRouter } from 'vue-router'
-import { message } from 'ant-design-vue'
-import 'ant-design-vue/es/message/style/css'
+import { ref, computed, onMounted } from "vue"
+import { useRouter } from "vue-router"
+import { message } from "ant-design-vue"
+import { useGetters, useActions } from "@/hooks"
+import "ant-design-vue/es/message/style/css"
 
 const router = useRouter()
 export default {
-	setup() {
-		const storeCartGetters = useGetters('cart', ['validateList', 'validateTotal', 'validateAmount'])
-		const storeCartActions = useActions('cart', ['getCartList', 'removeCart'])
-		const visible = ref(false)
-		const hide = () => (visible.value = false)
-		const checkButton = computed(() => !Boolean(storeCartGetters.validateTotal.value.valueOf()))
-		const deleteGoods = (goods) => {
-			// 这里处理购物车删除单个商品
-			try {
-				storeCartActions.removeCart(goods).then(() => message.success('删除成功!'))
-			} catch (e) {
-				message.error('删除失败!')
-				throw new Error(e)
-			}
-		}
-		const toCartPage = () => router.push('/cart')
-		onMounted(() => {
-			if (Boolean(storeCartGetters.validateTotal.value.valueOf())) {
-				storeCartActions.getCartList().then(() => message.success('更新本地购物车成功！'))
-			}
-		})
+  components: { ShoppingCartOutlined, CloseOutlined },
+  setup() {
+    const storeCartGetters = useGetters("cart", ["validateList", "validateTotal", "validateAmount"])
+    const storeCartActions = useActions("cart", ["getCartList", "removeCart"])
+    const visible = ref(false)
+    const hide = () => {
+      return (visible.value = false)
+    }
+    const checkButton = computed(() => !storeCartGetters.validateTotal.value.valueOf())
+    const deleteGoods = (goods) => {
+      // 这里处理购物车删除单个商品
+      try {
+        storeCartActions.removeCart(goods).then(() => message.success("删除成功!"))
+      } catch (e) {
+        message.error("删除失败!")
+        throw new Error(e)
+      }
+    }
+    const toCartPage = () => router.push("/cart")
+    onMounted(() => {
+      if (storeCartGetters.validateTotal.value.valueOf()) {
+        storeCartActions.getCartList().then(() => message.success("更新本地购物车成功！"))
+      }
+    })
 
-		return {
-			storeCartGetters,
-			visible,
-			hide,
-			checkButton,
-			deleteGoods,
-			toCartPage,
-		}
-	},
-	components: { ShoppingCartOutlined, CloseOutlined },
+    return {
+      storeCartGetters,
+      visible,
+      hide,
+      checkButton,
+      deleteGoods,
+      toCartPage,
+    }
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .layer {
-	width: 400px;
-	height: 400px;
-	.list {
-		height: 340px;
-		overflow: auto;
-		// 滚动条的样式
-		&::-webkit-scrollbar {
-			width: 10px;
-			height: 10px;
-		}
-		&::-webkit-scrollbar-track {
-			background: #f8f8f8;
-			border-radius: 2px;
-		}
-		&::-webkit-scrollbar-thumb {
-			background: #eee;
-			border-radius: 10px;
-		}
-		&::-webkit-scrollbar-thumb:hover {
-			background: #ccc;
-		}
-		// 商品列表
-		.item {
-			border-bottom: 1px solid #f5f5f5;
-			padding: 10px 0;
-			position: relative;
-			// 图标button
-			> button.ant-btn {
-				position: absolute;
-				top: 50%;
-				right: 5px;
-				transform: translateY(-50%);
-				opacity: 0;
-				color: #666;
-				transition: all 0.5s;
-			}
-			&:hover {
-				> button.ant-btn {
-					opacity: 1;
-					cursor: pointer;
-				}
-			}
-			// 商品
-			a {
-				display: flex;
-				align-items: center;
-				width: 100%;
-				img {
-					height: 80px;
-					width: 80px;
-				}
-				.center {
-					margin: 0 10px;
-					width: 200px;
-					> p {
-						margin: 5px 0;
-						&.name {
-							font-size: 16px;
-						}
-						&.attr {
-							color: #999;
-							padding-top: 5px;
-						}
-					}
-				}
-				.right {
-					margin-right: 20px;
-					text-align: center;
-					> p {
-						margin: 5px 0;
-						&.price {
-							font-size: 16px;
-							color: @priceColor;
-						}
-						&.count {
-							color: #999;
-							margin-top: 5px;
-							font-size: 16px;
-						}
-					}
-				}
-			}
-		}
-	}
-	.foot {
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		height: 70px;
-		width: 100%;
-		padding: 10px;
-		display: flex;
-		justify-content: space-between;
-		background: #f8f8f8;
-		align-items: center;
-		.total {
-			padding-left: 10px;
-			color: #999;
-			display: flex;
-			flex-flow: column nowrap;
-			justify-content: center;
-			align-items: center;
-			p {
-				display: block;
-				margin: 0;
-				&:last-child {
-					font-size: 18px;
-					color: @priceColor;
-				}
-			}
-		}
-	}
+  width: 400px;
+  height: 400px;
+  .list {
+    height: 340px;
+    overflow: auto;
+    // 滚动条的样式
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f8f8f8;
+      border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #eee;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #ccc;
+    }
+    // 商品列表
+    .item {
+      border-bottom: 1px solid #f5f5f5;
+      padding: 10px 0;
+      position: relative;
+      // 图标button
+      > button.ant-btn {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        opacity: 0;
+        color: #666;
+        transition: all 0.5s;
+      }
+      &:hover {
+        > button.ant-btn {
+          opacity: 1;
+          cursor: pointer;
+        }
+      }
+      // 商品
+      a {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        img {
+          height: 80px;
+          width: 80px;
+        }
+        .center {
+          margin: 0 10px;
+          width: 200px;
+          > p {
+            margin: 5px 0;
+            &.name {
+              font-size: 16px;
+            }
+            &.attr {
+              color: #999;
+              padding-top: 5px;
+            }
+          }
+        }
+        .right {
+          margin-right: 20px;
+          text-align: center;
+          > p {
+            margin: 5px 0;
+            &.price {
+              font-size: 16px;
+              color: @priceColor;
+            }
+            &.count {
+              color: #999;
+              margin-top: 5px;
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .foot {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 70px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background: #f8f8f8;
+    align-items: center;
+    .total {
+      padding-left: 10px;
+      color: #999;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: center;
+      p {
+        display: block;
+        margin: 0;
+        &:last-child {
+          font-size: 18px;
+          color: @priceColor;
+        }
+      }
+    }
+  }
 }
 </style>

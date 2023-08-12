@@ -1,12 +1,12 @@
 // ? 这里定义 用户 相关的接口
-import { request } from '@/utils/request.js'
+import { request } from "@/utils/request.js"
 
 /** ? 账号登录
  * @param {String} account -- 用户账号
  * @param {String} password -- 用户密码
  */
 export function _userAccountLogin({ account, password }) {
-	return request('/login', 'post', { account, password })
+  return request("/login", "post", { account, password })
 }
 
 /**
@@ -15,7 +15,7 @@ export function _userAccountLogin({ account, password }) {
  * @returns Object
  */
 export function _userGetVerificationCode(phone) {
-	return request('/login/code', 'get', { mobile: phone })
+  return request("/login/code", "get", { mobile: phone })
 }
 
 /**
@@ -25,7 +25,7 @@ export function _userGetVerificationCode(phone) {
  * @returns Object
  */
 export function _userSMSLogin({ phone, verificationCode }) {
-	return request('/login/code', 'post', { mobile: phone, code: verificationCode })
+  return request("/login/code", "post", { mobile: phone, code: verificationCode })
 }
 
 /**
@@ -35,7 +35,7 @@ export function _userSMSLogin({ phone, verificationCode }) {
  * @returns Object
  */
 export function _userQQLogin({ unionId, source = 6 }) {
-	return request('/login/social', 'post', { unionId, source })
+  return request("/login/social", "post", { unionId, source })
 }
 
 /**
@@ -44,7 +44,7 @@ export function _userQQLogin({ unionId, source = 6 }) {
  * @returns
  */
 export function _userQQBindGetVerificationCode(phone) {
-	return request('/login/social/code', 'get', { mobile: phone })
+  return request("/login/social/code", "get", { mobile: phone })
 }
 
 /**
@@ -55,7 +55,7 @@ export function _userQQBindGetVerificationCode(phone) {
  * @returns
  */
 export function _userQQBindPhone({ unionId, mobile, verificationCode }) {
-	return request('/login/social/bind', 'post', { unionId, mobile, code: verificationCode })
+  return request("/login/social/bind", "post", { unionId, mobile, code: verificationCode })
 }
 
 /**
@@ -64,7 +64,7 @@ export function _userQQBindPhone({ unionId, mobile, verificationCode }) {
  * @returns
  */
 export function _userCheckAccount(account) {
-	return request('/register/check', 'get', { account })
+  return request("/register/check", "get", { account })
 }
 
 /**
@@ -74,7 +74,12 @@ export function _userCheckAccount(account) {
  * @returns
  */
 export function _userQQPatchAccount(unionId, { account, phone, verificationCode, password }) {
-	return request(`/login/social/${unionId}/complement`, 'post', { account, mobile: phone, code: verificationCode, password })
+  return request(`/login/social/${unionId}/complement`, "post", {
+    account,
+    mobile: phone,
+    code: verificationCode,
+    password,
+  })
 }
 
 /**
@@ -83,7 +88,7 @@ export function _userQQPatchAccount(unionId, { account, phone, verificationCode,
  * @returns
  */
 export function _userPCRegisterVerificationCode(phone) {
-	return request('/register/code', 'get', { mobile: phone })
+  return request("/register/code", "get", { mobile: phone })
 }
 
 /**
@@ -95,5 +100,5 @@ export function _userPCRegisterVerificationCode(phone) {
  * @returns
  */
 export function _userPCRegister({ account, phone, verificationCode, password }) {
-	return request('/register', 'post', { account, mobile: phone, code: verificationCode, password })
+  return request("/register", "post", { account, mobile: phone, code: verificationCode, password })
 }

@@ -1,26 +1,27 @@
 <template>
-	<div class="login-layout">
-		<LoginHeader>
-			<template #subTitle>
-				<slot name="headTitle"></slot>
-			</template>
-		</LoginHeader>
-		<slot name="body"></slot>
-		<LoginFooter></LoginFooter>
-	</div>
+  <div class="login-layout">
+    <login-header>
+      <template #subTitle>
+        <slot name="headTitle"></slot>
+      </template>
+    </login-header>
+    <slot name="body"></slot>
+    <login-footer></login-footer>
+  </div>
 </template>
 
 <script>
-import LoginHeader from './login-header.vue'
-import LoginFooter from './login-footer.vue'
+import LoginHeader from "./login-header.vue"
+import LoginFooter from "./login-footer.vue"
+
 export default {
-	setup() {
-		return {}
-	},
-	components: {
-		LoginHeader,
-		LoginFooter,
-	},
+  components: {
+    LoginHeader,
+    LoginFooter,
+  },
+  setup() {
+    return {}
+  },
 }
 </script>
 

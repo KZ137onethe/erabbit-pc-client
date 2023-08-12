@@ -1,31 +1,31 @@
 <template>
-    <div class="xtx-skeleton" :style="{width, height}" :class="{shan: animation}">
-        <div class="block" :style="{backgroundColor: bg}"></div>
-    </div>
+  <div class="xtx-skeleton" :style="{ width, height }" :class="{ shan: animation }">
+    <div class="block" :style="{ backgroundColor: bg }"></div>
+  </div>
 </template>
 
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'XtxSkeleton',
+  name: "XtxSkeleton",
   props: {
     bg: {
       type: String,
-      default: '#efefef'
+      default: "#efefef",
     },
     width: {
       type: String,
-      default: '100px'
+      default: "100px",
     },
     height: {
       type: String,
-      default: '100px'
+      default: "100px",
     },
     animation: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 

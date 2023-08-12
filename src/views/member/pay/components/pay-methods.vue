@@ -1,30 +1,31 @@
 <template>
-	<div class="pay-methods">
-		<Option title="支付方式">
-			<template #content>
-				<div class="main">
-					<a-space size="middle">
-						<a-button size="large">工商银行</a-button>
-						<a-button size="large">招商银行</a-button>
-						<a-button size="large">建设银行</a-button>
-						<a-button size="large">农业银行</a-button>
-						<a-button size="large" disabled>交通银行</a-button>
-					</a-space>
-				</div>
-			</template>
-		</Option>
-	</div>
+  <div class="pay-methods">
+    <public-option title="支付方式">
+      <template #content>
+        <div class="main">
+          <a-space size="middle">
+            <a-button size="large">工商银行</a-button>
+            <a-button size="large">招商银行</a-button>
+            <a-button size="large">建设银行</a-button>
+            <a-button size="large">农业银行</a-button>
+            <a-button size="large" disabled>交通银行</a-button>
+          </a-space>
+        </div>
+      </template>
+    </public-option>
+  </div>
 </template>
 
 <script>
-import Option from './public-option.vue'
+import PublicOption from "./public-option"
+
 export default {
-	setup() {
-		return {}
-	},
-	components: {
-		Option,
-	},
+  components: {
+    PublicOption,
+  },
+  setup() {
+    return {}
+  },
 }
 </script>
 
