@@ -24,7 +24,7 @@
 <script>
 import { ref, reactive, watch } from "vue"
 import { useRoute } from "vue-router"
-import { categoryApi } from "@/api/category"
+import categoryApi from "@/api/category"
 import SubBread from "./components/sub-bread"
 import SubFilter from "./components/sub-filter"
 import SubSort from "./components/sub-sort"

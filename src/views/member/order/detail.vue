@@ -13,7 +13,7 @@ import MemberOrderDetailHeader from "./components/member-order-detail-header.vue
 import MemberOrderDetailContent from "./components/member-order-detail-content.vue"
 import MemberOrderDetailFooter from "./components/member-order-detail-footer.vue"
 
-import { memberApi } from "@/api/member"
+import memberApi from "@/api/member"
 
 export default {
   components: {

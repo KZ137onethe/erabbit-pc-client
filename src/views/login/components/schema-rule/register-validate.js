@@ -1,5 +1,5 @@
 import { computed } from "vue"
-import { userApi } from "@/api/user"
+import userApi from "@/api/user"
 
 export const validateAccount = async (_rule, value) => {
   return new Promise((resolve, reject) => {
