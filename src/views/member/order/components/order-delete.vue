@@ -8,11 +8,10 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue"
 import { createVNode } from "vue"
 import { Modal, message } from "ant-design-vue"
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 import "ant-design-vue/es/message/style/css"
 import "ant-design-vue/es/modal/style/css"
 
-const { _deleteOrder } = memberApi
 export default {
   props: {
     orderId: {
@@ -30,7 +29,7 @@ export default {
         okType: "danger",
         cancelText: "返回",
         onOk() {
-          _deleteOrder([props.orderId]).then(() => {
+          memberApi._deleteOrder([props.orderId]).then(() => {
             message.success("删除成功!")
             emit("refresh")
           })

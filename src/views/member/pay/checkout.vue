@@ -36,9 +36,7 @@ import { DeliveryTime, PayMethod } from "./components/public-option"
 import CheckoutTable from "./components/checkout-table.vue"
 import "ant-design-vue/es/message/style/css"
 
-import { orderApi } from "@/api"
-
-const { _getCheckoutInfo, _submitOrder } = orderApi
+import orderApi from "@/api/order"
 
 export default {
   components: {
@@ -66,7 +64,7 @@ export default {
     const submitOrder = () => {
       const addressId = submitParams.addressId ?? false
       if (addressId) {
-        _submitOrder({ ...submitParams }).then((data) => {
+        orderApi._submitOrder({ ...submitParams }).then((data) => {
           router.push({
             path: "/member/pay",
             query: {
@@ -90,7 +88,7 @@ export default {
 
     const router = useRouter()
     onMounted(() => {
-      _getCheckoutInfo().then((res) => {
+      orderApi._getCheckoutInfo().then((res) => {
         order.value = res.result
         submitParams.goods = order.value.goods.map((item) => {
           return {

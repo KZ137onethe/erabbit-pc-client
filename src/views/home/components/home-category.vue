@@ -66,9 +66,8 @@
 <script>
 import { ref, reactive, computed } from "vue"
 import { useState } from "@/hooks"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 
-const { _findBrand } = homeApi
 export default {
   name: "HomeCategory",
   setup() {
@@ -107,7 +106,7 @@ export default {
       return leftCategoryList.value.find((item) => item.id === categoryId.value)
     })
     // ? 获取品牌的数据
-    _findBrand().then((data) => {
+    homeApi._findBrand().then((data) => {
       brand.brands = data.result
     })
     return {

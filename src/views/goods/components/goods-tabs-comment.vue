@@ -106,9 +106,8 @@
 <script>
 import { inject, ref, reactive, watch, toRefs } from "vue"
 import GoodsTabsCommentPreviewImg from "./goods-tabs-comment-previewImg"
-import { productApi } from "@/api"
+import productApi from "@/api/product"
 
-const { _findGoodsCommentInfo, _findGoodsCommentData } = productApi
 export default {
   components: { GoodsTabsCommentPreviewImg },
   setup() {
@@ -189,7 +188,7 @@ export default {
       commentParams,
       async () => {
         // 获取商品评价分页数据
-        const data = await _findGoodsCommentData({
+        const data = await productApi._findGoodsCommentData({
           id: goods.value.id,
           query: commentParams,
         })
@@ -228,7 +227,7 @@ export default {
 // 获取商品评价的统计信息
 const goodsCommentCount = (goodsId) => {
   const info = ref(null)
-  _findGoodsCommentInfo({ id: goodsId }).then((data) => {
+  productApi._findGoodsCommentInfo({ id: goodsId }).then((data) => {
     data.result.tags.unshift({
       type: "img",
       title: "有图",

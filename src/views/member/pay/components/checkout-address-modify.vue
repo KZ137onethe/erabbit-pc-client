@@ -53,7 +53,7 @@
 <script>
 import { computed, reactive } from "vue"
 import { message } from "ant-design-vue"
-import { orderApi } from "@/api"
+import orderApi from "@/api/order"
 import "ant-design-vue/es/message/style/css"
 
 const layout = {
@@ -90,7 +90,7 @@ const formFormat = reactive({
     placeholder: "请输入地址标签，逗号分隔",
   },
 })
-const { _modifyAddress } = orderApi
+
 export default {
   props: {
     open: {
@@ -114,7 +114,8 @@ export default {
     const onFinish = () => {
       const addressId = formState.value?.id
       if (addressId) {
-        _modifyAddress({ addressId, address: formState.value })
+        orderApi
+          ._modifyAddress({ addressId, address: formState.value })
           .then(() => {
             emit("change", formState.value)
             onClose()

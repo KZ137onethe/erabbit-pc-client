@@ -1,16 +1,6 @@
 import Big from "big.js"
 
-import { cartApi } from "@/api"
-
-const {
-  _getGoodsInfoNewest,
-  _mergeLocalCart,
-  _getCartList,
-  _addCart,
-  _deleteCart,
-  _modifyCart,
-  _checkCartAllSelected,
-} = cartApi
+import cartApi from "@/api/cart"
 
 // 购物车模块
 const CartModule = {
@@ -124,9 +114,10 @@ const CartModule = {
       return new Promise((resolve) => {
         if (isLogin) {
           // 向服务端添加数据,在拉一遍获取购物车数据的请求,将本地数据替换
-          _addCart({ skuId: payload.skuId, count: payload.count })
+          cartApi
+            ._addCart({ skuId: payload.skuId, count: payload.count })
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -143,14 +134,14 @@ const CartModule = {
       return new Promise((resolve, reject) => {
         if (isLogin) {
           // 登录后
-          _getCartList().then((data) => {
+          cartApi._getCartList().then((data) => {
             commit("setCart", data.result)
             resolve()
           })
         } else {
           // 同时发送购物车的所有商品的更新请求
           const promiseArr = state.list.map((item) => {
-            return _getGoodsInfoNewest(item.skuId)
+            return cartApi._getGoodsInfoNewest(item.skuId)
           })
           Promise.all(promiseArr)
             .then((results) => {
@@ -169,9 +160,10 @@ const CartModule = {
       const isLogin = Boolean(rootState.user.profile?.token)
       return new Promise((resolve) => {
         if (isLogin) {
-          _modifyCart(payload)
+          cartApi
+            ._modifyCart(payload)
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -190,9 +182,10 @@ const CartModule = {
       return new Promise((resolve) => {
         if (isLogin) {
           const ids = dataSource.map((item) => item.skuId)
-          _checkCartAllSelected({ selected: payload, ids })
+          cartApi
+            ._checkCartAllSelected({ selected: payload, ids })
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -211,9 +204,10 @@ const CartModule = {
       const isLogin = Boolean(rootState.user.profile?.token)
       return new Promise((resolve) => {
         if (isLogin) {
-          _deleteCart([payload.skuId])
+          cartApi
+            ._deleteCart([payload.skuId])
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -231,9 +225,10 @@ const CartModule = {
       return new Promise((resolve) => {
         if (isLogin) {
           const ids = dataSource.map((item) => item.skuId)
-          _deleteCart(ids)
+          cartApi
+            ._deleteCart(ids)
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -257,12 +252,13 @@ const CartModule = {
         if (isLogin) {
           const { skuId, price, inventory: stock, specsText: attrsText } = newValue
           const next = { ...pre, ...{ skuId, price, stock, attrsText } }
-          _deleteCart([pre.skuId])
+          cartApi
+            ._deleteCart([pre.skuId])
             .then(() => {
-              return _addCart({ skuId: next.skuId, count: next.count })
+              return cartApi._addCart({ skuId: next.skuId, count: next.count })
             })
             .then(() => {
-              return _getCartList()
+              return cartApi._getCartList()
             })
             .then((data) => {
               commit("setCart", data.result)
@@ -286,7 +282,8 @@ const CartModule = {
         const { skuId, selected, count } = item
         return { skuId, selected, count }
       })
-      _mergeLocalCart(cartList)
+      cartApi
+        ._mergeLocalCart(cartList)
         .then(() => {
           commit("setCart", [])
         })

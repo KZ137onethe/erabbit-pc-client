@@ -54,7 +54,7 @@
 <script>
 import { reactive, computed } from "vue"
 import { message } from "ant-design-vue"
-import { orderApi } from "@/api"
+import orderApi from "@/api/order"
 import "ant-design-vue/es/message/style/css"
 
 const layout = {
@@ -91,7 +91,6 @@ const formFormat = reactive({
     placeholder: "请输入地址标签，逗号分隔",
   },
 })
-const { _appendAddress } = orderApi
 export default {
   props: {
     open: {
@@ -120,7 +119,8 @@ export default {
     const onFinish = () => {
       const copyFormState = reactive({ ...formState })
       delete copyFormState.fullLocation
-      _appendAddress(copyFormState)
+      orderApi
+        ._appendAddress(copyFormState)
         .then((res) => {
           copyFormState.id = res.result.id
           copyFormState.fullLocation = formState.fullLocation

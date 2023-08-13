@@ -49,9 +49,8 @@
 import { HeartOutlined, EyeOutlined, MessageOutlined } from "@ant-design/icons-vue"
 import HomePanel from "./home-panel"
 import { useLazyData } from "@/hooks"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 
-const { _findSpecial } = homeApi
 export default {
   components: {
     HomePanel,
@@ -60,7 +59,7 @@ export default {
     MessageOutlined,
   },
   setup() {
-    const { target, res } = useLazyData(_findSpecial)
+    const { target, res } = useLazyData(homeApi._findSpecial)
     return {
       target,
       special: res,

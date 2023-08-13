@@ -32,16 +32,15 @@
 <script>
 import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
-import { orderApi } from "@/api"
+import orderApi from "@/api/order"
 
-const { _getOrderDetail } = orderApi
 export default {
   setup() {
     const route = useRoute()
     const orderId = computed(() => route.query.orderId)
     const order = ref(null)
     onMounted(() => {
-      _getOrderDetail(orderId.value).then((res) => {
+      orderApi._getOrderDetail(orderId.value).then((res) => {
         const { result } = res
         order.value = result
         console.log("order:", order.value)

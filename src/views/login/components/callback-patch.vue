@@ -59,12 +59,11 @@ import "ant-design-vue/es/message/style/css"
 
 import { reactive, computed } from "vue"
 import { useRouter } from "vue-router"
-import { userApi } from "@/api"
+import userApi from "@/api/user"
 import { checkButton, SendBtn } from "./form"
 import { PatchRules } from "./schema-rule/callback-patch-validate"
 import { useState, useMutations, useActions } from "@/hooks"
 
-const { _userPCRegisterVerificationCode, _userQQPatchAccount } = userApi
 export default {
   components: {
     UserOutlined,
@@ -94,7 +93,7 @@ export default {
       const phone = parseInt(data, 10)
       return /^1[3-9]\d{9}$/.test(phone)
     }
-    const sendCode = (phone) => _userPCRegisterVerificationCode(phone)
+    const sendCode = (phone) => userApi._userPCRegisterVerificationCode(phone)
     // 绑定框状态
     const buttonCheck = computed(() => checkButton(formState))
     const { unionId } = reactive(props)
@@ -104,7 +103,8 @@ export default {
     const storeCartActions = useActions("cart", ["mergeLocalCart", "getCartList"])
     const handleFinish = (values) => {
       const { account, phone, verificationCode, password } = values
-      _userQQPatchAccount(unionId, { account, phone, verificationCode, password })
+      userApi
+        ._userQQPatchAccount(unionId, { account, phone, verificationCode, password })
         .then((res) => {
           // 存用户数据 => 重定向 => 登录提示
           const userData = res.result

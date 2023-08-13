@@ -27,9 +27,9 @@ import "ant-design-vue/es/message/style/css"
 import { ref, reactive, computed, defineComponent } from "vue"
 import OperationButton from "./operation-btn.vue"
 
-import { cancelReason, memberApi } from "@/api"
+import memberApi from "@/api/member"
+import { cancelReason } from "@/api/contents"
 
-const { _cancelOrder } = memberApi
 export default defineComponent({
   components: {
     OperationButton,
@@ -72,7 +72,7 @@ export default defineComponent({
         }
       }
       confirmLoading.value = true
-      _cancelOrder({ orderId: props.orderId, cancelReason: nowReason.value }).then(() => {
+      memberApi._cancelOrder({ orderId: props.orderId, cancelReason: nowReason.value }).then(() => {
         confirmLoading.value = false
         visible.value = false
         // 提醒父组件重新发一次请求获得最新的数据

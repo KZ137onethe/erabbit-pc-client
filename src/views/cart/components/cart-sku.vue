@@ -19,9 +19,8 @@ import { DownOutlined, LoadingOutlined } from "@ant-design/icons-vue"
 import { h, ref } from "vue"
 import { onClickOutside } from "@vueuse/core"
 import GoodsSku from "@/views/goods/components/goods-sku.vue"
-import { cartApi } from "@/api"
+import cartApi from "@/api/cart"
 
-const { _getCartSku } = cartApi
 export default {
   name: "CartSku",
   components: { DownOutlined, GoodsSku },
@@ -46,7 +45,7 @@ export default {
       layerLoading.value = true
 
       // 获取sku数据
-      _getCartSku(props.skuId).then((res) => {
+      cartApi._getCartSku(props.skuId).then((res) => {
         skuData.value = res.result
         layerLoading.value = false
       })

@@ -33,10 +33,9 @@ import CallbackBind from "./components/callback-bind"
 import CallbackPatch from "./components/callback-patch"
 
 import { useState, useMutations } from "@/hooks"
-import { userApi } from "@/api"
+import userApi from "@/api/user"
 import "ant-design-vue/es/message/style/css"
 
-const { _userQQLogin } = userApi
 export default {
   components: {
     LoginLayout,
@@ -79,7 +78,8 @@ export default {
       if (QC.Login.check()) {
         QC.Login.getMe((openId) => {
           unionId.value = openId
-          _userQQLogin({ unionId: openId })
+          userApi
+            ._userQQLogin({ unionId: openId })
             .then((data) => {
               // 存用户数据 => 重定向 => 登录提示
               const userData = data.result

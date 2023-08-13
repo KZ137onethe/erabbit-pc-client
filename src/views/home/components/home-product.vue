@@ -39,7 +39,7 @@
 import HomePanel from "./home-panel"
 import HomeGoods from "./home-goods"
 import { useLazyData } from "@/hooks"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 
 const { _findGoodsColumn } = homeApi
 export default {
@@ -49,7 +49,7 @@ export default {
   },
   setup() {
     // TODO: 添加左侧图片的两个说明
-    const { target, res } = useLazyData(_findGoodsColumn)
+    const { target, res } = useLazyData(homeApi._findGoodsColumn)
     return {
       goods: res,
       target,

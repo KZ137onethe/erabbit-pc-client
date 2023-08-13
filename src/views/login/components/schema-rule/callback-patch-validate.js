@@ -1,7 +1,6 @@
 import { computed } from "vue"
-import { userApi } from "@/api"
+import { userApi } from "@/api/user"
 
-const { _userCheckAccount } = userApi
 export const validateAccount = async (_rule, value) => {
   return new Promise((resolve, reject) => {
     if (value === "") {
@@ -10,7 +9,7 @@ export const validateAccount = async (_rule, value) => {
       if (!/^[a-zA-Z]\w{5,19}$/.test(value)) {
         reject(new Error("字母开头且6-20字符"))
       }
-      _userCheckAccount(value).then((res) => {
+      userApi._userCheckAccount(value).then((res) => {
         const { result } = res
         if (result.valid) {
           reject(new Error("用户名已存在"))

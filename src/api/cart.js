@@ -5,7 +5,7 @@ import { request } from "@/utils/request.js"
  * @param {String} skuId -- 商品规格唯一id
  * return Promise
  */
-export function _getGoodsInfoNewest(skuId) {
+function _getGoodsInfoNewest(skuId) {
   return request(`/goods/stock/${skuId}`, "get")
 }
 
@@ -14,7 +14,7 @@ export function _getGoodsInfoNewest(skuId) {
  * @param {String} skuId -- 商品规格唯一id
  * @returns
  */
-export function _getCartSku(skuId) {
+function _getCartSku(skuId) {
   return request(`/goods/sku/${skuId}`, "get")
 }
 
@@ -24,14 +24,14 @@ export function _getCartSku(skuId) {
  * object 必须包含 skuId, selected, count 这三个字段
  * @returns
  */
-export function _mergeLocalCart(localCartList) {
+function _mergeLocalCart(localCartList) {
   return request(`/member/cart/merge`, "post", localCartList)
 }
 
 /**
  * 登录状态下，获取购物车列表
  */
-export function _getCartList() {
+function _getCartList() {
   return request("/member/cart", "get")
 }
 
@@ -41,7 +41,7 @@ export function _getCartList() {
  * @param {Number} count -- 商品数量
  * @returns
  */
-export function _addCart({ skuId, count }) {
+function _addCart({ skuId, count }) {
   return request("/member/cart", "post", { skuId, count })
 }
 
@@ -50,7 +50,7 @@ export function _addCart({ skuId, count }) {
  * @param {Array<string>} ids -- skuId数组集合
  * @returns
  */
-export function _deleteCart(ids) {
+function _deleteCart(ids) {
   return request("/member/cart", "delete", { ids })
 }
 
@@ -61,7 +61,7 @@ export function _deleteCart(ids) {
  * @param {Number} count -- 商品数量
  * @returns
  */
-export function _modifyCart({ skuId, selected, count }) {
+function _modifyCart({ skuId, selected, count }) {
   return request(`/member/cart/${skuId}`, "put", { selected, count })
 }
 
@@ -71,6 +71,17 @@ export function _modifyCart({ skuId, selected, count }) {
  * @param {Array<string>} ids -- skuId数组集合
  * @returns
  */
-export function _checkCartAllSelected({ selected, ids }) {
+function _checkCartAllSelected({ selected, ids }) {
   return request(`/member/cart/selected`, "put", { selected, ids })
+}
+
+export default {
+  _getGoodsInfoNewest,
+  _getCartSku,
+  _mergeLocalCart,
+  _getCartList,
+  _addCart,
+  _deleteCart,
+  _modifyCart,
+  _checkCartAllSelected,
 }

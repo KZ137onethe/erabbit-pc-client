@@ -110,12 +110,11 @@ export default {
 }
 
 const blankSpace = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0"
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 
-const { _getOrderList } = memberApi
 export async function sendOrderRequest({ page, pageSize, orderState = 0 }) {
   const result = ref([])
-  _getOrderList({ page, pageSize, orderState }).then((res) => {
+  memberApi._getOrderList({ page, pageSize, orderState }).then((res) => {
     for (const item of res.result.items) {
       const realItem = { ...item }
       realItem.message = `下单时间：${item.payLatestTime}${blankSpace}订单编号：${item.id}`

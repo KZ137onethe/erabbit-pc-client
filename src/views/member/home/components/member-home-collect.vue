@@ -12,9 +12,8 @@
 import { ref, onMounted } from "vue"
 import MemberHomePanel from "./member-home-panel.vue"
 
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 
-const { _getCollect } = memberApi
 export default {
   components: {
     MemberHomePanel,
@@ -22,7 +21,7 @@ export default {
   setup() {
     const collect = ref([])
     onMounted(() => {
-      _getCollect({ page: 1, pageSize: 4 }).then((data) => {
+      memberApi._getCollect({ page: 1, pageSize: 4 }).then((data) => {
         collect.value = data.result
         console.log(collect)
       })

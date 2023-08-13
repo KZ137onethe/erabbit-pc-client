@@ -47,10 +47,9 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons-vue"
 import { ref, computed } from "vue"
 import HomePanel from "./home-panel"
 import HomeSkeleton from "./home-skeleton"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 import { useLazyData } from "@/hooks"
 
-const { _findBrand } = homeApi
 export default {
   components: {
     HomePanel,
@@ -61,7 +60,7 @@ export default {
   setup() {
     // TODO: 组件结构需要优化
     const index = ref(0)
-    const { target, res } = useLazyData(() => _findBrand(10))
+    const { target, res } = useLazyData(() => homeApi._findBrand(10))
     // 通过按钮改变品牌栏的索引
     const toggle = (step) => {
       const resIndex = index.value + step

@@ -24,13 +24,12 @@
 <script>
 import { ref, reactive, watch } from "vue"
 import { useRoute } from "vue-router"
-import { categoryApi } from "@/api"
+import { categoryApi } from "@/api/category"
 import SubBread from "./components/sub-bread"
 import SubFilter from "./components/sub-filter"
 import SubSort from "./components/sub-sort"
 import categoryGoodsItem from "./components/category-goods-item"
 
-const { _findSubCategoryGoods } = categoryApi
 export default {
   name: "SubCategory",
   components: {
@@ -60,7 +59,7 @@ export default {
     }
     const getGoodsData = () => {
       loading.value = true
-      _findSubCategoryGoods(queryParams).then(({ result }) => {
+      categoryApi._findSubCategoryGoods(queryParams).then(({ result }) => {
         // 如果请求到的数据不为空数组，则将数组push到商品列表中
         if (result.items.length > 0) {
           goodList.value.push(...result.items)

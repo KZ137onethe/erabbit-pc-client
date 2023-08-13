@@ -18,9 +18,8 @@
 
 <script>
 import { computed, ref } from "vue"
-import { productApi } from "@/api"
+import productApi from "@/api/product"
 
-const { _findGoodsHot } = productApi
 export default {
   props: {
     type: {
@@ -39,9 +38,11 @@ export default {
     const title = computed(() => titleObj[props.type])
     // 热销榜数据
     const hotData = ref([])
-    _findGoodsHot({ id: props.id, type: props.type, limit: props.limit }).then((data) => {
-      hotData.value = data.result.map((item) => item)
-    })
+    productApi
+      ._findGoodsHot({ id: props.id, type: props.type, limit: props.limit })
+      .then((data) => {
+        hotData.value = data.result.map((item) => item)
+      })
     return {
       title,
       hotData,

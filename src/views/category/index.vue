@@ -43,12 +43,11 @@
 <script>
 import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { categoryApi } from "@/api"
+import categoryApi from "@/api/category"
 import { useState } from "@/hooks"
 import CategoryBanner from "./components/category-banner"
 import CategoryGoodsItem from "./components/category-goods-item"
 
-const { _findTopCategory } = categoryApi
 export default {
   name: "CategoryIndex",
   components: {
@@ -70,7 +69,7 @@ export default {
     // 获取当前分类所有二级分类的推荐商品
     const subCategoryInfo = ref([])
     const getSubCategoryInfo = () => {
-      _findTopCategory(routes.params.id).then((data) => {
+      categoryApi._findTopCategory(routes.params.id).then((data) => {
         subCategoryInfo.value = data.result.children
       })
     }

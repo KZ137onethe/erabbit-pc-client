@@ -44,9 +44,8 @@
 <script>
 import { ref, reactive, watch } from "vue"
 import { useRoute } from "vue-router"
-import { categoryApi } from "@/api"
+import categoryApi from "@/api/category"
 
-const { _findSubCategoryFilter } = categoryApi
 export default {
   name: "SubFilter",
   setup(props, { emit }) {
@@ -68,7 +67,7 @@ export default {
         if (newVal && `/category/sub/${newVal}` === route.path) {
           toggleLoadStatus()
           // 发请求获取数据
-          _findSubCategoryFilter(newVal).then((data) => {
+          categoryApi._findSubCategoryFilter(newVal).then((data) => {
             data.result.brands.unshift(allInClass)
             data.result.brandSelected = allInClass.id
             data.result.saleProperties.forEach((item) => {

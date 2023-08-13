@@ -50,9 +50,8 @@
 
 <script>
 import { watch, computed, ref, toRefs } from "vue"
-import { orderApi } from "@/api"
+import orderApi from "@/api/order"
 
-const { _removeAddress } = orderApi
 export default {
   props: {
     open: {
@@ -111,7 +110,7 @@ export default {
     const deleteAddress = (addressId) => {
       const id = addressId ?? false
       if (id) {
-        _removeAddress(id).then(() => {
+        orderApi._removeAddress(id).then(() => {
           emit("delete", id)
         })
       }

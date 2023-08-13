@@ -67,11 +67,10 @@ import "ant-design-vue/es/message/style/css"
 import { reactive, computed } from "vue"
 import { useRouter } from "vue-router"
 import { ValidateRule } from "./schema-rule/register-validate.js"
-import { userApi } from "@/api"
+import userApi from "@/api/user"
 import { checkButton, SendBtn } from "./form.jsx"
 import { useState } from "@/hooks"
 
-const { _userPCRegisterVerificationCode, _userPCRegister } = userApi
 export default {
   components: {
     UserOutlined,
@@ -98,14 +97,15 @@ export default {
       const phone = parseInt(data, 10)
       return /^1[3-9]\d{9}$/.test(phone)
     }
-    const sendCode = (phone) => _userPCRegisterVerificationCode(phone)
+    const sendCode = (phone) => userApi._userPCRegisterVerificationCode(phone)
     // 绑定框状态
     const buttonCheck = computed(() => checkButton(formState))
     // 表单校验成功的点击回调
     const handleFinish = (values) => {
       const { account, phone, verificationCode, password } = values
       // 注册成功提示 => 重定向
-      _userPCRegister({ account, phone, verificationCode, password })
+      userApi
+        ._userPCRegister({ account, phone, verificationCode, password })
         .then(() => {
           message.success("注册成功")
           setTimeout(() => {

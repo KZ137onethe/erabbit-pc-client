@@ -34,20 +34,15 @@
 import HomePanel from "./home-panel.vue"
 import HomeSkeleton from "./home-skeleton.vue"
 import { useLazyData } from "@/hooks"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 
-const { _findFreshThing } = homeApi
 export default {
   components: {
     HomePanel,
     HomeSkeleton,
   },
   setup() {
-    // const goods = ref([])
-    // _findFreshThing().then(data => {
-    //   goods.value = data.result
-    // })
-    const { target, res } = useLazyData(_findFreshThing)
+    const { target, res } = useLazyData(homeApi._findFreshThing)
     return {
       goods: res,
       target,

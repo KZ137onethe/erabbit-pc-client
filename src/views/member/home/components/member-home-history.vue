@@ -12,9 +12,8 @@
 import { ref, onMounted } from "vue"
 import MemberHomePanel from "./member-home-panel.vue"
 
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 
-const { _getHistory } = memberApi
 export default {
   components: {
     MemberHomePanel,
@@ -22,7 +21,7 @@ export default {
   setup() {
     const history = ref([])
     onMounted(() => {
-      _getHistory({ page: 1, pageSize: 4 }).then((data) => {
+      memberApi._getHistory({ page: 1, pageSize: 4 }).then((data) => {
         history.value = data.result
         console.log("history:", history.value)
       })

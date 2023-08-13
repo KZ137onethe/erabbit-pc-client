@@ -52,10 +52,9 @@ import { reactive, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { checkButton, SendBtn } from "./form"
 import { BindRules } from "./schema-rule/callback-bind-validate.js"
-import { userApi } from "@/api"
+import userApi from "@/api/user"
 import { useState, useMutations, useActions } from "@/hooks"
 
-const { _userQQBindGetVerificationCode, _userQQBindPhone } = userApi
 export default {
   components: {
     MobileOutlined,
@@ -101,7 +100,7 @@ export default {
       const phone = parseInt(data, 10)
       return /^1[3-9]\d{9}$/.test(phone)
     }
-    const sendCode = (phone) => _userQQBindGetVerificationCode(phone)
+    const sendCode = (phone) => userApi._userQQBindGetVerificationCode(phone)
     // 绑定框状态
     const buttonCheck = computed(() => checkButton(formState))
     const router = useRouter()
@@ -111,7 +110,8 @@ export default {
     const handleFinish = (values) => {
       const { phone, verificationCode } = values
       console.log(phone, verificationCode)
-      _userQQBindPhone({ unionId, mobile: phone, verificationCode })
+      userApi
+        ._userQQBindPhone({ unionId, mobile: phone, verificationCode })
         .then((res) => {
           // 存用户数据 => 重定向 => 登录提示
           const userData = res.result

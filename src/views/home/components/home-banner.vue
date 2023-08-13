@@ -38,9 +38,8 @@ import "swiper/css/pagination"
 import "swiper/css/navigation"
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper"
-import { homeApi } from "@/api"
+import homeApi from "@/api/home"
 
-const { _findBanner } = homeApi
 export default {
   components: {
     Swiper,
@@ -60,7 +59,7 @@ export default {
       },
     }
     const banners = ref([])
-    _findBanner().then((data) => {
+    homeApi._findBanner().then((data) => {
       banners.value = data.result
     })
     return {

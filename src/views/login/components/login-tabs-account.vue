@@ -116,11 +116,10 @@ import { ref, reactive, computed } from "vue"
 
 import { useRouter } from "vue-router"
 import { LoginRules } from "./schema-rule/login-account-validate.js"
-import { userApi } from "@/api"
+import userApi from "@/api/user"
 import { useState, useMutations, useActions } from "@/hooks"
 import { SendBtn } from "./form"
 
-const { _userAccountLogin, _userGetVerificationCode, _userSMSLogin } = userApi
 const imageQQURL = "https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
 const QQSdkCallbackUrl =
   "https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback"
@@ -205,7 +204,7 @@ export default {
       const phone = parseInt(data, 10)
       return /^1[3-9]\d{9}$/.test(phone)
     }
-    const sendCode = (phone) => _userGetVerificationCode(phone)
+    const sendCode = (phone) => userApi._userGetVerificationCode(phone)
 
     // 表单检验成功的回调
     const router = useRouter()
@@ -218,7 +217,8 @@ export default {
       // ? 账号密码登录
       if (currentLoginMode.value.useMode === accountMode.account.useMode) {
         const { account, password } = values
-        _userAccountLogin({ account, password })
+        userApi
+          ._userAccountLogin({ account, password })
           .then((res) => {
             console.log(res)
             const userData = { ...res.result }
@@ -241,7 +241,8 @@ export default {
       // ? 短信验证码登录
       else if (currentLoginMode.value.useMode === accountMode.SMS.useMode) {
         const { phone, verificationCode } = values
-        _userSMSLogin({ phone, verificationCode })
+        userApi
+          ._userSMSLogin({ phone, verificationCode })
           .then(async (res) => {
             const userData = { ...res.result }
             storeUserMutations.setUser(userData)

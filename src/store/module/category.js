@@ -1,6 +1,6 @@
-import { topCategory, categoryApi } from "@/api"
+import categoryApi from "@/api/category"
+import { topCategory } from "@/api/contents"
 
-const { _findAllCategory } = categoryApi
 // * 分类模块
 const categoryModule = {
   namespaced: true,
@@ -27,7 +27,7 @@ const categoryModule = {
   actions: {
     getList(state) {
       // ? 1.获取数据 2.修改数据
-      _findAllCategory().then((data) => {
+      categoryApi._findAllCategory().then((data) => {
         // console.log(data)
         data.result.forEach((top) => {
           top.open = false

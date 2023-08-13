@@ -39,12 +39,11 @@
 import { ref, defineComponent } from "vue"
 import { Autoplay, Pagination, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { productApi } from "@/api"
+import productApi from "@/api/product"
 import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/navigation"
 
-const { _findGoodsRelevant } = productApi
 export default defineComponent({
   // url: import.meta.url,
   components: {
@@ -60,7 +59,7 @@ export default defineComponent({
   setup(props) {
     const data = ref([])
 
-    _findGoodsRelevant({ id: props.goodsId, limit: 16 }).then((res) => {
+    productApi._findGoodsRelevant({ id: props.goodsId, limit: 16 }).then((res) => {
       data.value = res.result
     })
 

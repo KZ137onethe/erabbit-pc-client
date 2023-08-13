@@ -17,11 +17,10 @@
 
 <script>
 import { ref } from "vue"
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 
 import OperationButton, { OrderCard } from "./operation-btn.vue"
 
-const { _getOrderLogistics } = memberApi
 export default {
   components: {
     OperationButton,
@@ -38,7 +37,7 @@ export default {
     const logisticsData = ref([])
     const allData = ref(null)
     const getLogistics = () => {
-      _getOrderLogistics(props.orderId).then((res) => {
+      memberApi._getOrderLogistics(props.orderId).then((res) => {
         allData.value = res.result
         if (res && res.result && res.result.list) {
           logisticsData.value = Array.isArray(res.result.list) && res.result.list.reverse()

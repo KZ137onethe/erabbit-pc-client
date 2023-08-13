@@ -69,10 +69,9 @@ import { useRoute } from "vue-router"
 import PayPlatform from "./components/pay-platform.vue"
 import PayMethods from "./components/pay-methods.vue"
 
-import { orderApi } from "@/api"
+import orderApi from "@/api/order"
 import { useReciprocalTime } from "@/hooks"
 
-const { _getOrderDetail } = orderApi
 export default {
   components: {
     Icon,
@@ -86,7 +85,7 @@ export default {
 
     const payTime = ref(null)
     onMounted(() => {
-      _getOrderDetail(orderId.value).then((res) => {
+      orderApi._getOrderDetail(orderId.value).then((res) => {
         const { result } = res
         order.value = result
         if (result.countdown >= 0) {

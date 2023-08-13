@@ -13,9 +13,8 @@ import MemberOrderDetailHeader from "./components/member-order-detail-header.vue
 import MemberOrderDetailContent from "./components/member-order-detail-content.vue"
 import MemberOrderDetailFooter from "./components/member-order-detail-footer.vue"
 
-import { memberApi } from "@/api"
+import { memberApi } from "@/api/member"
 
-const { _getOrderDetail } = memberApi
 export default {
   components: {
     MemberOrderDetailHeader,
@@ -26,7 +25,7 @@ export default {
     const route = useRoute()
     const orderId = computed(() => route.params?.id)
     const orderDetail = ref(null)
-    _getOrderDetail(orderId.value).then((res) => {
+    memberApi._getOrderDetail(orderId.value).then((res) => {
       console.log("res:", res)
       orderDetail.value = res.result
     })

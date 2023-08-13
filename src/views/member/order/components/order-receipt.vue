@@ -9,12 +9,11 @@
 <script>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
-import { memberApi } from "@/api"
+import memberApi from "@/api/member"
 
 import OperationButton from "./operation-btn.vue"
 import "ant-design-vue/es/message/style/css"
 
-const { _receiptOrder } = memberApi
 export default {
   components: {
     OperationButton,
@@ -31,7 +30,7 @@ export default {
       visible.value = true
     }
     const handleOk = () => {
-      _receiptOrder(props.orderId).then(() => {
+      memberApi._receiptOrder(props.orderId).then(() => {
         message("确认收货成功!")
         visible.value = false
         emit("refresh")
