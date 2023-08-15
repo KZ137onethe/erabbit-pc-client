@@ -1,4 +1,4 @@
-import { request } from "@/utils/request.js"
+import request from "@/utils/request.js"
 
 /**
  * 获取最新的商品信息
@@ -6,7 +6,10 @@ import { request } from "@/utils/request.js"
  * return Promise
  */
 function _getGoodsInfoNewest(skuId) {
-  return request(`/goods/stock/${skuId}`, "get")
+  return request({
+    url: `/goods/stock/${skuId}`,
+    method: "get",
+  })
 }
 
 /**
@@ -15,7 +18,10 @@ function _getGoodsInfoNewest(skuId) {
  * @returns
  */
 function _getCartSku(skuId) {
-  return request(`/goods/sku/${skuId}`, "get")
+  return request({
+    url: `/goods/sku/${skuId}`,
+    method: "get",
+  })
 }
 
 /**
@@ -25,14 +31,23 @@ function _getCartSku(skuId) {
  * @returns
  */
 function _mergeLocalCart(localCartList) {
-  return request(`/member/cart/merge`, "post", localCartList)
+  return request({
+    url: `/member/cart/merge`,
+    method: "post",
+    data: {
+      localCartList,
+    },
+  })
 }
 
 /**
  * 登录状态下，获取购物车列表
  */
 function _getCartList() {
-  return request("/member/cart", "get")
+  return request({
+    url: "/member/cart",
+    method: "get",
+  })
 }
 
 /**
@@ -42,7 +57,14 @@ function _getCartList() {
  * @returns
  */
 function _addCart({ skuId, count }) {
-  return request("/member/cart", "post", { skuId, count })
+  return request({
+    url: "/member/cart",
+    method: "post",
+    data: {
+      skuId,
+      count,
+    },
+  })
 }
 
 /**
@@ -51,7 +73,13 @@ function _addCart({ skuId, count }) {
  * @returns
  */
 function _deleteCart(ids) {
-  return request("/member/cart", "delete", { ids })
+  return request({
+    url: "/member/cart",
+    method: "delete",
+    params: {
+      ids,
+    },
+  })
 }
 
 /**
@@ -62,7 +90,14 @@ function _deleteCart(ids) {
  * @returns
  */
 function _modifyCart({ skuId, selected, count }) {
-  return request(`/member/cart/${skuId}`, "put", { selected, count })
+  return request({
+    url: `/member/cart/${skuId}`,
+    method: "put",
+    data: {
+      selected,
+      count,
+    },
+  })
 }
 
 /**
@@ -72,7 +107,14 @@ function _modifyCart({ skuId, selected, count }) {
  * @returns
  */
 function _checkCartAllSelected({ selected, ids }) {
-  return request(`/member/cart/selected`, "put", { selected, ids })
+  return request({
+    url: `/member/cart/selected`,
+    method: "put",
+    data: {
+      selected,
+      ids,
+    },
+  })
 }
 
 export default {

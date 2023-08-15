@@ -1,11 +1,14 @@
-import { request } from "@/utils/request.js"
+import request from "@/utils/request.js"
 
 /**
  * 获取结算信息
  * @returns
  */
 function _getCheckoutInfo() {
-  return request("/member/order/pre", "get")
+  return request({
+    url: "/member/order/pre",
+    method: "get",
+  })
 }
 
 /**
@@ -23,7 +26,13 @@ function _getCheckoutInfo() {
  * @returns
  */
 function _appendAddress(address) {
-  return request("/member/address", "post", address)
+  return request({
+    url: "/member/address",
+    method: "post",
+    data: {
+      address,
+    },
+  })
 }
 
 /**
@@ -33,7 +42,13 @@ function _appendAddress(address) {
  * @returns
  */
 function _modifyAddress({ addressId, address }) {
-  return request(`/member/address/${addressId}`, "put", address)
+  return request({
+    url: `/member/address/${addressId}`,
+    method: "put",
+    data: {
+      address,
+    },
+  })
 }
 
 /**
@@ -42,7 +57,10 @@ function _modifyAddress({ addressId, address }) {
  * @returns
  */
 function _removeAddress(addressId) {
-  return request(`/member/address/${addressId}`, "delete")
+  return request({
+    url: `/member/address/${addressId}`,
+    method: "delete",
+  })
 }
 
 /**
@@ -55,13 +73,17 @@ function _removeAddress(addressId) {
  * @param {*} buyerMessage -- 买家留言
  */
 function _submitOrder({ goods, addressId, deliveryTimeType, payType, payChannel, buyerMessage }) {
-  return request(`/member/order`, "post", {
-    goods,
-    addressId,
-    deliveryTimeType,
-    payType,
-    payChannel,
-    buyerMessage,
+  return request({
+    url: `/member/order`,
+    method: "post",
+    data: {
+      goods,
+      addressId,
+      deliveryTimeType,
+      payType,
+      payChannel,
+      buyerMessage,
+    },
   })
 }
 
@@ -71,7 +93,10 @@ function _submitOrder({ goods, addressId, deliveryTimeType, payType, payChannel,
  * @returns
  */
 function _getOrderDetail(orderId) {
-  return request(`/member/order/${orderId}`, "get")
+  return request({
+    url: `/member/order/${orderId}`,
+    method: "get",
+  })
 }
 
 export default {

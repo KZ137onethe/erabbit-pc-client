@@ -64,12 +64,11 @@ import { UserOutlined, MobileOutlined, SafetyOutlined, LockOutlined } from "@ant
 import { message } from "ant-design-vue"
 import "ant-design-vue/es/message/style/css"
 
-import { reactive, computed } from "vue"
+import { reactive, computed, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 import { ValidateRule } from "./schema-rule/register-validate.js"
 import userApi from "@/api/user"
 import { checkButton, SendBtn } from "./form.jsx"
-import { useState } from "@/hooks"
 
 export default {
   components: {
@@ -80,8 +79,9 @@ export default {
     SendBtn,
   },
   setup() {
+    const { proxy } = getCurrentInstance()
     const router = useRouter()
-    const userState = useState("user", ["redirectUrl"])
+    const { redirectUrl } = proxy.$store.useState("user", ["redirectUrl"])
     const formState = reactive({
       account: "",
       phone: "",
@@ -109,7 +109,6 @@ export default {
         .then(() => {
           message.success("注册成功")
           setTimeout(() => {
-            const redirectUrl = userState.redirectUrl.value
             router.push(redirectUrl)
           }, 1000)
         })

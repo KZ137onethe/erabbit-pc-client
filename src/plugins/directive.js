@@ -2,12 +2,6 @@
 // ? 全局注册组件在@/components/library/index.js 中
 import defaultImg from "@/assets/images/defaultImg.png"
 
-export default {
-  install(app) {
-    defineDirective(app)
-  },
-}
-
 const defineDirective = (app) => {
   // * 图片懒加载指令
   // ? 先存储图片地址不能在src上，当图片进入可视区，将你存储的图片地址设置给图片元素即可
@@ -38,3 +32,5 @@ const defineDirective = (app) => {
     },
   })
 }
+
+export default defineDirective

@@ -112,12 +112,11 @@ import {
 } from "@ant-design/icons-vue"
 import { message } from "ant-design-vue"
 import "ant-design-vue/es/message/style/css"
-import { ref, reactive, computed } from "vue"
+import { ref, reactive, computed, getCurrentInstance } from "vue"
 
 import { useRouter } from "vue-router"
 import { LoginRules } from "./schema-rule/login-account-validate.js"
 import userApi from "@/api/user"
-import { useState, useMutations, useActions } from "@/hooks"
 import { SendBtn } from "./form"
 
 const imageQQURL = "https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
@@ -127,6 +126,7 @@ export default {
   name: "LoginTabsAccount",
   components: { UserOutlined, PhoneOutlined, MailOutlined, LockOutlined, SafetyOutlined, SendBtn },
   setup() {
+    const { proxy } = getCurrentInstance()
     const accountMode = reactive({
       account: {
         status: true,
@@ -208,31 +208,34 @@ export default {
 
     // 表单检验成功的回调
     const router = useRouter()
-    const storeState = useState(["web_home_page_router"])
-    const redirectUrl = storeState.web_home_page_router.value
-    const storeUserMutations = useMutations("user", ["setUser"])
-    const storeCartActions = useActions("cart", ["mergeLocalCart", "getCartList"])
+    const { redirectHome } = proxy.$store.useState({
+      redirectHome: (state) => state.redirectUrl,
+    })
+    const { setUser } = proxy.$store.useMutations("user", ["setUser"])
+    const { mergeLocalCart, getCartList } = proxy.$store.useActions("cart", [
+      "mergeLocalCart",
+      "getCartList",
+    ])
     const onFinish = (values) => {
-      // message.success('登录成功!')
+      /** 登录流程
+       * 1. 将 userData 数据存入 Vuex
+       * 2. 反馈给用户 ”登陆成功“
+       * 3、登录跳转（重定向）到首页
+       */
       // ? 账号密码登录
       if (currentLoginMode.value.useMode === accountMode.account.useMode) {
         const { account, password } = values
         userApi
           ._userAccountLogin({ account, password })
           .then((res) => {
-            console.log(res)
             const userData = { ...res.result }
-            /** 登录流程
-             * 1. 将 userData 数据存入 Vuex
-             * 2. 反馈给用户 ”登陆成功“
-             * 3、登录跳转（重定向）到首页
-             */
-            storeUserMutations.setUser(userData)
-            storeCartActions.mergeLocalCart().then(() => {
-              message.success("登录成功")
-              router.push(redirectUrl)
-            })
-            storeCartActions.getCartList()
+            setUser(userData)
+            return mergeLocalCart()
+          })
+          .then(() => {
+            message.success("登录成功")
+            router.push(redirectHome.value)
+            return getCartList()
           })
           .catch((e) => {
             message.error(e.response.data.message)
@@ -245,12 +248,13 @@ export default {
           ._userSMSLogin({ phone, verificationCode })
           .then(async (res) => {
             const userData = { ...res.result }
-            storeUserMutations.setUser(userData)
-            storeCartActions.mergeLocalCart().then(() => {
-              message.success("登录成功")
-              router.push(redirectUrl)
-            })
-            storeCartActions.getCartList()
+            setUser(userData)
+            return mergeLocalCart()
+          })
+          .then(() => {
+            message.success("登录成功")
+            router.push(redirectHome.value)
+            return getCartList()
           })
           .catch((_errors) => {
             message.error("登录失败")

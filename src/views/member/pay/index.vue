@@ -70,7 +70,7 @@ import PayPlatform from "./components/pay-platform.vue"
 import PayMethods from "./components/pay-methods.vue"
 
 import orderApi from "@/api/order"
-import { useReciprocalTime } from "@/hooks"
+import { useReciprocalTime } from "@/utils/count-down"
 
 export default {
   components: {

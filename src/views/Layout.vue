@@ -8,9 +8,8 @@
 
 <script>
 import { useRoute } from "vue-router"
-import { computed, provide } from "vue"
+import { computed, provide, getCurrentInstance, onMounted } from "vue"
 import DefaultLayout from "@/layout/default.vue"
-import { useState, useActions } from "@/hooks"
 
 export default {
   name: "LayoutDefault",
@@ -18,6 +17,7 @@ export default {
     DefaultLayout,
   },
   setup() {
+    const { proxy } = getCurrentInstance()
     const route = useRoute()
     const control = computed(() => {
       if (route.path === "/cart" || route.fullPath.search(/\/member[/\w*]*/) !== -1) {
@@ -25,16 +25,23 @@ export default {
       }
       return true
     })
-    const storeCategoryActions = useActions("category", {
+    const { getCategoryList } = proxy.$store.useActions("category", {
       getCategoryList: "getList",
     })
-    storeCategoryActions.getCategoryList()
-    const storeCategoryState = useState("category", ["list"])
+
+    const { categoryList } = proxy.$store.useState("category", {
+      categoryList: "list",
+    })
+
     provide("headSticky", control)
+
+    onMounted(() => {
+      getCategoryList()
+    })
     return {
       control,
-      ...storeCategoryActions,
-      ...storeCategoryState,
+      getCategoryList,
+      categoryList,
     }
   },
 }

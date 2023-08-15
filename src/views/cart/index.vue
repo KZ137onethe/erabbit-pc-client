@@ -93,8 +93,8 @@
                 <a-button type="link" @click="deleteSelectedCartGoods(currentData)">删除</a-button>
               </a-table-summary-cell>
               <a-table-summary-cell class="overview" :index="3" :col-span="3">
-                <span class="description">{{ dataSummary.description }}</span>
-                <span class="total">共计 ¥{{ dataSummary.selectedAmount }}</span>
+                <div class="description">{{ dataSummary.description }}</div>
+                <div class="total">共计 ¥{{ dataSummary.selectedAmount }}</div>
               </a-table-summary-cell>
               <a-table-summary-cell class="overview" :index="4" :col-span="1">
                 <XtxButton
@@ -121,11 +121,10 @@ import "ant-design-vue/es/message/style/css"
 import "ant-design-vue/es/modal/style/css"
 import { WarningOutlined } from "@ant-design/icons-vue"
 
-import { ref, reactive, computed, createVNode, defineComponent } from "vue"
+import { ref, reactive, computed, createVNode, defineComponent, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 import Big from "big.js"
 import CartSku from "./components/cart-sku.vue"
-import { useState, useGetters, useActions } from "@/hooks"
 import { options, columns } from "./index.js"
 
 export default defineComponent({
@@ -133,17 +132,16 @@ export default defineComponent({
     CartSku,
   },
   setup() {
-    const { cartList } = useState("cart", {
+    const { proxy } = getCurrentInstance()
+    const { cartList } = proxy.$store.useState("cart", {
       cartList: (state) => state.list,
     })
-    const { validateList, invalidateList, selectedTotal, selectedAmount } = useGetters("cart", [
-      "validateList",
-      "invalidateList",
-      "selectedTotal",
-      "selectedAmount",
-    ])
+    const { validateList, invalidateList, selectedTotal, selectedAmount } = proxy.$store.useGetters(
+      "cart",
+      ["validateList", "invalidateList", "selectedTotal", "selectedAmount"],
+    )
     const { removeCart, modifyCart, modifyAllCart, removeCartSelected, updateCartGoodsSku } =
-      useActions("cart", [
+      proxy.$store.useActions("cart", [
         "removeCart",
         "modifyCart",
         "modifyAllCart",
@@ -223,7 +221,7 @@ export default defineComponent({
       }, 0)
       res.selectedCount = selectedTotal.value
       res.selectedAmount = selectedAmount.value
-      res.description = `共 ${res.totalCount} 件商品，已选择 ${res.selectedCount} 件，`
+      res.description = `共 ${res.totalCount} 件商品，已选择 ${res.selectedCount} 件`
       return res
     })
 
@@ -287,8 +285,8 @@ export default defineComponent({
     }
 
     // 结算
-    const { isLogin } = useGetters("user", ["isLogin"])
-    const { selectedList } = useGetters("cart", ["selectedList"])
+    const { isLogin } = proxy.$store.useGetters("user", ["isLogin"])
+    const { selectedList } = proxy.$store.useGetters("cart", ["selectedList"])
     const router = useRouter()
     const checkout = () => {
       // 判断 有无商品 或者 有无勾选的商品 => 判断是否登录
@@ -383,13 +381,13 @@ export default defineComponent({
   height: 100%;
 }
 .overview {
-  > span {
-    font-size: 14px;
-    &.total {
-      margin-right: 20px;
-      font-size: 16px;
-      color: @priceColor;
-    }
+  * {
+    text-align: center;
+    font-size: 1rem;
+  }
+  .total {
+    font-size: 1.2rem;
+    color: @priceColor;
   }
 }
 </style>

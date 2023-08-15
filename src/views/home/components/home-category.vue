@@ -64,13 +64,13 @@
 </template>
 
 <script>
-import { ref, reactive, computed } from "vue"
-import { useState } from "@/hooks"
+import { ref, reactive, computed, getCurrentInstance } from "vue"
 import homeApi from "@/api/home"
 
 export default {
   name: "HomeCategory",
   setup() {
+    const { proxy } = getCurrentInstance()
     /**
      * 1. 获取vuex的一级分类，并且只需要两个二级分类
      * 2. 需要在组件内部，定义一个品牌数据
@@ -83,7 +83,7 @@ export default {
       children: [{ id: "brand-children", name: "品牌推荐" }],
       brands: [],
     })
-    const storeCategoryState = useState("category", {
+    const storeCategoryState = proxy.$store.useState("category", {
       categoryList: "list",
     })
     // TODO: 下面函数中map有时候在首次网站的时候，白屏；控制台报错

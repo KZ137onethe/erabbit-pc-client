@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { ref, reactive, h, onMounted } from "vue"
+import { ref, reactive, h, onMounted, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 import { NodeIndexOutlined, FormOutlined, LoadingOutlined } from "@ant-design/icons-vue"
 import { message } from "ant-design-vue"
@@ -32,7 +32,6 @@ import LoginLayout from "@/layout/login/Layout.vue"
 import CallbackBind from "./components/callback-bind"
 import CallbackPatch from "./components/callback-patch"
 
-import { useState, useMutations } from "@/hooks"
 import userApi from "@/api/user"
 import "ant-design-vue/es/message/style/css"
 
@@ -46,6 +45,7 @@ export default {
     CallbackPatch,
   },
   setup() {
+    const { proxy } = getCurrentInstance()
     const loading = ref(true)
     const indicator = h(LoadingOutlined, {
       style: {
@@ -69,8 +69,8 @@ export default {
     // QQ登录后账号的唯一标识
     const unionId = ref(null)
     // vuex的user仓库数据
-    const storeUserMutations = useMutations("user", ["setUser"])
-    const storeUserState = useState("user", ["redirectUrl"])
+    const storeUserMutations = proxy.$store.useMutations("user", ["setUser"])
+    const storeUserState = proxy.$store.useState("user", ["redirectUrl"])
     // 渲染完后
     onMounted(() => {
       const router = useRouter()

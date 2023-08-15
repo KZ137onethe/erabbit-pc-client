@@ -8,18 +8,18 @@
 </template>
 
 <script>
+import { getCurrentInstance } from "vue"
 import { useRoute } from "vue-router"
 import LoginLayout from "@/layout/login/Layout.vue"
 import LoginBody from "./components/login-body.vue"
-
-import { useMutations } from "@/hooks"
 
 export default {
   name: "PageLogin",
   components: { LoginLayout, LoginBody },
   setup() {
+    const { proxy } = getCurrentInstance()
     const route = useRoute()
-    const storeUserMutations = useMutations("user", ["setRedirectUrl"])
+    const storeUserMutations = proxy.$store.useMutations("user", ["setRedirectUrl"])
     storeUserMutations.setRedirectUrl(route.fullPath)
   },
 }

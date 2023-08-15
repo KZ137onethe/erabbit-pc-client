@@ -9,7 +9,7 @@ import category from "./module/category"
 export default createStore({
   state() {
     return {
-      web_home_page_router: "/",
+      redirectUrl: "/",
     }
   },
   getters: {},

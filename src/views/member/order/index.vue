@@ -17,7 +17,7 @@
 
 <script>
 import { ref, reactive, computed, watch, readonly } from "vue"
-import { useReciprocalTime } from "@/hooks"
+import { useReciprocalTime } from "@/utils/count-down"
 
 import MemberOrderAllOrder from "./components/member-order-allOrder.vue"
 import MemberOrderAfterPayment from "./components/member-order-afterPayment.vue"

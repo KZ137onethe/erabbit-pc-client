@@ -33,7 +33,7 @@
 <script>
 import HomePanel from "./home-panel.vue"
 import HomeSkeleton from "./home-skeleton.vue"
-import { useLazyData } from "@/hooks"
+import { useLazyData } from "@/utils/heigo-pc"
 import homeApi from "@/api/home"
 
 export default {

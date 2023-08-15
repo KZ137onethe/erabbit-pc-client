@@ -1,6 +1,6 @@
 import { ref, reactive, computed, defineComponent } from "vue"
 import { message, Button } from "ant-design-vue"
-import { useReciprocalTime } from "@/hooks"
+import { useReciprocalTime } from "@/utils/count-down"
 import "ant-design-vue/es/message/style/css"
 
 import "ant-design-vue/lib/button/style"

@@ -4,11 +4,11 @@ import router from "./router"
 import store from "./store"
 
 // vue的插件
-import Directive from "./utils/plugin"
+import plugins from "./plugins"
 
-// 重置样式的包
+// 导入全局样式
 import "normalize.css"
-import "@/assets/styles/common.less"
+import "@/assets/styles/index.less"
 
 // 导入全局注册的UI组件
 import { getComponent } from "@/components/library/index.js"
@@ -26,7 +26,7 @@ async function startApp() {
 
   app.use(router)
   app.use(store)
-  app.use(Directive)
+  app.use(plugins)
   app.component("SvgIcon", SvgIcon)
 
   app.mount("#app")

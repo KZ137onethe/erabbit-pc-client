@@ -4,7 +4,7 @@
     <template #content>
       <div class="layer">
         <div class="list">
-          <div v-for="goods in storeCartGetters.validateList.value" :key="goods.skuId" class="item">
+          <div v-for="goods in validateList" :key="goods.skuId" class="item">
             <router-link :to="`/product/${goods.id}`" @click="hide()">
               <img :src="goods.picture" alt="" />
               <div class="center">
@@ -13,18 +13,16 @@
               </div>
               <div class="right">
                 <p class="price">&yen;{{ goods.nowPrice }}</p>
-                <p class="count">{{ `X ${goods.count}` }}</p>
+                <p class="count">{{ `${goods.count} 件` }}</p>
               </div>
             </router-link>
-            <a-button shape="circle" size="small" @click="deleteGoods(goods)">
-              <close-outlined />
-            </a-button>
+            <a-button type="link" :icon="h(DeleteOutlined)" @click="deleteGoods(goods)" />
           </div>
         </div>
         <div class="foot">
           <div class="total">
-            <p>共 {{ storeCartGetters.validateTotal }} 件商品</p>
-            <p>&yen;{{ storeCartGetters.validateAmount }}</p>
+            <p>共 {{ validateTotal }} 件商品</p>
+            <p>&yen;{{ validateAmount }}</p>
           </div>
           <XtxButton v-model:disabled="checkButton" type="primary" @click="$router.push('/cart')">
             去购物车结算
@@ -33,42 +31,44 @@
       </div>
     </template>
     <!-- 购物车图标按钮 -->
-    <a-badge :count="storeCartGetters.validateTotal" class="cart-btn">
+    <a-badge :count="validateTotal" class="cart-btn">
       <router-link to="/cart">
-        <a-button type="dashed" shape="circle" size="large">
-          <template #icon>
-            <shopping-cart-outlined />
-          </template>
-        </a-button>
+        <a-button type="dashed" shape="circle" :icon="h(ShoppingCartOutlined)" size="large" />
       </router-link>
     </a-badge>
   </a-popover>
 </template>
 
 <script>
-import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons-vue"
+import { ShoppingCartOutlined, DeleteOutlined } from "@ant-design/icons-vue"
 
-import { ref, computed, onMounted } from "vue"
+import { h, ref, computed, onMounted, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 import { message } from "ant-design-vue"
-import { useGetters, useActions } from "@/hooks"
 import "ant-design-vue/es/message/style/css"
 
 const router = useRouter()
 export default {
-  components: { ShoppingCartOutlined, CloseOutlined },
   setup() {
-    const storeCartGetters = useGetters("cart", ["validateList", "validateTotal", "validateAmount"])
-    const storeCartActions = useActions("cart", ["getCartList", "removeCart"])
+    const { proxy } = getCurrentInstance()
+    const { validateList, validateTotal, validateAmount } = proxy.$store.useGetters("cart", [
+      "validateList",
+      "validateTotal",
+      "validateAmount",
+    ])
+    const { getCartList, removeCart } = proxy.$store.useActions("cart", [
+      "getCartList",
+      "removeCart",
+    ])
     const visible = ref(false)
     const hide = () => {
       return (visible.value = false)
     }
-    const checkButton = computed(() => !storeCartGetters.validateTotal.value.valueOf())
+    const checkButton = computed(() => !validateTotal.value.valueOf())
     const deleteGoods = (goods) => {
       // 这里处理购物车删除单个商品
       try {
-        storeCartActions.removeCart(goods).then(() => message.success("删除成功!"))
+        removeCart(goods).then(() => message.success("删除成功!"))
       } catch (e) {
         message.error("删除失败!")
         throw new Error(e)
@@ -76,18 +76,23 @@ export default {
     }
     const toCartPage = () => router.push("/cart")
     onMounted(() => {
-      if (storeCartGetters.validateTotal.value.valueOf()) {
-        storeCartActions.getCartList().then(() => message.success("更新本地购物车成功！"))
+      if (validateTotal.value.valueOf()) {
+        getCartList().then(() => message.success("更新本地购物车成功！"))
       }
     })
 
     return {
-      storeCartGetters,
+      h,
+      validateList,
+      validateTotal,
+      validateAmount,
       visible,
       hide,
       checkButton,
       deleteGoods,
       toCartPage,
+      ShoppingCartOutlined,
+      DeleteOutlined,
     }
   },
 }
@@ -127,15 +132,7 @@ export default {
         top: 50%;
         right: 5px;
         transform: translateY(-50%);
-        opacity: 0;
         color: #666;
-        transition: all 0.5s;
-      }
-      &:hover {
-        > button.ant-btn {
-          opacity: 1;
-          cursor: pointer;
-        }
       }
       // 商品
       a {

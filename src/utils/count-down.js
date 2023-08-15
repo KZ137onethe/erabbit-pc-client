@@ -25,7 +25,7 @@ const baseMillisecond = () => {
  * 倒计时函数(默认每秒触发)
  * @returns
  */
-export const useReciprocalTime = (time) => {
+const useReciprocalTime = (time) => {
   const base = baseMillisecond()
   const suffix = ref("")
   const timer = ref(time)
@@ -71,3 +71,5 @@ export const useReciprocalTime = (time) => {
     zhTime,
   })
 }
+
+export { useReciprocalTime }

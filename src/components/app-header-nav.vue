@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex"
-import { useState } from "@/hooks"
+import { getCurrentInstance } from "vue"
 
 export default {
   name: "AppHeaderNav",
@@ -51,7 +50,8 @@ export default {
     },
   },
   setup() {
-    const storeCategoryState = useState("category", {
+    const { proxy } = getCurrentInstance()
+    const { categoryList } = proxy.$store.useState("category", {
       categoryList: (state) => state.list,
     })
     /**
@@ -59,14 +59,15 @@ export default {
      * ? 2.点击一级分类，二级分类，隐藏二级分类弹窗
      * ? 3.离开一级分类，二级分类，隐藏二级分类弹窗
      */
-    const storeCategoryMutation = mapMutations("category", {
+    const { showSubCategory, hideSubCategory } = proxy.$store.useMutations("category", {
       showSubCategory: "show",
       hideSubCategory: "hide",
     })
-    // console.log('storeCategoryMutation:', storeCategoryMutation)
+
     return {
-      ...storeCategoryState,
-      ...storeCategoryMutation,
+      categoryList,
+      showSubCategory,
+      hideSubCategory,
     }
   },
 }

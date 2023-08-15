@@ -1,4 +1,4 @@
-import { request } from "@/utils/request.js"
+import request from "@/utils/request.js"
 
 /**
  * 获取我的收藏
@@ -7,7 +7,15 @@ import { request } from "@/utils/request.js"
  * @param {*} collectType -- 收藏类型 1为商品，2为专题，3为品牌
  */
 function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
-  return request("/member/collect", "get", { page, pageSize, collectType })
+  return request({
+    url: "/member/collect",
+    method: "get",
+    params: {
+      page,
+      pageSize,
+      collectType,
+    },
+  })
 }
 
 /**
@@ -16,7 +24,14 @@ function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
  * @param {*} pageSize -- 页码条数
  */
 function _getHistory({ page, pageSize }) {
-  return request("/member/browseHistory", "get", { page, pageSize })
+  return request({
+    url: "/member/browseHistory",
+    method: "get",
+    params: {
+      page,
+      pageSize,
+    },
+  })
 }
 
 /**
@@ -26,7 +41,15 @@ function _getHistory({ page, pageSize }) {
  * @param {*} orderState -- 订单状态，1为待付款、2为待发货、3为待收货、4为待评价、5为已完成、6为已取消，未传该参数或0为全部
  */
 function _getOrderList({ page, pageSize, orderState = 0 }) {
-  return request("/member/order", "get", { page, pageSize, orderState })
+  return request({
+    url: "/member/order",
+    method: "get",
+    params: {
+      page,
+      pageSize,
+      orderState,
+    },
+  })
 }
 
 /**
@@ -36,7 +59,13 @@ function _getOrderList({ page, pageSize, orderState = 0 }) {
  * @returns
  */
 function _cancelOrder({ orderId, cancelReason }) {
-  return request(`/member/order/${orderId}/cancel`, "put", { cancelReason })
+  return request({
+    url: `/member/order/${orderId}/cancel`,
+    method: "put",
+    data: {
+      cancelReason,
+    },
+  })
 }
 
 /**
@@ -44,7 +73,13 @@ function _cancelOrder({ orderId, cancelReason }) {
  * @param {Array} ids 删除订单id的数组
  */
 function _deleteOrder(ids) {
-  return request("/member/order", "delete", { ids })
+  return request({
+    url: "/member/order",
+    method: "delete",
+    data: {
+      ids,
+    },
+  })
 }
 
 /**
@@ -53,7 +88,10 @@ function _deleteOrder(ids) {
  * @returns
  */
 function _receiptOrder(id) {
-  return request(`/member/order/${id}/receipt`, "put")
+  return request({
+    url: `/member/order/${id}/receipt`,
+    method: "put",
+  })
 }
 
 /**
@@ -62,7 +100,10 @@ function _receiptOrder(id) {
  * @returns
  */
 function _getOrderLogistics(id) {
-  return request(`/member/order/${id}/logistics`, "get")
+  return request({
+    url: `/member/order/${id}/logistics`,
+    method: "get",
+  })
 }
 
 /**
@@ -71,7 +112,10 @@ function _getOrderLogistics(id) {
  * @returns
  */
 function _getOrderDetail(id) {
-  return request(`/member/order/${id}`, "get")
+  return request({
+    url: `/member/order/${id}`,
+    method: "get",
+  })
 }
 
 export default {

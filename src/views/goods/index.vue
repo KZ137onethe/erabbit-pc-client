@@ -61,7 +61,7 @@
 <script>
 import { useRoute } from "vue-router"
 import { message } from "ant-design-vue"
-import { ref, reactive, provide, computed } from "vue"
+import { ref, reactive, provide, computed, getCurrentInstance } from "vue"
 import { useGoods } from "."
 import GoodsRelevant from "./components/goods-relevant"
 import GoodsImage from "./components/goods-image"
@@ -73,8 +73,6 @@ import GoodsTabs from "./components/goods-tabs"
 import GoodsHotItem from "./components/goods-hot-item"
 import GoodsWarn from "./components/goods-warn"
 import "ant-design-vue/es/message/style/css"
-
-import { useActions } from "@/hooks"
 
 export default {
   name: "XtxGoodsPage",
@@ -90,6 +88,7 @@ export default {
     GoodsWarn,
   },
   setup() {
+    const { proxy } = getCurrentInstance()
     const route = useRoute()
     const goods = useGoods(route)
     const currentSKU = ref(null)
@@ -117,7 +116,7 @@ export default {
     }
 
     // 添加购物车 (字段：skuId name attrsText picture price nowPrice selected count isEffective	)
-    const storeCartActions = useActions("cart", ["addCart"])
+    const storeCartActions = proxy.$store.useActions("cart", ["addCart"])
     const addCart = () => {
       const isSKU = !!currentSKU.value
       if (isSKU) {

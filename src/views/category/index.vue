@@ -41,10 +41,9 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue"
+import { computed, ref, watch, getCurrentInstance } from "vue"
 import { useRoute } from "vue-router"
 import categoryApi from "@/api/category"
-import { useState } from "@/hooks"
 import CategoryBanner from "./components/category-banner"
 import CategoryGoodsItem from "./components/category-goods-item"
 
@@ -55,8 +54,9 @@ export default {
     CategoryGoodsItem,
   },
   setup() {
+    const { proxy } = getCurrentInstance()
     const routes = useRoute()
-    const category = useState("category", {
+    const category = proxy.$store.useState("category", {
       list: (state) => state.list?.result,
     })
     // 获取当前分类的所有二级分类

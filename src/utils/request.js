@@ -1,21 +1,21 @@
 import axios from "axios"
+import { message } from "ant-design-vue"
 import store from "@/store"
 import router from "@/router"
+import { getToken, removeToken } from "./auth"
 
-// const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
-const baseURL = "https://apipc-xiaotuxian-front.itheima.net/"
-const instance = axios.create({
-  baseURL,
+const service = axios.create({
+  baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000,
 })
 
 // * 请求拦截器
-instance.interceptors.request.use(
+service.interceptors.request.use(
   (config) => {
-    // 如果有token就在头部携带，如果没有token就设置token
-    const { profile } = store.state.user
-    if (profile.token) {
-      config.headers.Authorization = `Bearer ${profile.token}`
+    // 是否设置token
+    const isToken = (config.headers || {}).isToken === false
+    if (!isToken) {
+      config.headers.Authorization = `Bearer ${getToken()}`
     }
     return config
   },
@@ -26,33 +26,32 @@ instance.interceptors.request.use(
 )
 
 // * 响应拦截器
-instance.interceptors.response.use(
+service.interceptors.response.use(
   (res) => res.data,
   (error) => {
-    console.log(store)
-    // * 401 状态码，进入该函数
+    console.log(`err${error}`)
+    let { message: msg } = error
+    if (msg === "Network Error") {
+      msg = "后端接口连接异常"
+    } else if (msg.includes("timeout")) {
+      msg = "系统接口请求超时"
+    } else if (msg.includes("Request failed with status code")) {
+      msg = `系统接口${msg.substr(msg.length - 3)}异常`
+    }
     if (error.response && error.response.status === 401) {
-      // * 1. 清空无效用户的信息    2. 跳转到登录页码   3. 跳转需要传参（当前路由地址）给登录页码
+      /* 授权失败
+       * 1. 清空无效用户的信息
+       * 2. 重定向到登录页码
+       */
+      msg = "授权失败,请重新登录!"
       store.commit("user/setUser", {})
-      // * 获得当前路由地址
-      // encodeURIComponent 路径转换URL编码，防止解析地址出问题 currentRoute为ref响应式
+      removeToken()
       const fullPath = encodeURIComponent(router.currentRoute.value.fullPath)
       router.push(`/login?redirectUrl=${fullPath}`)
     }
+    message.error(msg)
     return Promise.reject(error)
   },
 )
 
-// * 请求工具函数
-function request(url, method, submitData) {
-  // * 负责发请求
-  return instance({
-    url,
-    method,
-    // ? get请求（需要使用 params 来传递submitData）
-    // ? 非get请求（需要使用 data 来传递submitData）
-    [method.toLowerCase() === "get" ? "params" : "data"]: submitData,
-  })
-}
-
-export { baseURL, request }
+export default service

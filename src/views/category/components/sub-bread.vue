@@ -19,18 +19,18 @@
 </template>
 
 <script>
-import { computed } from "vue"
+import { computed, getCurrentInstance } from "vue"
 import { useRoute } from "vue-router"
-import { useState } from "@/hooks"
 
 export default {
   name: "SubBread",
   setup() {
+    const { proxy } = getCurrentInstance()
     // 获取二级分类的ID
     const route = useRoute()
     // console.log(route.params.id, route.path)
     // 通过获取vuex的类目数据来得到二级分类的名称和ID，一级分类的名称和ID
-    const category = useState("category", {
+    const category = proxy.$store.useState("category", {
       list: (state) => state.list?.result,
     })
     const categoryInfo = computed(() => {

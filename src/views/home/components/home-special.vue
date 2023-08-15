@@ -48,7 +48,7 @@
 <script>
 import { HeartOutlined, EyeOutlined, MessageOutlined } from "@ant-design/icons-vue"
 import HomePanel from "./home-panel"
-import { useLazyData } from "@/hooks"
+import { useLazyData } from "@/utils/heigo-pc"
 import homeApi from "@/api/home"
 
 export default {

@@ -28,11 +28,10 @@
 <script>
 import { SketchOutlined, SettingOutlined, EnvironmentOutlined } from "@ant-design/icons-vue"
 
+import { getCurrentInstance } from "vue"
 import backgroundImg from "@/assets/images/center-bg.png"
 
 const BackgroundStyle = `background: url(${backgroundImg}) no-repeat center/cover`
-
-import { useState } from "@/hooks"
 
 export default {
   components: {
@@ -41,7 +40,8 @@ export default {
     EnvironmentOutlined,
   },
   setup() {
-    const { profile } = useState("user", ["profile"])
+    const { proxy } = getCurrentInstance()
+    const { profile } = proxy.$store.useState("user", ["profile"])
     return {
       profile,
       BackgroundStyle,

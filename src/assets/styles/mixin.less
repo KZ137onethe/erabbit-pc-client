@@ -1,19 +1,16 @@
-// less 混入
-@import './variables.less';
-
 // 商品图片触摸动画效果
-.hoverShadow(){
-  transition: all .5s;
-  &:hover{
+.hoverShadow() {
+  transition: all 0.5s;
+  &:hover {
     transform: translate3d(0, -3px, 0);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, .2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   }
 }
 // 链接触摸颜色效果
-.hoverLink(@color){
-  transition: all .3s;
-  &:hover{
-    color: if(isColor(@color), @color, @xtxColor);
+.hoverLink(@color) {
+  transition: all 0.3s;
+  &:hover {
+    color: if(isColor(@color), @color, #27ba9b);
   }
 }
 // 单行文本

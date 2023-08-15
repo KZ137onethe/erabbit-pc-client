@@ -38,7 +38,7 @@
 <script>
 import HomePanel from "./home-panel"
 import HomeGoods from "./home-goods"
-import { useLazyData } from "@/hooks"
+import { useLazyData } from "@/utils/heigo-pc"
 import homeApi from "@/api/home"
 
 const { _findGoodsColumn } = homeApi

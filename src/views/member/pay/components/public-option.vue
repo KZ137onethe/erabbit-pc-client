@@ -44,6 +44,7 @@ export const DeliveryTime = defineComponent({
       },
     ])
     const copyArr = addMessage(deliveryForm.value, ": ", "method", "time")
+    console.log("copyArr: ", copyArr)
     return () => (
       <Option class='delivery-time bold' title='配送时间'>
         {{
@@ -51,7 +52,7 @@ export const DeliveryTime = defineComponent({
             <div class='main'>
               {copyArr.map((item, index) => (
                 <a-button size='large' key={index}>
-                  {item.message()}
+                  {item.message}
                 </a-button>
               ))}
             </div>

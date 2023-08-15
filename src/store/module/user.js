@@ -1,4 +1,8 @@
 // 用户模块
+import { useRouter } from "vue-router"
+import { setToken } from "@/utils/auth"
+
+const router = useRouter()
 
 const UserModule = {
   namespaced: true,
@@ -13,7 +17,6 @@ const UserModule = {
         gender: "",
         account: "",
         mobile: "",
-        token: "",
         profession: "",
         provinceCode: "",
       },
@@ -31,6 +34,9 @@ const UserModule = {
       for (const key of Object.keys(state.profile)) {
         state.profile[key] = payload[key] ?? ""
       }
+      if (payload.token) {
+        setToken(payload.token)
+      }
     },
     setRedirectUrl(state, url) {
       state.redirectUrl = url
@@ -40,8 +46,12 @@ const UserModule = {
     // 我们这里有很多种登录方式，所以不在这里写一个专门的异步方法
     // 退出登录
     logout({ rootState, commit }) {
-      commit("setUser", {})
-      rootState.cart.list = []
+      return new Promise((resolve) => {
+        commit("setUser", {})
+        rootState.cart.list = []
+        router.push("/login")
+        resolve()
+      })
     },
   },
 }

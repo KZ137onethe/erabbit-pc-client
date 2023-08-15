@@ -48,7 +48,7 @@ import { ref, computed } from "vue"
 import HomePanel from "./home-panel"
 import HomeSkeleton from "./home-skeleton"
 import homeApi from "@/api/home"
-import { useLazyData } from "@/hooks"
+import { useLazyData } from "@/utils/heigo-pc"
 
 export default {
   components: {

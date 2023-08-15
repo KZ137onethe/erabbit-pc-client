@@ -45,8 +45,7 @@
 <script>
 import { UserOutlined, MobileTwoTone } from "@ant-design/icons-vue"
 
-import { useRouter } from "vue-router"
-import { useState, useActions } from "@/hooks"
+import { getCurrentInstance } from "vue"
 
 export default {
   components: {
@@ -54,21 +53,13 @@ export default {
     MobileTwoTone,
   },
   setup() {
-    const storeUserState = useState("user", {
+    const { proxy } = getCurrentInstance()
+    const { profile } = proxy.$store.useState("user", {
       profile: (state) => state.profile,
     })
-    // const storeUserMutations = useMutations('user', ['setUser'])
-    const storeUserActions = useActions("user", ["logout"])
-    const router = useRouter()
-    const logout = () => {
-      storeUserActions.logout().then(() => {
-        router.push("/login")
-      })
-      // storeUserMutations.setUser({})
-      // router.push('/login')
-    }
+    const { logout } = proxy.$store.useActions("user", ["logout"])
     return {
-      ...storeUserState,
+      profile,
       logout,
     }
   },

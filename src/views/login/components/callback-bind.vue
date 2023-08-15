@@ -48,12 +48,11 @@ import { MobileOutlined, SafetyOutlined } from "@ant-design/icons-vue"
 import { message } from "ant-design-vue"
 import "ant-design-vue/es/message/style/css"
 
-import { reactive, computed, onMounted } from "vue"
+import { reactive, computed, onMounted, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 import { checkButton, SendBtn } from "./form"
 import { BindRules } from "./schema-rule/callback-bind-validate.js"
 import userApi from "@/api/user"
-import { useState, useMutations, useActions } from "@/hooks"
 
 export default {
   components: {
@@ -68,6 +67,7 @@ export default {
     },
   },
   setup(props) {
+    const { proxy } = getCurrentInstance()
     // 表单
     const formState = reactive({
       phone: "",
@@ -104,9 +104,14 @@ export default {
     // 绑定框状态
     const buttonCheck = computed(() => checkButton(formState))
     const router = useRouter()
-    const storeState = useState(["web_home_page_router"])
-    const storeUserMutations = useMutations("user", ["setUser"])
-    const storeCartActions = useActions("cart", ["mergeLocalCart", "getCartList"])
+    const { redirectHome } = proxy.$store.useState({
+      redirectHome: (state) => state.redirectUrl,
+    })
+    const { setUser } = proxy.$store.useMutations("user", ["setUser"])
+    const { mergeLocalCart, getCartList } = proxy.$store.useActions("cart", [
+      "mergeLocalCart",
+      "getCartList",
+    ])
     const handleFinish = (values) => {
       const { phone, verificationCode } = values
       console.log(phone, verificationCode)
@@ -115,13 +120,12 @@ export default {
         .then((res) => {
           // 存用户数据 => 重定向 => 登录提示
           const userData = res.result
-          const redirectUrl = storeState.web_home_page_router.value
-          storeUserMutations.setUser(userData)
-          storeCartActions.mergeLocalCart().then(() => {
-            router.push(redirectUrl)
+          setUser(userData)
+          mergeLocalCart().then(() => {
+            router.push(redirectHome)
             message.success("登录成功")
           })
-          storeCartActions.getCartList()
+          getCartList()
         })
         .catch((e) => {
           message.error(e.response.data.message)
