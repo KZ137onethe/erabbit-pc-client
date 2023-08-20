@@ -1,9 +1,9 @@
 <template>
-  <operation-button title="确认收货" class="order-receipt" @btnClick="showModal">
+  <operation title="确认收货" class="order-receipt" @btnClick="showModal">
     <a-modal v-model:visible="visible" title="确认收货" @ok="handleOk">
       <p class="description">您确认收到货吗？确认后货款将会打给卖家。</p>
     </a-modal>
-  </operation-button>
+  </operation>
 </template>
 
 <script>
@@ -11,12 +11,12 @@ import { ref } from "vue"
 import { message } from "ant-design-vue"
 import memberApi from "@/api/member"
 
-import OperationButton from "./operation-btn.vue"
+import Operation from "./operation.vue"
 import "ant-design-vue/es/message/style/css"
 
 export default {
   components: {
-    OperationButton,
+    Operation,
   },
   props: {
     orderId: {

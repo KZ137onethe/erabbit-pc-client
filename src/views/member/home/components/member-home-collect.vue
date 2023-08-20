@@ -2,7 +2,7 @@
   <div class="member-home-collect">
     <member-home-panel
       title="我的收藏"
-      :goods="collect?.items"
+      :goods="collect?.data"
       :jump-data="{ path: '/', info: '查看全部 >' }"
     />
   </div>

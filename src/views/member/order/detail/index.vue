@@ -1,25 +1,25 @@
 <template>
   <a-layout v-if="orderDetail" class="member-order_detail">
-    <member-order-detail-header :order="orderDetail" />
-    <member-order-detail-content :order="orderDetail" />
-    <member-order-detail-footer :order="orderDetail" />
+    <detail-header :order="orderDetail" />
+    <detail-content :order="orderDetail" />
+    <detail-footer :order="orderDetail" />
   </a-layout>
 </template>
 
 <script>
 import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
-import MemberOrderDetailHeader from "./components/member-order-detail-header.vue"
-import MemberOrderDetailContent from "./components/member-order-detail-content.vue"
-import MemberOrderDetailFooter from "./components/member-order-detail-footer.vue"
+import DetailHeader from "./header.vue"
+import DetailContent from "./content.vue"
+import DetailFooter from "./footer.vue"
 
 import memberApi from "@/api/member"
 
 export default {
   components: {
-    MemberOrderDetailHeader,
-    MemberOrderDetailContent,
-    MemberOrderDetailFooter,
+    DetailHeader,
+    DetailContent,
+    DetailFooter,
   },
   setup() {
     const route = useRoute()

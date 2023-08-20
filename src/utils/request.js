@@ -2,10 +2,12 @@ import axios from "axios"
 import { message } from "ant-design-vue"
 import store from "@/store"
 import router from "@/router"
+import config from "@/config"
 import { getToken, removeToken } from "./auth"
 
+axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8"
 const service = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_API,
+  baseURL: config.BaseApi,
   timeout: 5000,
 })
 
@@ -54,4 +56,16 @@ service.interceptors.response.use(
   },
 )
 
-export default service
+function request(options, mock = false) {
+  if (config.env === "production") {
+    service.defaults.baseURL = config.BaseApi
+  }
+  // mock 开关打开
+  else if (config.mock) {
+    service.defaults.baseURL = mock ? config.MockApi : config.BaseApi
+  }
+
+  return service(options)
+}
+
+export default request

@@ -1,15 +1,15 @@
 <template>
-  <operation-button title="申请售后" class="order-aftersales" @btnClick="click"></operation-button>
+  <operation title="申请售后" class="order-aftersales" @btnClick="click"></operation>
 </template>
 
 <script>
 import { message } from "ant-design-vue"
-import OperationButton from "./operation-btn.vue"
+import Operation from "./operation"
 import "ant-design-vue/es/message/style/css"
 
 export default {
   components: {
-    OperationButton,
+    Operation,
   },
   setup() {
     const click = () => {

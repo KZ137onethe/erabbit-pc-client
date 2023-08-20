@@ -76,7 +76,7 @@ function _deleteCart(ids) {
   return request({
     url: "/member/cart",
     method: "delete",
-    params: {
+    data: {
       ids,
     },
   })

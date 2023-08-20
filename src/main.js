@@ -17,8 +17,6 @@ import { getComponent } from "@/components/library/index.js"
 import "virtual:svg-icons-register"
 import SvgIcon from "@/components/SvgIcon"
 
-import "./mock/index.js"
-
 async function startApp() {
   const app = createApp(App)
 

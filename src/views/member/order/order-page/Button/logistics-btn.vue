@@ -1,5 +1,5 @@
 <template>
-  <operation-button title="查看物流" class="order-logistics" @btnClick="getLogistics">
+  <operation title="查看物流" class="order-logistics" @btnClick="getLogistics">
     <a-modal v-model:visible="visible" title="物流信息" :footer="null">
       <!-- 商品基本信息 -->
       <order-card class="logistics-info" :order="allData"></order-card>
@@ -12,18 +12,18 @@
         </a-timeline-item>
       </a-timeline>
     </a-modal>
-  </operation-button>
+  </operation>
 </template>
 
 <script>
 import { ref } from "vue"
 import memberApi from "@/api/member"
 
-import OperationButton, { OrderCard } from "./operation-btn.vue"
+import Operation, { OrderCard } from "./operation.vue"
 
 export default {
   components: {
-    OperationButton,
+    Operation,
     OrderCard,
   },
   props: {

@@ -1,5 +1,5 @@
 <template>
-  <operation-button class="order-cancel" title="取消订单" @btnClick="showModal">
+  <operation class="order-cancel" title="取消订单" @btnClick="showModal">
     <a-modal
       v-model:visible="visible"
       title="取消订单"
@@ -18,21 +18,21 @@
         </a-col>
       </a-row>
     </a-modal>
-  </operation-button>
+  </operation>
 </template>
 <script>
 import { message } from "ant-design-vue"
 import "ant-design-vue/es/message/style/css"
 
 import { ref, reactive, computed, defineComponent } from "vue"
-import OperationButton from "./operation-btn.vue"
+import Operation from "./operation.vue"
 
 import memberApi from "@/api/member"
 import { cancelReason } from "@/api/contents"
 
 export default defineComponent({
   components: {
-    OperationButton,
+    Operation,
   },
   props: {
     orderId: {

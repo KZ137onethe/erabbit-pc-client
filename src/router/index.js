@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import store from "@/store"
+import { getToken } from "@/utils/auth"
 
 // * 路由规则
 const routes = [
@@ -7,6 +7,7 @@ const routes = [
   {
     path: "/",
     component: () => import("@/views/Layout.vue"),
+    meta: { title: "首页" },
     children: [
       { path: "/", component: () => import("@/views/home/index.vue") },
       { path: "/category/:id", component: () => import("@/views/category/index.vue") },
@@ -22,7 +23,10 @@ const routes = [
         children: [
           { path: "/member", component: () => import("@/views/member/home/index.vue") },
           { path: "/member/order", component: () => import("@/views/member/order/index.vue") },
-          { path: "/member/order/:id", component: () => import("@/views/member/order/detail.vue") },
+          {
+            path: "/member/order/:id",
+            component: () => import("@/views/member/order/detail/index.vue"),
+          },
         ],
       },
     ],
@@ -52,7 +56,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isLogin = store.getters["user/isLogin"]
+  const isLogin = Boolean(getToken())
   // 跳转去一个 /member 的地址，且未登录
   if (to.path.startsWith("/member") && isLogin === false) {
     next({ path: "/login", query: { redirectUrl: to.fullPath } })

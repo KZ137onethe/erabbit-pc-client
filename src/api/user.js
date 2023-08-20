@@ -9,6 +9,9 @@ function _userAccountLogin({ account, password }) {
   return request({
     url: "/login",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: { account, password },
   })
 }
@@ -22,6 +25,9 @@ function _userGetVerificationCode(phone) {
   return request({
     url: "/login/code",
     method: "get",
+    headers: {
+      isToken: false,
+    },
     params: { mobile: phone },
   })
 }
@@ -36,6 +42,9 @@ function _userSMSLogin({ phone, verificationCode }) {
   return request({
     url: "/login/code",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: {
       mobile: phone,
       code: verificationCode,
@@ -53,6 +62,9 @@ function _userQQLogin({ unionId, source = 6 }) {
   return request({
     url: "/login/social",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: {
       unionId,
       source,
@@ -69,6 +81,9 @@ function _userQQBindGetVerificationCode(phone) {
   return request({
     url: "/login/social/code",
     method: "get",
+    headers: {
+      isToken: false,
+    },
     params: {
       mobile: phone,
     },
@@ -86,6 +101,9 @@ function _userQQBindPhone({ unionId, mobile, verificationCode }) {
   return request({
     url: "/login/social/bind",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: {
       unionId,
       mobile,
@@ -103,6 +121,9 @@ function _userCheckAccount(account) {
   return request({
     url: "/register/check",
     method: "get",
+    headers: {
+      isToken: false,
+    },
     params: {
       account,
     },
@@ -119,6 +140,9 @@ function _userQQPatchAccount(unionId, { account, phone, verificationCode, passwo
   return request({
     url: `/login/social/${unionId}/complement`,
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: {
       account,
       mobile: phone,
@@ -137,6 +161,9 @@ function _userPCRegisterVerificationCode(phone) {
   return request({
     url: "/register/code",
     method: "get",
+    headers: {
+      isToken: false,
+    },
     params: {
       mobile: phone,
     },
@@ -152,10 +179,12 @@ function _userPCRegisterVerificationCode(phone) {
  * @returns
  */
 function _userPCRegister({ account, phone, verificationCode, password }) {
-  // return request("/register", "post", { account, mobile: phone, code: verificationCode, password })
   return request({
     url: "/register",
     method: "post",
+    headers: {
+      isToken: false,
+    },
     data: {
       account,
       mobile: phone,

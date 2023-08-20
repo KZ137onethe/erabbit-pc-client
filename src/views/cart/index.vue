@@ -126,6 +126,7 @@ import { useRouter } from "vue-router"
 import Big from "big.js"
 import CartSku from "./components/cart-sku.vue"
 import { options, columns } from "./index.js"
+import { getToken } from "@/utils/auth"
 
 export default defineComponent({
   components: {
@@ -285,7 +286,7 @@ export default defineComponent({
     }
 
     // 结算
-    const { isLogin } = proxy.$store.useGetters("user", ["isLogin"])
+    const isLogin = computed(() => Boolean(getToken()))
     const { selectedList } = proxy.$store.useGetters("cart", ["selectedList"])
     const router = useRouter()
     const checkout = () => {

@@ -2,7 +2,7 @@
   <div class="member-home-history">
     <member-home-panel
       title="我的足迹"
-      :goods="history?.items"
+      :goods="history?.data"
       :jump-data="{ path: '/', info: '查看全部 >' }"
     />
   </div>

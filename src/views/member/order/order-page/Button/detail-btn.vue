@@ -1,14 +1,14 @@
 <template>
-  <operation-button title="查看详情" class="order-detail" @btnClick="click"></operation-button>
+  <operation title="查看详情" class="order-detail" @btnClick="click"></operation>
 </template>
 
 <script>
 import { useRouter } from "vue-router"
-import OperationButton from "./operation-btn.vue"
+import Operation from "./operation.vue"
 
 export default {
   components: {
-    OperationButton,
+    Operation,
   },
   props: {
     orderId: {

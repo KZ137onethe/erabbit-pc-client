@@ -1,6 +1,6 @@
 // 用户模块
 import { useRouter } from "vue-router"
-import { setToken } from "@/utils/auth"
+import { setToken, removeToken } from "@/utils/auth"
 
 const router = useRouter()
 
@@ -23,12 +23,7 @@ const UserModule = {
       redirectUrl: "/",
     }
   },
-  getters: {
-    // 用户是否登录
-    isLogin(state) {
-      return Boolean(state.profile.token)
-    },
-  },
+  getters: {},
   mutations: {
     setUser(state, payload) {
       for (const key of Object.keys(state.profile)) {
@@ -48,6 +43,7 @@ const UserModule = {
     logout({ rootState, commit }) {
       return new Promise((resolve) => {
         commit("setUser", {})
+        removeToken()
         rootState.cart.list = []
         router.push("/login")
         resolve()

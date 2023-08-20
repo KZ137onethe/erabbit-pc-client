@@ -1,6 +1,7 @@
 import { ref, reactive, computed, defineComponent } from "vue"
 import { message, Button } from "ant-design-vue"
-import { useReciprocalTime } from "@/utils/count-down"
+import { reciprocalTime } from "@/utils/time"
+
 import "ant-design-vue/es/message/style/css"
 
 import "ant-design-vue/lib/button/style"
@@ -36,7 +37,13 @@ export const SendBtn = defineComponent({
   setup(props) {
     const { dataRule, authenticationFn } = reactive(props)
     const data = computed(() => props.data)
-    const process = ref(null)
+    const countdown = new Map([
+      ["true", 60],
+      ["false", 3],
+    ])
+    const timer = ref(null)
+    const zhTime = ref("0秒")
+
     const SendCode = async () => {
       // 校验手机号
 
@@ -45,16 +52,15 @@ export const SendBtn = defineComponent({
         try {
           await authenticationFn(data.value)
           message.success("短信发送成功！")
-          // timer.value = 60
-
-          process.value = useReciprocalTime(60)
+          timer.value = countdown.get("true")
         } catch (e) {
           message.error(e.response.data.message)
-          // timer.value = 3
-          process.value = useReciprocalTime(3)
+          timer.value = countdown.get("false")
         } finally {
-          // resume()
-          process.value?.start()
+          const { start } = reciprocalTime(timer.value, (value) => {
+            start()
+            zhTime.value = value
+          })
         }
       } else {
         // 手机校验失败，提示用户
@@ -62,12 +68,9 @@ export const SendBtn = defineComponent({
       }
     }
 
-    // 这里写个正则更合适
-    const timeNumber = computed(() => parseInt(process.value?.zhTime, 10) || 0)
-
     const checkBtn = reactive({
-      msg: computed(() => (timeNumber.value <= 0 ? "发送验证码" : `${process.value?.zh_time}`)),
-      disabled: computed(() => timeNumber.value > 0),
+      msg: computed(() => (zhTime.value === "0秒" ? "发送验证码" : zhTime.value)),
+      disabled: computed(() => zhTime.value !== "0秒"),
     })
 
     return () => (

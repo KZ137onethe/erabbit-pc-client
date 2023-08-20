@@ -3,7 +3,7 @@
     <div class="container">
       <a-row justify="end" align="middle">
         <a-col :flex="60"></a-col>
-        <template v-if="profile.token">
+        <template v-if="isLogin">
           <a-col :flex="2">
             <a-avatar>
               <template #icon>
@@ -45,7 +45,8 @@
 <script>
 import { UserOutlined, MobileTwoTone } from "@ant-design/icons-vue"
 
-import { getCurrentInstance } from "vue"
+import { computed, getCurrentInstance } from "vue"
+import { getToken } from "@/utils/auth"
 
 export default {
   components: {
@@ -54,11 +55,13 @@ export default {
   },
   setup() {
     const { proxy } = getCurrentInstance()
+    const isLogin = computed(() => Boolean(getToken()))
     const { profile } = proxy.$store.useState("user", {
       profile: (state) => state.profile,
     })
     const { logout } = proxy.$store.useActions("user", ["logout"])
     return {
+      isLogin,
       profile,
       logout,
     }

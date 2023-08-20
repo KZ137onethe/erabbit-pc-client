@@ -1,6 +1,9 @@
 import Big from "big.js"
-
+import { computed } from "vue"
+import { getToken } from "@/utils/auth"
 import cartApi from "@/api/cart"
+
+const isLogin = computed(() => Boolean(getToken()))
 
 // 购物车模块
 const CartModule = {
@@ -109,10 +112,9 @@ const CartModule = {
     },
   },
   actions: {
-    addCart({ rootState, commit }, payload) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    addCart({ commit }, payload) {
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           // 向服务端添加数据,在拉一遍获取购物车数据的请求,将本地数据替换
           cartApi
             ._addCart({ skuId: payload.skuId, count: payload.count })
@@ -129,10 +131,9 @@ const CartModule = {
         }
       })
     },
-    getCartList({ state, commit, rootState }) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    getCartList({ state, commit }) {
       return new Promise((resolve, reject) => {
-        if (isLogin) {
+        if (isLogin.value) {
           // 登录后
           cartApi._getCartList().then((data) => {
             commit("setCart", data.result)
@@ -156,10 +157,9 @@ const CartModule = {
         }
       })
     },
-    modifyCart({ rootState, commit }, payload) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    modifyCart({ commit }, payload) {
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           cartApi
             ._modifyCart(payload)
             .then(() => {
@@ -175,12 +175,11 @@ const CartModule = {
         }
       })
     },
-    modifyAllCart({ state, rootState, commit }, payload) {
+    modifyAllCart({ state, commit }, payload) {
       payload = payload.selected ?? payload
       const dataSource = payload.dataSource ?? state.list
-      const isLogin = Boolean(rootState.user.profile?.token)
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           const ids = dataSource.map((item) => item.skuId)
           cartApi
             ._checkCartAllSelected({ selected: payload, ids })
@@ -200,10 +199,9 @@ const CartModule = {
       })
     },
     // 删除选中的购物车商品（单个）
-    removeCart({ rootState, commit }, payload) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    removeCart({ commit }, payload) {
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           cartApi
             ._deleteCart([payload.skuId])
             .then(() => {
@@ -220,10 +218,10 @@ const CartModule = {
       })
     },
     // 删除选中的购物车商品（批量）
-    removeCartSelected({ _getters, rootState, commit }, dataSource) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    removeCartSelected({ _getters, commit }, dataSource) {
+      console.log("批量删除商品中...")
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           const ids = dataSource.map((item) => item.skuId)
           cartApi
             ._deleteCart(ids)
@@ -242,14 +240,13 @@ const CartModule = {
         }
       })
     },
-    updateCartGoodsSku({ state, rootState, commit }, payload) {
-      const isLogin = Boolean(rootState.user.profile?.token)
+    updateCartGoodsSku({ state, commit }, payload) {
       const { newValue, old } = payload
       const pre = state.list.find((item) => item.skuId === old)
       const preIndex = state.list.indexOf(pre) !== -1 ? state.list.indexOf(pre) : undefined
       // 这里登录前后的 attrText 和 attrsText 两个字段不一致
       return new Promise((resolve) => {
-        if (isLogin) {
+        if (isLogin.value) {
           const { skuId, price, inventory: stock, specsText: attrsText } = newValue
           const next = { ...pre, ...{ skuId, price, stock, attrsText } }
           cartApi

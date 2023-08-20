@@ -6,7 +6,7 @@
       <a-breadcrumb-item>购物车</a-breadcrumb-item>
       <a-breadcrumb-item>支付订单</a-breadcrumb-item>
     </a-breadcrumb>
-    <div v-if="order" class="pay-status">
+    <div v-if="order.data" class="pay-status">
       <a-row class="pay-status--wrapper" :wrap="false" align="middle" justify="space-between">
         <a-col class="time">
           <a-row :wrap="false">
@@ -36,9 +36,9 @@
             <a-col class="time-description">
               <p>订单提交成功！请尽快完成支付。</p>
               <p>
-                <span v-if="order.countdown >= 0">
+                <span v-if="order.data.countdown >= 0">
                   支付还剩
-                  <b>{{ payTime?.zh_time }}</b>
+                  <b>{{ order.payTime }}</b>
                   ， 超时将取消订单
                 </span>
                 <b v-else>订单已超时!</b>
@@ -48,7 +48,7 @@
         </a-col>
         <a-col class="total" :wrap="false">
           <span>应付总额：</span>
-          <span class="total-amount">&yen; {{ order.payMoney }}</span>
+          <span class="total-amount">&yen; {{ order.data.payMoney }}</span>
         </a-col>
       </a-row>
     </div>
@@ -64,13 +64,13 @@
 
 <script>
 import Icon from "@ant-design/icons-vue"
-import { ref, computed, onMounted } from "vue"
+import { reactive, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import PayPlatform from "./components/pay-platform.vue"
 import PayMethods from "./components/pay-methods.vue"
 
 import orderApi from "@/api/order"
-import { useReciprocalTime } from "@/utils/count-down"
+import { reciprocalTime } from "@/utils/time"
 
 export default {
   components: {
@@ -80,24 +80,27 @@ export default {
   },
   setup() {
     const route = useRoute()
-    const order = ref(null)
-    const orderId = computed(() => route.query.id)
-
-    const payTime = ref(null)
+    const order = reactive({
+      data: {},
+      id: route.query.id,
+      payTime: "",
+    })
     onMounted(() => {
-      orderApi._getOrderDetail(orderId.value).then((res) => {
-        const { result } = res
-        order.value = result
-        if (result.countdown >= 0) {
-          payTime.value = useReciprocalTime(result.countdown)
-          payTime.value.start()
+      orderApi._getOrderDetail(order.id).then((res) => {
+        const { countdown } = res.result
+        order.data = res.result
+        console.log("result: ", res.result)
+        if (Number.isInteger(countdown) && countdown >= 0) {
+          const { start } = reciprocalTime(countdown, (value) => {
+            start()
+            order.payTime = value
+          })
         }
       })
     })
 
     return {
       order,
-      payTime,
     }
   },
 }

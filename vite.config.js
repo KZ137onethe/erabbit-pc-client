@@ -36,6 +36,11 @@ export default defineConfig(() => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/dev-api/, ""),
         },
+        "/mock-api": {
+          target: "https://www.fastmock.site/mock/a5829fe6ec4d23dedebb451b883d4ef2/mock/",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/mock-api/, ""),
+        },
       },
     },
     build: {

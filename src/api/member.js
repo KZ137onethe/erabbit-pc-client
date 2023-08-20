@@ -7,15 +7,18 @@ import request from "@/utils/request.js"
  * @param {*} collectType -- 收藏类型 1为商品，2为专题，3为品牌
  */
 function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
-  return request({
-    url: "/member/collect",
-    method: "get",
-    params: {
-      page,
-      pageSize,
-      collectType,
+  return request(
+    {
+      url: "/member/collect",
+      method: "get",
+      params: {
+        page,
+        pageSize,
+        collectType,
+      },
     },
-  })
+    true,
+  )
 }
 
 /**
@@ -24,14 +27,17 @@ function _getCollect({ page = 1, pageSize = 10, collectType = 1 }) {
  * @param {*} pageSize -- 页码条数
  */
 function _getHistory({ page, pageSize }) {
-  return request({
-    url: "/member/browseHistory",
-    method: "get",
-    params: {
-      page,
-      pageSize,
+  return request(
+    {
+      url: "/member/browseHistory",
+      method: "get",
+      params: {
+        page,
+        pageSize,
+      },
     },
-  })
+    true,
+  )
 }
 
 /**

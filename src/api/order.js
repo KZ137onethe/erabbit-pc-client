@@ -13,7 +13,7 @@ function _getCheckoutInfo() {
 
 /**
  * 添加收货地址
- * @param {Object} address -- 地址信息（下面是他的字段）
+ * @param {Object} data -- 地址信息（下面是他的字段）
  * @param {String} receiver -- 收货人姓名
  * @param {String} contact -- 联系方式
  * @param {String} provinceCode -- 所在省份编码
@@ -25,12 +25,31 @@ function _getCheckoutInfo() {
  * @param {	Number} isDefault -- 是否为默认地址，0为是，1为否
  * @returns
  */
-function _appendAddress(address) {
+function _appendAddress(data) {
+  const {
+    address,
+    receiver,
+    contact,
+    provinceCode,
+    cityCode,
+    countyCode,
+    postalCode,
+    addressTags,
+    isDefault,
+  } = data
   return request({
     url: "/member/address",
     method: "post",
     data: {
       address,
+      receiver,
+      contact,
+      provinceCode,
+      cityCode,
+      countyCode,
+      postalCode,
+      addressTags,
+      isDefault,
     },
   })
 }

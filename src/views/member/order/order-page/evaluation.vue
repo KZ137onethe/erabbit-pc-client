@@ -28,9 +28,7 @@
           <div class="option">
             <template
               v-for="(btn, idx) of [...OptionMap][
-                Array.from(orderStatus)
-                  .map((status) => status[1])
-                  .findIndex((item) => item === record.orderState)
+                Array.from(orderComponents.keys()).findIndex((item) => item === record.orderState)
               ]"
               :key="idx"
             >
@@ -48,57 +46,75 @@
     </a-table>
   </template>
   <template v-else-if="Array.isArray(orderList)">
-    <div class="loading">
-      <XtxLoading :size="50"></XtxLoading>
-    </div>
-  </template>
-  <template v-else>
     <div class="empty">
       <a-empty :image="simpleImage" />
     </div>
   </template>
-  <a-pagination v-model:current="currentPageNumber" :total="500" />
+  <template v-else-if="orderList === null">
+    <div class="loading">
+      <XtxLoading :size="50"></XtxLoading>
+    </div>
+  </template>
+  <pagination
+    :page="paginationParams.page"
+    :page-size="paginationParams.pageSize"
+    :total="paginationParams.total"
+  ></pagination>
 </template>
 <script>
 import { Empty } from "ant-design-vue"
 
-import { ref, watch, computed } from "vue"
-
-import { orderStatus } from "../index.vue"
-import OrderGoodsTable, { columns } from "./order-table"
-import { OptionMap } from "./option-btn"
+import { ref, reactive, onMounted } from "vue"
+import OrderGoodsTable, { columns } from "./orderTable.vue"
+import { OptionMap } from "./Button"
+import Pagination from "@/components/Pagination"
+import { sendOrderRequest } from "./index"
 
 export default {
+  name: "EvaluationOrder",
+  components: {
+    OrderGoodsTable,
+    Pagination,
+  },
   props: {
-    orderMap: {
+    state: {
+      type: Number,
+      required: true,
+      validator(value) {
+        return value >= 0 && value <= 6
+      },
+    },
+    orderComponents: {
       type: Map,
-      default: new Map([["afterPayment", []]]),
+      required: true,
     },
   },
-  setup(props, { emit }) {
-    const orderList = computed(() => props.orderMap.get("afterPayment"))
-    const currentPageNumber = ref(1)
-
-    watch(currentPageNumber, (newValue) => {
-      emit("changePage", newValue)
+  setup(props) {
+    const orderList = ref(null)
+    const paginationParams = reactive({
+      page: 1,
+      pageSize: 5,
+      state: props.state,
     })
 
-    const refresh = () => {
-      emit("refresh")
+    const getAllOrderData = async () => {
+      const { page, pageSize, state } = paginationParams
+      const data = await sendOrderRequest({ page, pageSize, orderState: state })
+      orderList.value = data
+      paginationParams.total = data.length
     }
 
+    onMounted(() => {
+      getAllOrderData()
+    })
+
     return {
-      orderStatus,
       OptionMap,
       orderList,
       columns,
-      currentPageNumber,
-      refresh,
+      paginationParams,
       simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
     }
-  },
-  components: {
-    OrderGoodsTable,
   },
 }
 </script>
